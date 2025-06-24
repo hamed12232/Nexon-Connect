@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "219899770182",
+    "project_id": "demosocialapp-ef38c",
+    "storage_bucket": "demosocialapp-ef38c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219899770182:android:382cf87744ee69e1d5a147",
+        "android_client_info": {
+          "package_name": "com.example.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQzyt1fYF0WhIMgsl13NoXMOztcDyfjAk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
