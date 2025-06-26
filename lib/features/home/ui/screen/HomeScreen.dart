@@ -9,7 +9,7 @@ import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
 import 'package:myapp/features/home/ui/widgets/home_card.dart';
 
 class HomeScreen extends StatefulWidget {
-  static String routeName = "/home";
+  static  const String routeName = "/home";
 
   const HomeScreen({super.key});
   @override

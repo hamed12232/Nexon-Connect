@@ -9,7 +9,7 @@ import 'package:myapp/core/Components/enums.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
-  static String routeName = "/profile";
+  static const String routeName = "/profile";
   const ProfileScreen({super.key});
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();

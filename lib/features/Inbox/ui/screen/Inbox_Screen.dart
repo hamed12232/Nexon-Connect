@@ -6,7 +6,7 @@ import 'package:myapp/core/Components/enums.dart';
 import 'package:myapp/features/Inbox/ui/widget/Chat_item.dart';
 
 class InboxScreen extends StatefulWidget {
-  static String routeName = "/inbox";
+  static const String  routeName = "/inbox";
 
   const InboxScreen({super.key});
   @override
