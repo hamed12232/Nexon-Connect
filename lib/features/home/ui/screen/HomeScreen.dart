@@ -5,11 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myapp/core/Components/Custom_NavBar.dart';
 import 'package:myapp/core/Components/data.dart';
 import 'package:myapp/core/Components/enums.dart';
+import 'package:myapp/features/Post/ui/screen/post_screen.dart';
 import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
 import 'package:myapp/features/home/ui/widgets/home_card.dart';
 
 class HomeScreen extends StatefulWidget {
-  static  const String routeName = "/home";
+  static const String routeName = "/home";
 
   const HomeScreen({super.key});
   @override
@@ -54,7 +55,9 @@ class _HomeState extends State<HomeScreen> {
                                   onTap: () async {
                                     await user.signOut();
                                     Navigator.pushNamed(
-                                        context, AuthScreen.routeName);
+                                      context,
+                                      AuthScreen.routeName,
+                                    );
                                   },
                                   child: SvgPicture.asset(
                                     "assets/icons/menu.svg",
@@ -64,9 +67,22 @@ class _HomeState extends State<HomeScreen> {
                                   ),
                                 ),
                                 SizedBox(width: 20),
-                                SvgPicture.asset(
-                                  "assets/icons/notification.svg",
-                                  height: 30,
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      PostScreen.routeName,
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xff651CE5),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: Icon(Icons.add, color: Colors.white,size: 35,),
+                                  ),
                                 ),
                                 SizedBox(width: 20),
                                 SvgPicture.asset(

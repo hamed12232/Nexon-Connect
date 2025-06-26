@@ -54,3 +54,4 @@ Map<int, Color> color = {
   800: Color.fromRGBO(102, 28, 229, .9),
   900: Color.fromRGBO(102, 28, 229, 1),
 };
+

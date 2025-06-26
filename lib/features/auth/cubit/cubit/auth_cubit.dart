@@ -9,7 +9,7 @@ part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
-   FirebaseHelper firebaseHelper= FirebaseHelper();
+  FirebaseHelper firebaseHelper = FirebaseHelper();
 
   Future<void> login(String email, String password) async {
     emit(AuthLoading());
@@ -59,5 +59,10 @@ class AuthCubit extends Cubit<AuthState> {
     } catch (e) {
       emit(AuthFailure('other error'));
     }
+  }
+
+  Future<UserModel> getUserData(String uid) async {
+    UserModel user =await firebaseHelper.getUser(uid);
+    return user;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/features/Post/ui/screen/post_screen.dart';
 import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
 import 'package:myapp/features/home/ui/screen/HomeScreen.dart';
 import 'package:myapp/features/Inbox/ui/screen/Inbox_Screen.dart';
@@ -14,6 +15,8 @@ class NavigationRoutes {
         return MaterialPageRoute(builder: (context) => const HomeScreen());
       case InboxScreen.routeName:
         return MaterialPageRoute(builder: (context) => const InboxScreen());
+      case PostScreen.routeName:
+        return MaterialPageRoute(builder: (context) => const PostScreen());
       case ProfileScreen.routeName:
         return MaterialPageRoute(builder: (context) => const ProfileScreen());
       default:
