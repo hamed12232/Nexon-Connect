@@ -22,7 +22,7 @@ class UserModel {
       uid: uid,
       fullName: map['fullName'],
       email: map['email'],
-      image: map['image'] ?? 'assets/images/guestImage.avif',
+      image: map['image']  ,
       followers: map['followers'] ?? 0,
       following: map['following'] ?? 0,
       likes: map['likes'] ?? 0,

@@ -1,12 +1,15 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:myapp/core/Components/Custom_NavBar.dart';
 import 'package:myapp/core/Components/Snak_bar.dart';
 import 'package:myapp/core/Components/enums.dart';
 import 'package:myapp/core/helper/services_helper.dart';
+import 'package:myapp/features/auth/cubit/cubit/auth_cubit.dart';
+import 'package:myapp/features/profile/logic/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -23,15 +26,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final userId = FirebaseAuth.instance.currentUser!.uid;
   final ServicesHelper servicesHelper = ServicesHelper();
   bool uploaded = false;
+  UserModel? userModel;
 
   @override
   void initState() {
     fileName = 'profile_$userId.jpg';
+    loadUserData();
     super.initState();
+  }
+
+  Future<void> loadUserData() async {
+    userModel = await context.read<AuthCubit>().getUserData(userId);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    if (userModel == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(color: Colors.deepPurple),
+        ),
+      );
+    }
     return SafeArea(
       child: Scaffold(
         body: Stack(
@@ -87,8 +104,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: Colors.black,
             height: 25,
           ),
-          const Text(
-            "John doy",
+          Text(
+            userModel!.fullName,
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w700,
@@ -125,15 +142,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Padding(
               padding: EdgeInsets.all(4.0),
               child: CircleAvatar(
-                backgroundImage:
-                    imageFile!=null
-                        ? NetworkImage(
-                          supabase.storage
-                              .from('images')
-                              .getPublicUrl("uploads/$fileName"),
-                        )
-                        : AssetImage('assets/images/guestImage.avif')
-                            as ImageProvider,
+                backgroundImage: NetworkImage(userModel!.image),
+
                 radius: 25,
               ),
             ),
@@ -145,9 +155,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onTap: () async {
                 await pickImageGallery();
                 if (imageFile != null) {
-                  await servicesHelper.uploadImage(imageFile!, fileName);
-                  setState(() {
-                  });
+                String? newImageUrl=  await servicesHelper.uploadImage(imageFile!, fileName);
+                  await servicesHelper.updateUserImage(userId, newImageUrl!);
+                  await loadUserData();
+                  setState(() {});
                 } else {
                   // ignore: use_build_context_synchronously
                   showInSnackBar("No image selected", context);
@@ -188,8 +199,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildUsername() {
-    return const Text(
-      "@John_doy",
+    return Text(
+      "@${userModel!.fullName}",
       style: TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.w700,
@@ -204,9 +215,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildStatItem("29", "Following"),
-          _buildStatItem("140k", "Followers"),
-          _buildStatItem("5M", "Like"),
+          _buildStatItem("${userModel!.following}", "Following"),
+          _buildStatItem("${userModel!.followers}", "Followers"),
+          _buildStatItem("${userModel!.likes}", "Like"),
         ],
       ),
     );

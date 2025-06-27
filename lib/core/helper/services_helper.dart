@@ -36,7 +36,7 @@ class ServicesHelper {
   }
 
   Future<void> updateUserImage(String uid, String imageUrl) async {
-    await firestore.collection('users').doc(uid).update({'imageUrl': imageUrl});
+    await firestore.collection('users').doc(uid).update({'image': imageUrl});
   }
 
   // Future<void> verficationUser() async {
