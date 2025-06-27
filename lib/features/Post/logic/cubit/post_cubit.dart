@@ -9,7 +9,7 @@ import 'package:uuid/uuid.dart';
 part 'post_state.dart';
 
 class PostCubit extends Cubit<PostState> {
-  final ServicesHelper servicesHelper= ServicesHelper();
+  final ServicesHelper servicesHelper = ServicesHelper();
   PostCubit() : super(PostInitial());
 
   Future<void> createPost({required String? text, File? imageFile}) async {
@@ -36,7 +36,17 @@ class PostCubit extends Cubit<PostState> {
 
       final postId = const Uuid().v4();
 
-      PostModel postModel=PostModel(id: postId, userId: userModel.uid, username: userModel.fullName, userImage: userModel.image, text: text, postImage: imageUrl, createdAt: DateTime.now(), likes: [], comments: []);
+      PostModel postModel = PostModel(
+        id: postId,
+        userId: userModel.uid,
+        username: userModel.fullName,
+        userImage: userModel.image,
+        text: text,
+        postImage: imageUrl,
+        createdAt: DateTime.now(),
+        likes: [],
+        comments: [],
+      );
 
       await FirebaseFirestore.instance
           .collection('posts')
@@ -47,5 +57,19 @@ class PostCubit extends Cubit<PostState> {
     } catch (e) {
       emit(PostFailure("Failed to create post"));
     }
+  }
+
+  Future<void> fetchPost() async{
+    emit(PostLoading());
+    try {
+      final snapshot= await servicesHelper.firestore.collection("posts").
+      orderBy("created_at",descending: true).get();
+
+    final posts=snapshot.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
+    emit(PostLoaded(posts));
+    }  
+      catch(e){
+        emit(PostFailure(e.toString()));        
+      }
   }
 }
