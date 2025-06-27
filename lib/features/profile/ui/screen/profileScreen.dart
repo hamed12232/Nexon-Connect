@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:myapp/core/Components/Custom_NavBar.dart';
 import 'package:myapp/core/Components/Snak_bar.dart';
 import 'package:myapp/core/Components/enums.dart';
+import 'package:myapp/core/helper/services_helper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String fileName = '';
   final SupabaseClient supabase = Supabase.instance.client;
   final userId = FirebaseAuth.instance.currentUser!.uid;
+  final ServicesHelper servicesHelper = ServicesHelper();
   bool uploaded = false;
 
   @override
@@ -124,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: EdgeInsets.all(4.0),
               child: CircleAvatar(
                 backgroundImage:
-                    uploaded
+                    imageFile!=null
                         ? NetworkImage(
                           supabase.storage
                               .from('images')
@@ -143,7 +145,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onTap: () async {
                 await pickImageGallery();
                 if (imageFile != null) {
-                  await uploadProfileImage();
+                  await servicesHelper.uploadImage(imageFile!, fileName);
+                  setState(() {
+                  });
                 } else {
                   // ignore: use_build_context_synchronously
                   showInSnackBar("No image selected", context);
@@ -380,28 +384,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Future<void> uploadProfileImage() async {
-    final bucket = supabase.storage.from('images');
-    try {
-      //final filename = DateTime.now().millisecondsSinceEpoch.toString();
-      final path = "uploads/$fileName";
-      await bucket.upload(
-        path,
-        imageFile!,
-        fileOptions: FileOptions(upsert: true),
-      );
-      showInSnackBar("upload successful image", context);
-      setState(() {
-        uploaded = true;
-      });
-    } catch (e) {
-      showInSnackBar("Failed to upload image", context);
-      print(e.toString());
-      setState(() {
-        uploaded = false;
-      });
-    }
-  }
+  // Future<void> uploadProfileImage() async {
+  //   final bucket = supabase.storage.from('images');
+  //   try {
+  //     //final filename = DateTime.now().millisecondsSinceEpoch.toString();
+  //     final path = "uploads/$fileName";
+  //     await bucket.upload(
+  //       path,
+  //       imageFile!,
+  //       fileOptions: FileOptions(upsert: true),
+  //     );
+  //     showInSnackBar("upload successful image", context);
+  //     setState(() {
+  //       uploaded = true;
+  //     });
+  //   } catch (e) {
+  //     showInSnackBar("Failed to upload image", context);
+  //     print(e.toString());
+  //     setState(() {
+  //       uploaded = false;
+  //     });
+  //   }
+  // }
 
   Future<void> pickImageGallery() async {
     final picker = ImagePicker();

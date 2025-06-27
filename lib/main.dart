@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:myapp/features/Post/logic/cubit/post_cubit.dart';
 import 'package:myapp/features/auth/cubit/cubit/auth_cubit.dart';
 import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
 import 'package:myapp/core/routing/NavigationRoutes.dart';
@@ -18,7 +19,12 @@ void main() async {
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoamJ0ZnFqbWxrd29vb2F2bmZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA0NzkwODgsImV4cCI6MjA2NjA1NTA4OH0.SbVH4Dw2z3fJ7_Tv02fODxnAPeJgqpB4j4rJCxMah8g',
   );
-  runApp(BlocProvider(create: (context) => AuthCubit(), child: MyApp()));
+  runApp(MultiBlocProvider(
+    providers: [
+       BlocProvider(create: (_) => AuthCubit()),
+      BlocProvider(create: (_) => PostCubit()),
+    ],
+    child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

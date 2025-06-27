@@ -1,0 +1,51 @@
+import 'dart:io';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meta/meta.dart';
+import 'package:myapp/core/helper/services_helper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:myapp/features/Post/logic/model/post_model.dart';
+import 'package:uuid/uuid.dart';
+part 'post_state.dart';
+
+class PostCubit extends Cubit<PostState> {
+  final ServicesHelper servicesHelper= ServicesHelper();
+  PostCubit() : super(PostInitial());
+
+  Future<void> createPost({required String? text, File? imageFile}) async {
+    emit(PostLoading());
+
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        emit(PostFailure("User not found"));
+        return;
+      }
+
+      final userModel = await servicesHelper.getUser(user.uid);
+
+      String? imageUrl;
+      if (imageFile != null) {
+        final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        imageUrl = await servicesHelper.uploadImage(imageFile, fileName);
+        if (imageUrl == null) {
+          emit(PostFailure("Failed to upload image"));
+          return;
+        }
+      }
+
+      final postId = const Uuid().v4();
+
+      PostModel postModel=PostModel(id: postId, userId: userModel.uid, username: userModel.fullName, userImage: userModel.image, text: text, postImage: imageUrl, createdAt: DateTime.now(), likes: [], comments: []);
+
+      await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postId)
+          .set(postModel.toMap());
+
+      emit(PostSuccess());
+    } catch (e) {
+      emit(PostFailure("Failed to create post"));
+    }
+  }
+}

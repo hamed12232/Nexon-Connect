@@ -54,7 +54,7 @@ class _HomeState extends State<HomeScreen> {
                                 GestureDetector(
                                   onTap: () async {
                                     await user.signOut();
-                                    Navigator.pushNamed(
+                                    Navigator.pushReplacementNamed(
                                       context,
                                       AuthScreen.routeName,
                                     );

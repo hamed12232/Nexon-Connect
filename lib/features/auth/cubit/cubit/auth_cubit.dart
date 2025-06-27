@@ -2,19 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:myapp/core/helper/firebase_helper.dart';
+import 'package:myapp/core/helper/services_helper.dart';
 import 'package:myapp/features/profile/logic/user_model.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
+     ServicesHelper servicesHelper= ServicesHelper();
   AuthCubit() : super(AuthInitial());
-  FirebaseHelper firebaseHelper = FirebaseHelper();
 
   Future<void> login(String email, String password) async {
     emit(AuthLoading());
     try {
-      await firebaseHelper.loginUser(email, password);
+      await servicesHelper.loginUser(email, password);
       emit(AuthSuccess());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -32,7 +32,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> register(String email, String password, String name) async {
     emit(AuthLoading());
     try {
-      String uid = await firebaseHelper.registerUser(email, password);
+      String uid = await servicesHelper.registerUser(email, password);
       final newUser = UserModel(
         uid: uid,
         fullName: name,
@@ -62,7 +62,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<UserModel> getUserData(String uid) async {
-    UserModel user =await firebaseHelper.getUser(uid);
+    UserModel user = await servicesHelper.getUser(uid);
     return user;
   }
 }

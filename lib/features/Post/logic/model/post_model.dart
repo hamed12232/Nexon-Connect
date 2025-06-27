@@ -34,4 +34,17 @@ class PostModel {
       comments: List<String>.from(json['comments']),
     );
   }
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'user_id': userId,
+      'username': username,
+      'user_image': userImage,
+      'text': text,
+      'post_image': postImage,
+      'created_at': createdAt.toIso8601String(),
+      'likes': likes,
+      'comments': comments,
+    };
+  }
 }
