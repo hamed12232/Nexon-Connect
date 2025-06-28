@@ -1,3 +1,4 @@
+// ✅ ProfileScreen refactored with cleaner image update and user data flow
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,14 +10,13 @@ import 'package:myapp/core/Components/Snak_bar.dart';
 import 'package:myapp/core/Components/enums.dart';
 import 'package:myapp/core/helper/services_helper.dart';
 import 'package:myapp/features/Post/logic/cubit/post_cubit.dart';
-import 'package:myapp/features/Post/logic/model/post_model.dart';
 import 'package:myapp/features/auth/cubit/cubit/auth_cubit.dart';
-import 'package:myapp/features/profile/logic/user_model.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
 class ProfileScreen extends StatefulWidget {
   static const String routeName = "/profile";
   const ProfileScreen({super.key});
+
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -24,39 +24,35 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   File? imageFile;
   String fileName = '';
-  final SupabaseClient supabase = Supabase.instance.client;
+  final supabase = Supabase.instance.client;
   final userId = FirebaseAuth.instance.currentUser!.uid;
-  final ServicesHelper servicesHelper = ServicesHelper();
-  bool uploaded = false;
-  UserModel? userModel;
+  final servicesHelper = ServicesHelper();
 
   @override
   void initState() {
     fileName = 'profile_$userId.jpg';
-    loadUserData();
+    context.read<AuthCubit>().getUserData(userId);
     context.read<PostCubit>().fetchUserPosts(userId);
     super.initState();
   }
 
-  Future<void> loadUserData() async {
-    userModel = await context.read<AuthCubit>().getUserData(userId);
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (userModel == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(color: Colors.deepPurple),
-        ),
-      );
-    }
     return SafeArea(
       child: Scaffold(
         body: Stack(
           children: [
-            _buildProfileContent(context),
+            BlocBuilder<AuthCubit, AuthState>(
+              builder: (context, state) {
+                if (state is AuthLoading || state is AuthInitial) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is AuthUserLoaded) {
+                  return _buildProfileContent(context, state.user);
+                } else {
+                  return const Center(child: Text("Failed to load user"));
+                }
+              },
+            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: CustomNavBar(selectedMenu: MenuState.profile),
@@ -67,53 +63,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildProfileContent(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      color: Colors.white,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeader(),
-            const SizedBox(height: 50),
-            _buildAvatar(),
-            const SizedBox(height: 30),
-            _buildUsername(),
-            const SizedBox(height: 20),
-            _buildStats(),
-            const SizedBox(height: 20),
-            _buildActions(),
-            const SizedBox(height: 30),
-            _buildTabBar(),
-            const SizedBox(height: 15),
-            _buildGrid(),
-            const SizedBox(height: 300),
-          ],
-        ),
+  Widget _buildProfileContent(BuildContext context, userModel) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          _buildHeader(userModel),
+          const SizedBox(height: 50),
+          _buildAvatar(userModel),
+          const SizedBox(height: 30),
+          Text(
+            "@${userModel.fullName}",
+            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 20),
+          _buildStats(userModel),
+          const SizedBox(height: 20),
+          _buildActions(),
+          const SizedBox(height: 30),
+          _buildTabBar(),
+          const SizedBox(height: 15),
+          _buildGrid(),
+          const SizedBox(height: 300),
+        ],
       ),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(userModel) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // ignore: deprecated_member_use
           SvgPicture.asset(
             "assets/icons/back-arrow.svg",
-            // ignore: deprecated_member_use
             color: Colors.black,
             height: 25,
           ),
           Text(
-            userModel!.fullName,
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w700,
-              fontSize: 25,
-            ),
+            userModel.fullName,
+            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
           ),
           SvgPicture.asset("assets/icons/dots.svg", height: 8),
         ],
@@ -121,32 +110,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildAvatar() {
+  Widget _buildAvatar(userModel) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Stack(
         children: [
           Container(
+            height: 200,
+            width: 200,
             decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(100),
               boxShadow: [
                 BoxShadow(
-                  // ignore: deprecated_member_use
                   color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 2,
                   blurRadius: 5,
-                  offset: const Offset(0, 3),
                 ),
               ],
-              borderRadius: BorderRadius.circular(100),
-              color: Colors.white,
             ),
-            height: 200,
-            width: 200,
             child: Padding(
-              padding: EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(4.0),
               child: CircleAvatar(
-                backgroundImage: NetworkImage(userModel!.image),
-
+                backgroundImage: NetworkImage(
+                  "${userModel.image}?v=${DateTime.now().millisecondsSinceEpoch}",
+                ),
                 radius: 25,
               ),
             ),
@@ -163,38 +151,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fileName,
                   );
                   await servicesHelper.updateUserImage(userId, newImageUrl!);
-                  await loadUserData();
-                  setState(() {});
+                  await context.read<AuthCubit>().getUserData(userId);
+                  showInSnackBar("Image updated successfully", context);
                 } else {
-                  // ignore: use_build_context_synchronously
                   showInSnackBar("No image selected", context);
                 }
               },
               child: Container(
+                height: 55,
+                width: 55,
                 decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(50),
                   boxShadow: [
                     BoxShadow(
-                      // ignore: deprecated_member_use
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: Offset(0, 3), // changes position of shadow
                     ),
                   ],
-                  borderRadius: BorderRadius.circular(50),
-                  color: Colors.white,
                 ),
-                height: 55,
-                width: 55,
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xff651CE5),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Icon(Icons.add, color: Colors.white),
+                child: Container(
+                  margin: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff651CE5),
+                    borderRadius: BorderRadius.circular(50),
                   ),
+                  child: const Icon(Icons.add, color: Colors.white),
                 ),
               ),
             ),
@@ -204,26 +187,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildUsername() {
-    return Text(
-      "@${userModel!.fullName}",
-      style: TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.w700,
-        fontSize: 25,
-      ),
-    );
-  }
-
-  Widget _buildStats() {
+  Widget _buildStats(userModel) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 55),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildStatItem("${userModel!.following}", "Following"),
-          _buildStatItem("${userModel!.followers}", "Followers"),
-          _buildStatItem("${userModel!.likes}", "Like"),
+          _buildStatItem("${userModel.following}", "Following"),
+          _buildStatItem("${userModel.followers}", "Followers"),
+          _buildStatItem("${userModel.likes}", "Like"),
         ],
       ),
     );
@@ -234,11 +206,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         Text(
           count,
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         const SizedBox(height: 10),
         Text(
@@ -262,37 +230,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildFollowButton() {
     return Container(
-      width: 100.0,
-      height: 43.0,
+      width: 100,
+      height: 43,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
+        gradient: const LinearGradient(
+          colors: [Color(0xff651CE5), Color(0xff811ce5)],
+        ),
+        borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
             color: const Color(0xff651CE5).withOpacity(0.3),
-            spreadRadius: 1,
             blurRadius: 8,
-            offset: const Offset(0, 5),
           ),
         ],
-        gradient: const LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          stops: [0.1, 0.9],
-          colors: [Color(0xff651CE5), Color(0xff811ce5)],
-        ),
       ),
       child: TextButton(
-        style: TextButton.styleFrom(
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-        ),
         onPressed: () {},
         child: const Text(
           'Follow',
-          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
         ),
       ),
     );
@@ -302,15 +258,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          // ignore: deprecated_member_use
-          color: Colors.grey.withOpacity(0.2),
-        ),
         height: 50,
         width: 50,
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(100),
+        ),
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(12),
           child: SvgPicture.asset("assets/icons/mail-outline.svg"),
         ),
       ),
@@ -322,12 +277,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
+        children: const [
+          Text(
             "Photos",
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
           ),
-          const Text(
+          Text(
             "Videos",
             style: TextStyle(
               fontSize: 25,
@@ -335,7 +290,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: Colors.grey,
             ),
           ),
-          const Text(
+          Text(
             "Tagged",
             style: TextStyle(
               fontSize: 25,
@@ -343,7 +298,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               color: Colors.grey,
             ),
           ),
-          SvgPicture.asset("assets/icons/two dots.svg", height: 20),
         ],
       ),
     );
@@ -352,13 +306,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildGrid() {
     return BlocBuilder<PostCubit, PostState>(
       builder: (context, state) {
-        if (state is PostLoading) {
+        if (state is PostLoading)
           return const Center(child: CircularProgressIndicator());
-        } else if (state is PostFailure) {
-          print(state.error);
-          return Center(child: Text(state.error));
-        } else if (state is PostLoaded) {
-          List<PostModel> posts = (state).posts;
+        if (state is PostFailure) return Center(child: Text(state.error));
+        if (state is PostLoaded) {
+          final posts = state.posts;
           return GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -369,33 +321,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
               childAspectRatio: 200 / 300,
             ),
             itemBuilder: (context, index) {
+              final post = posts[index];
               return Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Stack(
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(15),
                       child: Image.network(
-                        posts[index].postImage!,
+                        post.postImage ?? '',
                         fit: BoxFit.fill,
-                        errorBuilder:
-                            (context, error, stackTrace) => Icon(Icons.error),
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(child: CircularProgressIndicator());
-                        },
+                        errorBuilder: (_, __, ___) => const Icon(Icons.error),
+                        loadingBuilder:
+                            (context, child, loadingProgress) =>
+                                loadingProgress == null
+                                    ? child
+                                    : const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
+                    Positioned(
+                      bottom: 20,
+                      left: 0,
+                      right: 0,
+                      child: Center(
                         child: Container(
                           height: 40,
                           width: 70,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(35),
                             color: Colors.white,
+                            borderRadius: BorderRadius.circular(35),
                           ),
                           child: const Center(
                             child: Text(
@@ -422,11 +378,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> pickImageGallery() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      setState(() {
-        imageFile = File(pickedFile.path);
-      });
+      setState(() => imageFile = File(pickedFile.path));
     }
   }
 }

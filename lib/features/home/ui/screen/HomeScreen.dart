@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/core/Components/Custom_NavBar.dart';
-import 'package:myapp/core/Components/Snak_bar.dart';
 import 'package:myapp/core/Components/enums.dart';
 import 'package:myapp/features/Post/logic/cubit/post_cubit.dart';
 import 'package:myapp/features/Post/logic/model/post_model.dart';
@@ -67,7 +66,7 @@ class _HomeState extends State<HomeScreen> {
                             ...List.generate(posts.length, (index) {
                               PostModel post = posts[index];
                               return HomeCard(
-                                dp: post.userImage,
+                                dp: "${post.userImage}?v=${DateTime.now().millisecondsSinceEpoch}",
                                 name: post.username,
                                 des: post.text!,
                                 hash: post.id,

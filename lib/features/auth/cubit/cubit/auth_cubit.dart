@@ -8,7 +8,7 @@ import 'package:myapp/features/profile/logic/user_model.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-     ServicesHelper servicesHelper= ServicesHelper();
+  ServicesHelper servicesHelper = ServicesHelper();
   AuthCubit() : super(AuthInitial());
 
   Future<void> login(String email, String password) async {
@@ -36,7 +36,8 @@ class AuthCubit extends Cubit<AuthState> {
       final newUser = UserModel(
         uid: uid,
         fullName: name,
-        image: "https://img.freepik.com/premium-vector/symbolic-drawing-person-with-circle-representing-bicycle-wheel-rim_797523-3031.jpg?w=2000",
+        image:
+            "https://img.freepik.com/premium-vector/symbolic-drawing-person-with-circle-representing-bicycle-wheel-rim_797523-3031.jpg?w=2000",
         email: email,
         followers: 0,
         following: 0,
@@ -61,8 +62,14 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<UserModel> getUserData(String uid) async {
-    UserModel user = await servicesHelper.getUser(uid);
-    return user;
+  Future<void> getUserData(String uid) async {
+    emit(AuthLoading());
+    try {
+      UserModel user = await servicesHelper.getUser(uid);
+      emit(AuthUserLoaded(user));
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+     
+    }
   }
 }
