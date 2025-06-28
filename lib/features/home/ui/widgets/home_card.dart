@@ -133,7 +133,7 @@ class _HomeCardState extends State<HomeCard> {
                 Row(
                   children: [
                     CircleAvatar(
-                      backgroundImage: AssetImage(widget.dp!),
+                      backgroundImage: NetworkImage(widget.dp!),
                       radius: 25,
                     ),
                     SizedBox(width: 10),
@@ -149,7 +149,7 @@ class _HomeCardState extends State<HomeCard> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  "It is a long established fact that a reader will be distracted by it",
+            widget.des!,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -160,7 +160,7 @@ class _HomeCardState extends State<HomeCard> {
                   children: [
                     Expanded(
                       child: Text(
-                        widget.hash!,
+                        "#hello",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color(0xff00d289),

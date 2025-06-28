@@ -57,15 +57,15 @@ List notifs = [
   "${names[random.nextInt(10)]} Sent you a friend request",
 ];
 
-List posts = List.generate(
-    4,
-    (index) => {
-          "name": names[random.nextInt(10)],
-          "dp": "assets/images/dm${random.nextInt(4)}.jpg",
-          "des": messages[random.nextInt(10)],
-          "hash": hash[random.nextInt(10)],
-          "img": "assets/images/dm${random.nextInt(4)}.jpg"
-        });
+// List posts = List.generate(
+//     4,
+//     (index) => {
+//           "name": names[random.nextInt(10)],
+//           "dp": "assets/images/dm${random.nextInt(4)}.jpg",
+//           "des": messages[random.nextInt(10)],
+//           "hash": hash[random.nextInt(10)],
+//           "img": "assets/images/dm${random.nextInt(4)}.jpg"
+//         });
 
 List chats = List.generate(
     13,

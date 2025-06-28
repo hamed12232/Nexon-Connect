@@ -8,6 +8,8 @@ import 'package:myapp/core/Components/Custom_NavBar.dart';
 import 'package:myapp/core/Components/Snak_bar.dart';
 import 'package:myapp/core/Components/enums.dart';
 import 'package:myapp/core/helper/services_helper.dart';
+import 'package:myapp/features/Post/logic/cubit/post_cubit.dart';
+import 'package:myapp/features/Post/logic/model/post_model.dart';
 import 'package:myapp/features/auth/cubit/cubit/auth_cubit.dart';
 import 'package:myapp/features/profile/logic/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -32,6 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     fileName = 'profile_$userId.jpg';
     loadUserData();
+    context.read<PostCubit>().fetchUserPosts(userId);
     super.initState();
   }
 
@@ -155,7 +158,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onTap: () async {
                 await pickImageGallery();
                 if (imageFile != null) {
-                String? newImageUrl=  await servicesHelper.uploadImage(imageFile!, fileName);
+                  String? newImageUrl = await servicesHelper.uploadImage(
+                    imageFile!,
+                    fileName,
+                  );
                   await servicesHelper.updateUserImage(userId, newImageUrl!);
                   await loadUserData();
                   setState(() {});
@@ -344,79 +350,75 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildGrid() {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(5),
-      itemCount: 6,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 200 / 300,
-      ),
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(15.0),
-                child: Image.asset(
-                  "assets/images/px$index.jpg",
-                  fit: BoxFit.fill,
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Container(
-                    height: 40,
-                    width: 70,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(35),
-                      color: Colors.white,
+    return BlocBuilder<PostCubit, PostState>(
+      builder: (context, state) {
+        if (state is PostLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is PostFailure) {
+          print(state.error);
+          return Center(child: Text(state.error));
+        } else if (state is PostLoaded) {
+          List<PostModel> posts = (state).posts;
+          return GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(5),
+            itemCount: posts.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 200 / 300,
+            ),
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Image.network(
+                        posts[index].postImage!,
+                        fit: BoxFit.fill,
+                        errorBuilder:
+                            (context, error, stackTrace) => Icon(Icons.error),
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(child: CircularProgressIndicator());
+                        },
+                      ),
                     ),
-                    child: const Center(
-                      child: Text(
-                        "123k",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Container(
+                          height: 40,
+                          width: 70,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(35),
+                            color: Colors.white,
+                          ),
+                          child: const Center(
+                            child: Text(
+                              "123k",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-        );
+              );
+            },
+          );
+        }
+        return const Center(child: Text("Something went wrong"));
       },
     );
   }
-
-  // Future<void> uploadProfileImage() async {
-  //   final bucket = supabase.storage.from('images');
-  //   try {
-  //     //final filename = DateTime.now().millisecondsSinceEpoch.toString();
-  //     final path = "uploads/$fileName";
-  //     await bucket.upload(
-  //       path,
-  //       imageFile!,
-  //       fileOptions: FileOptions(upsert: true),
-  //     );
-  //     showInSnackBar("upload successful image", context);
-  //     setState(() {
-  //       uploaded = true;
-  //     });
-  //   } catch (e) {
-  //     showInSnackBar("Failed to upload image", context);
-  //     print(e.toString());
-  //     setState(() {
-  //       uploaded = false;
-  //     });
-  //   }
-  // }
 
   Future<void> pickImageGallery() async {
     final picker = ImagePicker();

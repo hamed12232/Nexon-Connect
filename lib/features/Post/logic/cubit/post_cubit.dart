@@ -53,23 +53,45 @@ class PostCubit extends Cubit<PostState> {
           .doc(postId)
           .set(postModel.toMap());
 
-      emit(PostSuccess());
+      await fetchPost();
     } catch (e) {
       emit(PostFailure("Failed to create post"));
     }
   }
 
-  Future<void> fetchPost() async{
+  Future<void> fetchPost() async {
     emit(PostLoading());
     try {
-      final snapshot= await servicesHelper.firestore.collection("posts").
-      orderBy("created_at",descending: true).get();
+      final snapshot =
+          await servicesHelper.firestore
+              .collection("posts")
+              .orderBy("created_at", descending: true)
+              .get();
 
-    final posts=snapshot.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
-    emit(PostLoaded(posts));
-    }  
-      catch(e){
-        emit(PostFailure(e.toString()));        
-      }
+      final posts =
+          snapshot.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
+      emit(PostLoaded(posts));
+    } catch (e) {
+      emit(PostFailure(e.toString()));
+    }
   }
+  Future<void> fetchUserPosts(String userId) async {
+  emit(PostLoading());
+  try {
+    final snapshot = await servicesHelper.firestore
+        .collection('posts')
+        .where('user_id', isEqualTo: userId)
+        .orderBy('created_at', descending: true)
+        .get();
+
+    final posts = snapshot.docs.map((doc) {
+      return PostModel.fromJson(doc.data());
+    }).toList();
+
+    emit(PostLoaded(posts));
+  } catch (e) {
+    emit(PostFailure(e.toString()));
+  }
+}
+
 }

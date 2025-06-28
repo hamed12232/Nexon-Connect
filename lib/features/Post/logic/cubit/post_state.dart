@@ -12,7 +12,6 @@ final class PostLoaded extends PostState {
   PostLoaded(this.posts);
 }
 
-final class PostSuccess extends PostState {}
 
 final class PostFailure extends PostState {
   final String error;

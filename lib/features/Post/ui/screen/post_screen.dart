@@ -20,12 +20,13 @@ class PostScreen extends StatefulWidget {
 class _PostScreenState extends State<PostScreen> {
   File? imageFile;
   TextEditingController textController = TextEditingController();
-      final user = FirebaseAuth.instance.currentUser;
-      @override
+  final user = FirebaseAuth.instance.currentUser;
+  @override
   void dispose() {
     textController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final themeColor = const Color(0xFF651CE5); // نفس لون الـ Gradient الأساسي

@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/core/Components/Custom_NavBar.dart';
-import 'package:myapp/core/Components/data.dart';
+import 'package:myapp/core/Components/Snak_bar.dart';
 import 'package:myapp/core/Components/enums.dart';
+import 'package:myapp/features/Post/logic/cubit/post_cubit.dart';
+import 'package:myapp/features/Post/logic/model/post_model.dart';
 import 'package:myapp/features/home/ui/widgets/custom_app_bar_widget.dart';
 import 'package:myapp/features/home/ui/widgets/home_card.dart';
 
@@ -17,6 +20,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeState extends State<HomeScreen> {
   final user = FirebaseAuth.instance;
+  @override
+  void initState() {
+    context.read<PostCubit>().fetchPost();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,44 +37,59 @@ class _HomeState extends State<HomeScreen> {
     );
     return SafeArea(
       child: Scaffold(
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              Container(
-                color: Colors.white,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 20,
-                          right: 20,
-                          top: 10,
+        body: BlocBuilder<PostCubit, PostState>(
+          builder: (context, state) {
+            if (state is PostLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is PostFailure) {
+               return  Center(child: Text(state.error));
+            }      
+           else  if (state is PostLoaded) {
+              List<PostModel> posts = (state).posts;
+              return SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Stack(
+                  children: [
+                    Container(
+                      color: Colors.white,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 20,
+                                right: 20,
+                                top: 10,
+                              ),
+                              child: Custom_appBarWidget(user: user),
+                            ),
+                            SizedBox(height: 20),
+                            ...List.generate(posts.length, (index) {
+                              PostModel post = posts[index];
+                              return HomeCard(
+                                dp: post.userImage,
+                                name: post.username,
+                                des: post.text!,
+                                hash: post.id,
+                                img: post.postImage!,
+                              );
+                            }),
+                          ],
                         ),
-                        child: Custom_appBarWidget(user: user),
                       ),
-                      SizedBox(height: 20),
-                      ...List.generate(posts.length, (index) {
-                        Map post = posts[index];
-                        return HomeCard(
-                          dp: post["dp"],
-                          name: post['name'],
-                          img: "assets/images/dm$index.jpg",
-                          des: post['des'],
-                          hash: post['hash'],
-                        );
-                      }),
-                    ],
-                  ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      child: CustomNavBar(selectedMenu: MenuState.home),
+                    ),
+                  ],
                 ),
-              ),
-              Positioned(
-                bottom: 0,
-                child: CustomNavBar(selectedMenu: MenuState.home),
-              ),
-            ],
-          ),
+              );
+            }
+        
+              return const Center(child: Text("Something went wrong"));
+            
+          },
         ),
       ),
     );
