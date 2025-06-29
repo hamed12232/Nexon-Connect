@@ -1,4 +1,5 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/features/home/ui/widgets/home_card.dart';
 
@@ -34,7 +35,7 @@ class CustomShaderMaskImage extends StatelessWidget {
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: NetworkImage(widget.img),
+              image:  CachedNetworkImageProvider(widget.img),
             ),
             borderRadius: BorderRadius.circular(35),
           ),

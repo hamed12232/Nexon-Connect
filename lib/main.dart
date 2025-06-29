@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/features/Post/logic/cubit/post_cubit.dart';
+import 'package:myapp/features/Post/logic/cubit/post_cubit/post_cubit.dart';
 import 'package:myapp/features/auth/cubit/cubit/auth_cubit.dart';
 import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
 import 'package:myapp/core/routing/NavigationRoutes.dart';

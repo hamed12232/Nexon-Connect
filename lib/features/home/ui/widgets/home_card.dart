@@ -1,9 +1,11 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myapp/features/home/ui/widgets/custom_shader_mask.dart';
 import 'package:myapp/features/home/ui/widgets/custom_side_bar_icons.dart';
+import 'package:myapp/features/home/ui/widgets/like_button.dart';
 
 class HomeCard extends StatefulWidget {
   final String? dp;
@@ -11,6 +13,8 @@ class HomeCard extends StatefulWidget {
   final String? des;
   final String img;
   final String? hash;
+  final String postId;
+  final String user;
 
   const HomeCard({
     super.key,
@@ -19,6 +23,8 @@ class HomeCard extends StatefulWidget {
     required this.des,
     required this.hash,
     required this.img,
+    required this.postId,
+    required this.user,
   });
   @override
   // ignore: library_private_types_in_public_api
@@ -26,7 +32,6 @@ class HomeCard extends StatefulWidget {
 }
 
 class _HomeCardState extends State<HomeCard> {
-  bool isLiked = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -82,33 +87,7 @@ class _HomeCardState extends State<HomeCard> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        GestureDetector(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              // ignore: deprecated_member_use
-                              color: Colors.white.withOpacity(0.4),
-                            ),
-                            height: 60,
-                            width: 60,
-                            child: Padding(
-                              padding: const EdgeInsets.all(17.0),
-                              child: SvgPicture.asset(
-                                isLiked
-                                    ? "assets/icons/heart-shape-silhouette.svg"
-                                    : "assets/icons/heart-shape-outine.svg",
-                                // ignore: deprecated_member_use
-                                color: Color(0xffffffff),
-                              ),
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              isLiked = !isLiked;
-                            });
-                          },
-                        ),
-
+                        LikeButton(widget: widget),
                         MyCustomSideBarIcon(
                           urlimage: "assets/icons/comment-option.svg",
                         ),
@@ -133,7 +112,7 @@ class _HomeCardState extends State<HomeCard> {
                 Row(
                   children: [
                     CircleAvatar(
-                      backgroundImage: NetworkImage(widget.dp!),
+                      backgroundImage:CachedNetworkImageProvider(widget.dp!),
                       radius: 25,
                     ),
                     SizedBox(width: 10),
@@ -149,7 +128,7 @@ class _HomeCardState extends State<HomeCard> {
                 ),
                 SizedBox(height: 20),
                 Text(
-            widget.des!,
+                  widget.des!,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,

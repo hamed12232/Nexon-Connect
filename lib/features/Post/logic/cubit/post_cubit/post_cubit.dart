@@ -62,6 +62,7 @@ class PostCubit extends Cubit<PostState> {
   Future<void> fetchPost() async {
     emit(PostLoading());
     try {
+      
       final snapshot =
           await servicesHelper.firestore
               .collection("posts")
@@ -75,7 +76,7 @@ class PostCubit extends Cubit<PostState> {
       emit(PostFailure(e.toString()));
     }
   }
-  Future<void> fetchUserPosts(String userId) async {
+  Future<void> fetchUserPosts(String userId,) async {
   emit(PostLoading());
   try {
     final snapshot = await servicesHelper.firestore
@@ -93,5 +94,4 @@ class PostCubit extends Cubit<PostState> {
     emit(PostFailure(e.toString()));
   }
 }
-
 }

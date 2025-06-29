@@ -1,5 +1,6 @@
 // ✅ ProfileScreen refactored with cleaner image update and user data flow
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +10,7 @@ import 'package:myapp/core/Components/Custom_NavBar.dart';
 import 'package:myapp/core/Components/Snak_bar.dart';
 import 'package:myapp/core/Components/enums.dart';
 import 'package:myapp/core/helper/services_helper.dart';
-import 'package:myapp/features/Post/logic/cubit/post_cubit.dart';
+import 'package:myapp/features/Post/logic/cubit/post_cubit/post_cubit.dart';
 import 'package:myapp/features/auth/cubit/cubit/auth_cubit.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
@@ -22,6 +23,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late final int versionParam;
   File? imageFile;
   String fileName = '';
   final supabase = Supabase.instance.client;
@@ -30,6 +32,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
+      versionParam = DateTime.now().millisecondsSinceEpoch;
+
     fileName = 'profile_$userId.jpg';
     context.read<AuthCubit>().getUserData(userId);
     context.read<PostCubit>().fetchUserPosts(userId);
@@ -132,9 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: CircleAvatar(
-                backgroundImage: NetworkImage(
-                  "${userModel.image}?v=${DateTime.now().millisecondsSinceEpoch}",
-                ),
+                backgroundImage: CachedNetworkImageProvider("${userModel.image}?v=${DateTime.now().millisecondsSinceEpoch}"),
                 radius: 25,
               ),
             ),
@@ -306,8 +308,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildGrid() {
     return BlocBuilder<PostCubit, PostState>(
       builder: (context, state) {
-        if (state is PostLoading)
+        if (state is PostLoading) {
           return const Center(child: CircularProgressIndicator());
+        }
         if (state is PostFailure) return Center(child: Text(state.error));
         if (state is PostLoaded) {
           final posts = state.posts;

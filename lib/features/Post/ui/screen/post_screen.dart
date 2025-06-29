@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:myapp/core/Components/Snak_bar.dart';
-import 'package:myapp/features/Post/logic/cubit/post_cubit.dart';
+import 'package:myapp/features/Post/logic/cubit/post_cubit/post_cubit.dart';
 
 class PostScreen extends StatefulWidget {
   static const routeName = "/PostScreen";

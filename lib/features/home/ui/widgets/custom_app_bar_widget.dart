@@ -8,9 +8,8 @@ import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
 class Custom_appBarWidget extends StatelessWidget {
   const Custom_appBarWidget({
     super.key,
-    required this.user,
+    required this.user, 
   });
-
   final FirebaseAuth user;
 
   @override
