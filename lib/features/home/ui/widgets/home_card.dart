@@ -2,7 +2,10 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:myapp/features/Post/logic/cubit/comment_cubit/comment_cubit.dart';
+import 'package:myapp/features/Post/ui/screen/comment_bottom_sheet_screen.dart';
 import 'package:myapp/features/home/ui/widgets/custom_shader_mask.dart';
 import 'package:myapp/features/home/ui/widgets/custom_side_bar_icons.dart';
 import 'package:myapp/features/home/ui/widgets/like_button.dart';
@@ -88,8 +91,13 @@ class _HomeCardState extends State<HomeCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         LikeButton(widget: widget),
-                        MyCustomSideBarIcon(
-                          urlimage: "assets/icons/comment-option.svg",
+                        InkWell(
+                          onTap: () {
+                            showCommentSheet(context, widget.postId);
+                          },
+                          child: MyCustomSideBarIcon(
+                            urlimage: "assets/icons/comment-option.svg",
+                          ),
                         ),
                         MyCustomSideBarIcon(
                           urlimage: "assets/icons/bookmark-black-shape.svg",
@@ -156,6 +164,20 @@ class _HomeCardState extends State<HomeCard> {
       ),
     );
   }
+}
+void showCommentSheet(BuildContext context, String postId) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.white,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (_) => BlocProvider(
+      create: (context) => CommentCubit()..fetchComments(postId),
+      child: CommentBottomSheet(postId: postId),
+    ),
+  );
 }
 
 class MyCustomClipper extends CustomClipper<Path> {

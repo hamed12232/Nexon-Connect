@@ -75,10 +75,10 @@ class _HomeState extends State<HomeScreen> {
                               }
                               return BlocProvider(
                                 key: ValueKey(post.id),
-                                create: (context) => LikeCubit()..loadLikes(post.id, post.userId),
+                                create: (context) => LikeCubit()..loadLikes(post.id, user.currentUser!.uid),
                                 child: HomeCard(
                                   postId: post.id,
-                                  user: post.userId,
+                                  user: user.currentUser!.uid,
                                   dp: imageUrl,
                                   name: post.username,
                                   des: post.text!,
