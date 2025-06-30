@@ -3,8 +3,8 @@ class UserModel {
   final String fullName;
   final String email;
   final String image;
-  final int followers;
-  final int following;
+  final List followers;
+  final List following;
   final int likes;
 
   UserModel({
@@ -23,8 +23,8 @@ class UserModel {
       fullName: map['fullName'],
       email: map['email'],
       image: map['image']  ,
-      followers: map['followers'] ?? 0,
-      following: map['following'] ?? 0,
+      followers: map['followers'] ?? [],
+      following: map['following'] ?? [],
       likes: map['likes'] ?? 0,
     );
   }

@@ -39,8 +39,8 @@ class AuthCubit extends Cubit<AuthState> {
         image:
             "https://phjbtfqjmlkwoooavnfb.supabase.co/storage/v1/object/public/images/uploads/guestImage.avif",
         email: email,
-        followers: 0,
-        following: 0,
+        followers: [],
+        following: [],
         likes: 0,
       );
 

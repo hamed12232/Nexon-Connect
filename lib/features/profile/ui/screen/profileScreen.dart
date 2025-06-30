@@ -195,8 +195,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildStatItem("${userModel.following}", "Following"),
-          _buildStatItem("${userModel.followers}", "Followers"),
+          _buildStatItem("${userModel.following.length-1}", "Following"),
+          _buildStatItem("${userModel.followers.length-1}", "Followers"),
           _buildStatItem("${userModel.likes}", "Like"),
         ],
       ),
