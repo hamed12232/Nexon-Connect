@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:myapp/core/Components/enums.dart';
+import 'package:myapp/features/discover/ui/discover_screen.dart';
 import 'package:myapp/features/home/ui/screen/HomeScreen.dart';
 import 'package:myapp/features/Inbox/ui/screen/Inbox_Screen.dart';
 import 'package:myapp/features/profile/ui/screen/profileScreen.dart';
@@ -106,8 +107,9 @@ class CustomNavBar extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // if (!(route!.settings.name == "/discover"))
-                        //   Navigator.pushNamed(context, Discover.routeName);
+                        if (!(route!.settings.name == "/discover")) {
+                          Navigator.pushNamed(context, DiscoverScreen.routeName);
+                        }
                       },
                       child: Container(
                         decoration:

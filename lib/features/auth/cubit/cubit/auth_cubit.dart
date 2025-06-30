@@ -37,7 +37,7 @@ class AuthCubit extends Cubit<AuthState> {
         uid: uid,
         fullName: name,
         image:
-            "https://img.freepik.com/premium-vector/symbolic-drawing-person-with-circle-representing-bicycle-wheel-rim_797523-3031.jpg?w=2000",
+            "https://phjbtfqjmlkwoooavnfb.supabase.co/storage/v1/object/public/images/uploads/guestImage.avif",
         email: email,
         followers: 0,
         following: 0,

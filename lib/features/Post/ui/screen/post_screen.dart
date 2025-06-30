@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +31,7 @@ class _PostScreenState extends State<PostScreen> {
     final themeColor = const Color(0xFF651CE5); // نفس لون الـ Gradient الأساسي
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
@@ -51,12 +51,16 @@ class _PostScreenState extends State<PostScreen> {
         actions: [
           TextButton(
             onPressed: () async {
-              await context.read<PostCubit>().createPost(
-                text: textController.text,
-                imageFile: imageFile,
-              );
-              Navigator.pop(context);
-              showInSnackBar("Post created successfully", context);
+              if (imageFile != null && textController.text.isNotEmpty) {
+                await context.read<PostCubit>().createPost(
+                  text: textController.text,
+                  imageFile: imageFile,
+                );
+                Navigator.pop(context);
+                showInSnackBar("Post created successfully", context);
+              }else{
+                showInSnackBar("Please add text or image", context);
+              }
             },
             child: Text(
               'Post',
@@ -143,6 +147,7 @@ class _PostScreenState extends State<PostScreen> {
                   color: Colors.red,
                 ),
                 _buildIconButton(
+                  // ignore: deprecated_member_use
                   icon: FontAwesomeIcons.smile,
                   label: 'Feeling',
                   color: Colors.orange,
