@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:myapp/core/helper/services_helper.dart';
@@ -15,6 +16,12 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     try {
       await servicesHelper.loginUser(email, password);
+      final token = await FirebaseMessaging.instance.getToken();
+      //save token
+      await servicesHelper.firestore
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({"fcmToken": token});
       emit(AuthSuccess());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -48,6 +55,11 @@ class AuthCubit extends Cubit<AuthState> {
           .collection("users")
           .doc(uid)
           .set(newUser.toMap());
+      final token = await FirebaseMessaging.instance.getToken();
+      await servicesHelper.firestore
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({"fcmToken": token});
       emit(AuthSuccess());
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -69,7 +81,6 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthUserLoaded(user));
     } catch (e) {
       emit(AuthFailure(e.toString()));
-     
     }
   }
 }

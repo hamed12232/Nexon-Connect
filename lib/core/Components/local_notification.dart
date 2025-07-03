@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotification {
@@ -24,7 +25,7 @@ class LocalNotification {
     );
   }
 
-  void showBasicNotification() async {
+  void showBasicNotification(RemoteMessage message) async {
     NotificationDetails notificationDetails = NotificationDetails(
       android: AndroidNotificationDetails(
         "channelId",
@@ -37,8 +38,8 @@ class LocalNotification {
 
     await flutterLocalNotificationsPlugin.show(
       1,
-      "Basic Notification",
-      "This is a local notification!",
+      message.notification?.title,
+      message.notification?.body,
       notificationDetails,
     );
   }
@@ -59,9 +60,8 @@ class LocalNotification {
       "Repeated Notification",
       "Basic Notification",
       RepeatInterval.everyMinute,
-      notificationDetails, 
-      androidScheduleMode: AndroidScheduleMode.alarmClock
+      notificationDetails,
+      androidScheduleMode: AndroidScheduleMode.alarmClock,
     );
   }
-
 }
