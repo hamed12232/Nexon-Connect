@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:myapp/features/Post/logic/cubit/likes_cubit/likes_cubit.dart';
 import 'package:myapp/features/home/ui/widgets/home_card.dart';
-import 'package:myapp/main.dart';
 
 class LikeButton extends StatelessWidget {
   const LikeButton({super.key, required this.widget});

@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:myapp/core/Components/local_notification.dart';
 import 'package:myapp/features/Post/ui/screen/post_screen.dart';
 import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
 
@@ -120,16 +121,21 @@ class Custom_appBarWidget extends StatelessWidget {
                         fontSize: 18,
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      right: 15,
-                    ),
-                    child: SvgPicture.asset(
-                      "assets/icons/tick.svg",
-                      height: 21,
-                      // ignore: deprecated_member_use
-                      color: Color(0xff00d289),
+                  ),   
+                  InkWell(
+                      onTap: () {
+               LocalNotification().showRepeatedNotification();
+              },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 15,
+                      ),
+                      child: SvgPicture.asset(
+                        "assets/icons/tick.svg",
+                        height: 21,
+                        // ignore: deprecated_member_use
+                        color: Color(0xff00d289),
+                      ),
                     ),
                   ),
                 ],
