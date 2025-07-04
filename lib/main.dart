@@ -10,6 +10,7 @@ import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
 import 'package:myapp/core/routing/NavigationRoutes.dart';
 import 'package:myapp/features/home/ui/screen/HomeScreen.dart';
 import 'package:myapp/firebase_options.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -29,7 +30,7 @@ void main() async {
     LocalNotification().init(),
      FirebaseLocalNotification().initNotification()
   ]);
- 
+  await dotenv.load(fileName: "seceret.env");
   runApp(
     MultiBlocProvider(
       providers: [

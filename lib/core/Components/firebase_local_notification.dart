@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -32,29 +33,31 @@ class FirebaseLocalNotification {
     });
   }
 
-  Future<void> sendFollowNotificationToUser(
-    String targetUserId,
-    String followerName,
-  ) async {
-    final serverUrl =
-        'https://fcm.googleapis.com/v1/projects/demosocialapp-ef38c/messages:send'; // رابط السيرفر بتاعك
+  Future<void> sendPushNotification({
+  required String deviceToken,
+  required String accessToken,
+   required String follower
+}) async {
+  final url = Uri.parse("https://fcm.googleapis.com/v1/projects/demosocialapp-ef38c/messages:send");
 
-    final body = {
-      "toUserId": targetUserId,
-      "title": "$followerName started following you",
-      "body": "Tap to view their profile",
-    };
+  final headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer $accessToken',
+  };
 
-    try {
-      final response = await http.post(Uri.parse(serverUrl), body: body);
-
-      if (response.statusCode == 200) {
-        log("Notification sent successfully");
-      } else {
-        log("Failed to send notification: ${response.body}");
+  final body = jsonEncode({
+    "message": {
+      "token": deviceToken,
+      "notification": {
+        "title": "New Follower!",
+        "body": "$follower started following you",
       }
-    } catch (e) {
-      log("Error: $e");
     }
-  }
+  });
+
+  final response = await http.post(url, headers: headers, body: body);
+
+  log('Status: ${response.statusCode}');
+  log('Body: ${response.body}');
+}
 }

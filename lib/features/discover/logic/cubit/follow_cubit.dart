@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:myapp/core/Components/firebase_local_notification.dart';
 part 'follow_state.dart';
 
 class FollowCubit extends Cubit<FollowState> {
   FollowCubit() : super(FollowInitial());
+  String? serverKey= dotenv.env['fcm_token'];
 
   final _firestore = FirebaseFirestore.instance;
 
@@ -11,7 +14,7 @@ class FollowCubit extends Cubit<FollowState> {
     try {
       final currentUserDoc = _firestore.collection("users").doc(currentUserId);
       final targetUserDoc = _firestore.collection("users").doc(targetUserId);
-
+      final targetUserSnapshot = await targetUserDoc.get();
       final currentUserSnapshot = await currentUserDoc.get();
       final following = List<String>.from(currentUserSnapshot['following'] ?? []);
 
@@ -33,6 +36,10 @@ class FollowCubit extends Cubit<FollowState> {
         await targetUserDoc.update({
           "followers": FieldValue.arrayUnion([currentUserId])
         });
+         await FirebaseLocalNotification().sendPushNotification(deviceToken: targetUserSnapshot['fcmToken']??"null"
+        , accessToken: serverKey!,
+          follower: currentUserSnapshot["fullName"]
+        );
       }
 
        await loadSuggestedUsers(currentUserId);
