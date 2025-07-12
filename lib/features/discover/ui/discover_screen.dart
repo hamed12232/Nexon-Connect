@@ -16,7 +16,7 @@ class DiscoverScreen extends StatefulWidget {
 }
 
 class _DiscoverState extends State<DiscoverScreen> {
-    final cUser = FirebaseAuth.instance.currentUser;
+  final cUser = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,9 @@ class _DiscoverState extends State<DiscoverScreen> {
                                     end: Alignment.bottomLeft,
                                     stops: [0.1, 0.9],
                                     colors:
-                                       following.contains(state.users[index].id)
+                                        following.contains(
+                                              state.users[index].id,
+                                            )
                                             ? [
                                               Colors.black.withOpacity(0.5),
                                               Colors.grey,
@@ -104,11 +106,10 @@ class _DiscoverState extends State<DiscoverScreen> {
                                 ),
                                 child: TextButton(
                                   onPressed: () {
-                                   context.read<FollowCubit>().toggleFollow(
-                                     cUser!.uid ,
+                                    context.read<FollowCubit>().toggleFollow(
+                                      cUser!.uid,
                                       state.users[index].id,
                                     );
-                                   
                                   },
                                   style: TextButton.styleFrom(
                                     shape: RoundedRectangleBorder(
@@ -120,7 +121,7 @@ class _DiscoverState extends State<DiscoverScreen> {
                                     ),
                                   ),
                                   child: Text(
-                                   following.contains(state.users[index].id)
+                                    following.contains(state.users[index].id)
                                         ? 'Unfollow'
                                         : 'Follow',
                                     style: const TextStyle(

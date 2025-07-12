@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
-
+import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:myapp/core/Components/local_notification.dart';
 
@@ -33,31 +34,49 @@ class FirebaseLocalNotification {
     });
   }
 
+  Future<String> getAccessToken() async {
+    final jsonString = await rootBundle.loadString(
+      "assets/demosocialapp-ef38c-51f08dd044b3.json",
+    );
+    final clientCredentials = auth.ServiceAccountCredentials.fromJson(
+      jsonString,
+    );
+
+    final scopes = ["https://www.googleapis.com/auth/firebase.messaging"];
+    final client = await auth.clientViaServiceAccount(
+      clientCredentials,
+      scopes,
+    );
+    return client.credentials.accessToken.data;
+  }
+
   Future<void> sendPushNotification({
-  required String deviceToken,
-  required String accessToken,
-   required String follower
-}) async {
-  final url = Uri.parse("https://fcm.googleapis.com/v1/projects/demosocialapp-ef38c/messages:send");
+    required String deviceToken,
+    required String follower,
+  }) async {
+    String accessToken = await getAccessToken();
+    final url = Uri.parse(
+      "https://fcm.googleapis.com/v1/projects/demosocialapp-ef38c/messages:send",
+    );
 
-  final headers = {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer $accessToken',
-  };
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
 
-  final body = jsonEncode({
-    "message": {
-      "token": deviceToken,
-      "notification": {
-        "title": "New Follower!",
-        "body": "$follower started following you",
-      }
-    }
-  });
+    final body = jsonEncode({
+      "message": {
+        "token": deviceToken,
+        "notification": {
+          "title": "New Follower!",
+          "body": "$follower started following you",
+        },
+      },
+    });
 
-  final response = await http.post(url, headers: headers, body: body);
+    final response = await http.post(url, headers: headers, body: body);
 
-  log('Status: ${response.statusCode}');
-  log('Body: ${response.body}');
-}
+    log('Status: ${response.statusCode}');
+    log('Body: ${response.body}');
+  }
 }

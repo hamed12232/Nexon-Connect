@@ -10,7 +10,7 @@ import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
 import 'package:myapp/core/routing/NavigationRoutes.dart';
 import 'package:myapp/features/home/ui/screen/HomeScreen.dart';
 import 'package:myapp/firebase_options.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -22,15 +22,13 @@ void main() async {
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoamJ0ZnFqbWxrd29vb2F2bmZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA0NzkwODgsImV4cCI6MjA2NjA1NTA4OH0.SbVH4Dw2z3fJ7_Tv02fODxnAPeJgqpB4j4rJCxMah8g',
   );
-  // await LocalNotification().init();
-  // if (await Permission.notification.isDenied) {
-  //   await Permission.notification.request();
-  // }
+  if (await Permission.notification.isDenied) {
+    await Permission.notification.request();
+  }
   await Future.wait([
     LocalNotification().init(),
      FirebaseLocalNotification().initNotification()
   ]);
-  await dotenv.load(fileName: "seceret.env");
   runApp(
     MultiBlocProvider(
       providers: [

@@ -1,12 +1,12 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:myapp/core/Components/firebase_local_notification.dart';
 part 'follow_state.dart';
 
 class FollowCubit extends Cubit<FollowState> {
   FollowCubit() : super(FollowInitial());
-  String? serverKey= dotenv.env['fcm_token'];
 
   final _firestore = FirebaseFirestore.instance;
 
@@ -16,35 +16,38 @@ class FollowCubit extends Cubit<FollowState> {
       final targetUserDoc = _firestore.collection("users").doc(targetUserId);
       final targetUserSnapshot = await targetUserDoc.get();
       final currentUserSnapshot = await currentUserDoc.get();
-      final following = List<String>.from(currentUserSnapshot['following'] ?? []);
+      final following = List<String>.from(
+        currentUserSnapshot['following'] ?? [],
+      );
 
       final isFollowing = following.contains(targetUserId);
 
       if (isFollowing) {
         // Unfollow
         await currentUserDoc.update({
-          "following": FieldValue.arrayRemove([targetUserId])
+          "following": FieldValue.arrayRemove([targetUserId]),
         });
         await targetUserDoc.update({
-          "followers": FieldValue.arrayRemove([currentUserId])
+          "followers": FieldValue.arrayRemove([currentUserId]),
         });
       } else {
         // Follow
         await currentUserDoc.update({
-          "following": FieldValue.arrayUnion([targetUserId])
+          "following": FieldValue.arrayUnion([targetUserId]),
         });
         await targetUserDoc.update({
-          "followers": FieldValue.arrayUnion([currentUserId])
+          "followers": FieldValue.arrayUnion([currentUserId]),
         });
-         await FirebaseLocalNotification().sendPushNotification(deviceToken: targetUserSnapshot['fcmToken']??"null"
-        , accessToken: serverKey!,
-          follower: currentUserSnapshot["fullName"]
+        await FirebaseLocalNotification().sendPushNotification(
+          deviceToken: targetUserSnapshot['fcmToken'] ?? "null",
+          follower: currentUserSnapshot["fullName"],
         );
       }
 
-       await loadSuggestedUsers(currentUserId);
+      await loadSuggestedUsers(currentUserId);
     } catch (e) {
-      emit(FollowFailure("Something went wrong"));
+      log(e.toString());
+      emit(FollowFailure(e.toString()));
     }
   }
 
@@ -52,15 +55,15 @@ class FollowCubit extends Cubit<FollowState> {
     emit(FollowLoading());
     try {
       final usersSnapshot = await _firestore.collection("users").get();
-      final currentUser = usersSnapshot.docs.firstWhere((doc) => doc.id == currentUserId);
+      final currentUser = usersSnapshot.docs.firstWhere(
+        (doc) => doc.id == currentUserId,
+      );
       final following = List<String>.from(currentUser['following'] ?? []);
 
-      final suggestedUsers = usersSnapshot.docs
-          .where((doc) =>
-              doc.id != currentUserId )
-          .toList();
+      final suggestedUsers =
+          usersSnapshot.docs.where((doc) => doc.id != currentUserId).toList();
 
-      emit(FollowLoaded(users: suggestedUsers,following: following));
+      emit(FollowLoaded(users: suggestedUsers, following: following));
     } catch (e) {
       print(e.toString());
       emit(FollowFailure("Failed to load users"));

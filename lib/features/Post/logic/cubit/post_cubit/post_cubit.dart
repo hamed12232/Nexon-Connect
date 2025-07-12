@@ -28,10 +28,6 @@ class PostCubit extends Cubit<PostState> {
       if (imageFile != null) {
         final fileName = DateTime.now().millisecondsSinceEpoch.toString();
         imageUrl = await servicesHelper.uploadImage(imageFile, fileName);
-        if (imageUrl == null) {
-          emit(PostFailure("Failed to upload image"));
-          return;
-        }
       }
 
       final postId = const Uuid().v4();
