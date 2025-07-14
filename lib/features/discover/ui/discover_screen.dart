@@ -46,6 +46,7 @@ class _DiscoverState extends State<DiscoverScreen> {
                               vertical: 10,
                             ),
                             child: ListTile(
+                              
                               leading: Container(
                                 decoration: BoxDecoration(
                                   boxShadow: [
@@ -132,7 +133,9 @@ class _DiscoverState extends State<DiscoverScreen> {
                                   ),
                                 ),
                               ),
-                              onTap: () {},
+                              onTap: () {
+                                
+                              },
                             ),
                           );
                         },

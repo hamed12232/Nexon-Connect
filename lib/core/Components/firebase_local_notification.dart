@@ -36,7 +36,7 @@ class FirebaseLocalNotification {
 
   Future<String> getAccessToken() async {
     final jsonString = await rootBundle.loadString(
-      "assets/demosocialapp-ef38c-51f08dd044b3.json",
+      "assets/demosocialapp-ef38c-be73771d867a.json"
     );
     final clientCredentials = auth.ServiceAccountCredentials.fromJson(
       jsonString,

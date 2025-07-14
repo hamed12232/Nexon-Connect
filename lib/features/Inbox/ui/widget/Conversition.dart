@@ -1,18 +1,15 @@
 import 'dart:math';
+import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:myapp/core/Components/data.dart';
-import 'package:myapp/features/Inbox/ui/widget/Chat_bubble.dart';
 
 class Conversation extends StatefulWidget {
   final String? dp, name;
 
-  const Conversation({
-    super.key,
-    required this.dp,
-    required this.name,
-  });
+  const Conversation({super.key, required this.dp, required this.name});
   @override
+  // ignore: library_private_types_in_public_api
   _ConversationState createState() => _ConversationState();
 }
 
@@ -62,16 +59,12 @@ class _ConversationState extends State<Conversation> {
                     child: Padding(
                       padding: const EdgeInsets.all(2.0),
                       child: CircleAvatar(
-                        backgroundImage: AssetImage(
-                          "${widget.dp}",
-                        ),
+                        backgroundImage: AssetImage("${widget.dp}"),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 20,
-                ),
+                SizedBox(width: 20),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,13 +94,8 @@ class _ConversationState extends State<Conversation> {
             onTap: () {},
           ),
           actions: <Widget>[
-            SvgPicture.asset(
-              "assets/icons/dots.svg",
-              height: 5,
-            ),
-            SizedBox(
-              width: 20,
-            ),
+            SvgPicture.asset("assets/icons/dots.svg", height: 5),
+            SizedBox(width: 20),
           ],
         ),
         body: SizedBox(
@@ -120,19 +108,13 @@ class _ConversationState extends State<Conversation> {
                   itemCount: conversation.length,
                   reverse: true,
                   itemBuilder: (BuildContext context, int index) {
-                    Map msg = conversation[index];
-                    return ChatBubble(
-                      message: msg['type'] == "text"
-                          ? messages[random.nextInt(10)]
-                          : "assets/images/px$index.jpg",
-                      username: msg["username"],
-                      time: msg["time"],
-                      type: msg['type'],
-                      replyText: msg["replyText"],
-                      isMe: msg['isMe'],
-                      isGroup: msg['isGroup'],
-                      isReply: msg['isReply'],
-                      replyName: name,
+                 //   Map msg = conversation[index];
+                    return BubbleSpecialThree(
+                      text: 'Added iMessage shape bubbles',
+                      color: Color(0xFF1B97F3),
+                      tail: false,
+                      isSender: false,
+                      textStyle: TextStyle(color: Colors.white, fontSize: 16),
                     );
                   },
                 ),
@@ -143,9 +125,7 @@ class _ConversationState extends State<Conversation> {
                   elevation: 10,
                   color: Theme.of(context).primaryColor,
                   child: Container(
-                    constraints: BoxConstraints(
-                      maxHeight: 100,
-                    ),
+                    constraints: BoxConstraints(maxHeight: 100),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
@@ -170,10 +150,10 @@ class _ConversationState extends State<Conversation> {
                               hintText: "Write your message...",
                               hintStyle: TextStyle(
                                 fontSize: 15.0,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .color,
+                                color:
+                                    Theme.of(
+                                      context,
+                                    ).textTheme.titleLarge!.color,
                               ),
                             ),
                             maxLines: null,
@@ -185,7 +165,7 @@ class _ConversationState extends State<Conversation> {
                             color: Theme.of(context).colorScheme.secondary,
                           ),
                           onPressed: () {},
-                        )
+                        ),
                       ],
                     ),
                   ),

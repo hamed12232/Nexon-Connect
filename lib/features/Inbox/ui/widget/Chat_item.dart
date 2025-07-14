@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/features/Inbox/ui/widget/Conversition.dart';
 
@@ -52,7 +53,7 @@ class _ChatItemState extends State<ChatItem> {
                 child: Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: CircleAvatar(
-                    backgroundImage: AssetImage(
+                    backgroundImage: CachedNetworkImageProvider(
                       "${widget.dp}",
                     ),
                   ),
