@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/features/Inbox/ui/widget/Conversition.dart';
 
@@ -9,6 +10,8 @@ class ChatItem extends StatefulWidget {
   final String? msg;
   final bool? isOnline;
   final int? counter;
+  final String chatId;
+  final String senderId;
 
   const ChatItem({
     super.key,
@@ -17,14 +20,17 @@ class ChatItem extends StatefulWidget {
     required this.time,
     required this.msg,
     required this.isOnline,
-    required this.counter,
+    required this.counter, required this.chatId, required this.senderId,
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _ChatItemState createState() => _ChatItemState();
 }
 
 class _ChatItemState extends State<ChatItem> {
+  FirebaseAuth currentUser = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -39,6 +45,7 @@ class _ChatItemState extends State<ChatItem> {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
+                      // ignore: deprecated_member_use
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 2,
                       blurRadius: 5,
@@ -140,6 +147,8 @@ class _ChatItemState extends State<ChatItem> {
             MaterialPageRoute(
               builder: (BuildContext context) {
                 return Conversation(
+                  chatId: widget.chatId,
+                  senderId: widget.senderId,
                   dp: widget.dp,
                   name: widget.name,
                 );

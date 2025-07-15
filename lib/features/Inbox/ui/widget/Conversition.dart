@@ -1,21 +1,31 @@
-import 'dart:math';
-import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:myapp/core/Components/data.dart';
+import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
+import 'package:myapp/features/Inbox/ui/widget/Chat_bubble.dart';
 
 class Conversation extends StatefulWidget {
   final String? dp, name;
+  final String chatId;
+  final String senderId;
 
-  const Conversation({super.key, required this.dp, required this.name});
+  const Conversation({
+    super.key,
+    required this.dp,
+    required this.name,
+    required this.chatId,
+    required this.senderId,
+  });
   @override
   // ignore: library_private_types_in_public_api
   _ConversationState createState() => _ConversationState();
 }
 
 class _ConversationState extends State<Conversation> {
-  static Random random = Random();
-  String name = names[random.nextInt(10)];
+  final TextEditingController _textController = TextEditingController();
+  FirebaseAuth currentUser = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +35,7 @@ class _ConversationState extends State<Conversation> {
           elevation: 3,
           leading: GestureDetector(
             onTap: () {
+              context.read<ChatCubit>().loadChats(currentUser.currentUser!.uid);
               Navigator.pop(context);
             },
             child: Padding(
@@ -36,6 +47,7 @@ class _ConversationState extends State<Conversation> {
             ),
           ),
           titleSpacing: 0,
+          backgroundColor: Colors.white,
           title: InkWell(
             child: Row(
               children: <Widget>[
@@ -59,7 +71,9 @@ class _ConversationState extends State<Conversation> {
                     child: Padding(
                       padding: const EdgeInsets.all(2.0),
                       child: CircleAvatar(
-                        backgroundImage: AssetImage("${widget.dp}"),
+                        backgroundImage: CachedNetworkImageProvider(
+                          "${widget.dp}",
+                        ),
                       ),
                     ),
                   ),
@@ -98,82 +112,159 @@ class _ConversationState extends State<Conversation> {
             SizedBox(width: 20),
           ],
         ),
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: <Widget>[
-              Flexible(
-                child: ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  itemCount: conversation.length,
-                  reverse: true,
-                  itemBuilder: (BuildContext context, int index) {
-                 //   Map msg = conversation[index];
-                    return BubbleSpecialThree(
-                      text: 'Added iMessage shape bubbles',
-                      color: Color(0xFF1B97F3),
-                      tail: false,
-                      isSender: false,
-                      textStyle: TextStyle(color: Colors.white, fontSize: 16),
-                    );
-                  },
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: BottomAppBar(
-                  elevation: 10,
-                  color: Theme.of(context).primaryColor,
-                  child: Container(
-                    constraints: BoxConstraints(maxHeight: 100),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(
-                            Icons.add,
-                            color: Theme.of(context).colorScheme.secondary,
+        body: Stack(
+          children: [
+            Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              child: Image.asset("assets/images/background.png",fit: BoxFit.fill,)),
+            Column(
+              children: [
+                Expanded(
+                  child: StreamBuilder(
+                    stream: context.read<ChatCubit>().getMessages(
+                      widget.chatId,
+                    ),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+
+                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        return Center(
+                          child: SvgPicture.asset(
+                            "assets/images/Voice chat-amico.svg",
+                            fit: BoxFit.scaleDown,
                           ),
-                          onPressed: () {},
+                        );
+                      }
+
+                      final messages = snapshot.data!.docs;
+
+                      return Expanded(
+                        child: ListView.builder(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          itemCount: messages.length,
+                          reverse: true,
+                          itemBuilder: (context, index) {
+                            final messageData =
+                                messages[messages.length - 1 - index].data()
+                                    as Map<String, dynamic>?;
+
+                            //       messageData['senderId'] == widget.senderId,
+                            //   textStyle: TextStyle(
+                            //     color:
+                            //         messageData['senderId'] == widget.senderId
+                            //             ? Colors.white
+                            //             : Colors.black,
+                            return ChatBubble(
+                              message: messageData!['text'] ?? '',
+                              time: "22pm",
+                              isMe: messageData['senderId'] == widget.senderId,
+
+                              type: "text",
+                              replyText: "",
+                              isReply: false,
+                              replyName: "",
+                            );
+                          },
                         ),
-                        Flexible(
-                          child: TextField(
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              color:
-                                  Theme.of(context).textTheme.titleLarge!.color,
+                      );
+                    },
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: BottomAppBar(
+                    elevation: 10,
+                    color: Theme.of(context).primaryColor,
+                    child: Container(
+                      constraints: BoxConstraints(maxHeight: 100),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(
+                              Icons.attach_file,
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(10.0),
-                              border: InputBorder.none,
-                              enabledBorder: InputBorder.none,
-                              hintText: "Write your message...",
-                              hintStyle: TextStyle(
-                                fontSize: 15.0,
-                                color:
-                                    Theme.of(
-                                      context,
-                                    ).textTheme.titleLarge!.color,
+                            onPressed: () {},
+                          ),
+                          Flexible(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.circular(
+                                  30,
+                                ), // ده المهم عشان الكيرف
+                              ),
+                              child: TextField(
+                                controller: _textController,
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                  color:
+                                      Theme.of(
+                                        context,
+                                      ).textTheme.titleLarge!.color,
+                                ),
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(10.0),
+                                  enabledBorder: InputBorder.none,
+                                  border: InputBorder.none,
+
+                                  hintText: "Write your message...",
+                                  hintStyle: TextStyle(
+                                    fontSize: 15.0,
+                                    color:
+                                        Theme.of(
+                                          context,
+                                        ).textTheme.titleLarge!.color,
+                                  ),
+                                ),
+                                maxLines: null,
                               ),
                             ),
-                            maxLines: null,
                           ),
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.mic,
-                            color: Theme.of(context).colorScheme.secondary,
+                          IconButton(
+                            icon: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color(0xFF8E2DE2),
+                                    Color(0xFF4A00E0),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              child: Icon(Icons.send, color: Colors.white),
+                            ),
+                            onPressed: () {
+                              if (_textController.text.trim().isNotEmpty) {
+                                context.read<ChatCubit>().sendMessage(
+                                  chatId: widget.chatId,
+                                  senderId: widget.senderId,
+                                  text: _textController.text.trim(),
+                                );
+                                _textController.clear();
+                              }
+                            },
                           ),
-                          onPressed: () {},
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
+        backgroundColor: Color(0xfff1f5f9),
       ),
     );
   }

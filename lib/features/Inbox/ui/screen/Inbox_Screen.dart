@@ -1,15 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:myapp/core/Components/Custom_NavBar.dart';
 import 'package:myapp/core/Components/enums.dart';
 import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
-import 'package:myapp/features/Inbox/logic/models/chat_model.dart';
-import 'package:myapp/features/Inbox/ui/widget/Chat_item.dart';
+import 'package:myapp/features/Inbox/ui/widget/Chat_list_view.dart';
 import 'package:myapp/features/Inbox/ui/widget/showFriendsBottomSheet.dart';
 import 'package:myapp/features/discover/logic/cubit/follow_cubit.dart';
-import 'package:myapp/features/profile/logic/user_model.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class InboxScreen extends StatefulWidget {
   static const String routeName = "/inbox";
@@ -75,6 +74,7 @@ class _ChatsState extends State<InboxScreen>
                             decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
+                                  // ignore: deprecated_member_use
                                   color: Colors.grey.withOpacity(0.5),
                                   spreadRadius: 2,
                                   blurRadius: 5,
@@ -118,34 +118,34 @@ class _ChatsState extends State<InboxScreen>
                   child: BlocBuilder<ChatCubit, ChatState>(
                     builder: (context, state) {
                       if (state is ChatLoading) {
-                        return Center(child: CircularProgressIndicator());
+                        return Skeletonizer(
+                          enabled: true,
+                          child: ListView.builder(
+                            padding: const EdgeInsets.all(20),
+                            itemCount: 6,
+                            itemBuilder:
+                                (context, index) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: Container(
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                ),
+                          ),
+                        );
                       } else if (state is ChatError) {
                         return Center(child: Text(state.error));
                       } else if (state is ChatCreated) {
                         if (state.chats.isEmpty) {
-                          return Center(child: Text("Tap To Add Chats"));
-                        } else {
-                          return ListView.builder(
-                            padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                            itemCount: state.chats.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final chat =
-                                  state.chats[index]["chat"] as ChatModel;
-                              final otherUser =
-                                  state.chats[index]["otherUser"] as UserModel;
-
-                              return ChatItem(
-                                dp: otherUser.image,
-                                name: otherUser.fullName,
-                                isOnline: chat.isActive,
-                                counter: 1,
-                                msg: chat.lastMessage,
-                                time: DateFormat(
-                                  'hh:mm a',
-                                ).format(chat.lastTime),
-                              );
-                            },
+                          return SvgPicture.asset(
+                            "assets/images/Group Chat-amico.svg",
+                            fit: BoxFit.scaleDown,
                           );
+                        } else {
+                          return ChatsListView(chats: state.chats);
                         }
                       } else {
                         return Center(child: Text("Something went wrong"));
