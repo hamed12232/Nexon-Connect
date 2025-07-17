@@ -7,6 +7,7 @@ import 'package:myapp/features/Inbox/ui/screen/Inbox_Screen.dart';
 import 'package:myapp/features/profile/logic/user_model.dart';
 import 'package:myapp/features/profile/ui/screen/profileScreen.dart';
 import 'package:myapp/features/profile/ui/screen/SettingsPrivacypage.dart';
+import 'package:myapp/features/profile/ui/widget/accountSection.dart';
 import 'package:myapp/features/profile/ui/widget/changePassword.dart';
 
 class NavigationRoutes {
@@ -40,6 +41,9 @@ class NavigationRoutes {
       case Changepassword.routeName:
          final String email = settings.arguments as String;
         return MaterialPageRoute(builder: (context) => Changepassword(email: email,));
+
+      case ComplateProfileScreen.routeName:
+        return MaterialPageRoute(builder: (context) => const ComplateProfileScreen());
 
       default:
         return MaterialPageRoute(builder: (context) => const AuthScreen());

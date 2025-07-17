@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/core/helper/services_helper.dart';
 import 'package:myapp/core/style/style.dart';
 import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
+import 'package:myapp/features/profile/ui/widget/accountSection.dart';
 import 'package:myapp/features/profile/ui/widget/changePassword.dart';
 
 class SettingsPrivacyPage extends StatefulWidget {
@@ -52,7 +53,11 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
       body: ListView(
         children: [
           const SizedBox(height: 10),
-          _buildAccountSection(),
+          GestureDetector(
+            onTap: (){
+              Navigator.pushNamed(context, ComplateProfileScreen.routeName);
+            },
+            child: _buildAccountSection()),
           _buildDivider(),
           InkWell(
             onTap: () {
@@ -111,7 +116,7 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
           size: 16,
           color: Colors.grey,
         ),
-        onTap: () {},
+       
       ),
     );
   }

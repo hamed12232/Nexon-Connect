@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -65,6 +66,20 @@ class ServicesHelper {
     return false;
   }
 }
+Future<void> updateProfile(String name, String phoneNumber, String address) async {
+  try {
+    await firestore.collection('users').doc(auth.currentUser!.uid).update({
+      'fullName': name,
+      'phoneNumber': phoneNumber,
+      'address': address,
+    });
+    log("Profile updated successfully");
+  } catch (e) {
+    log("Error updating profile: $e");
+    rethrow; // لو حبيت ترجع الخطأ لباقي الكود
+  }
+}
+
 
   // Future<void> verficationUser() async {
   //   User? user = FirebaseAuth.instance.currentUser;
