@@ -41,45 +41,70 @@ class ServicesHelper {
     await firestore.collection('users').doc(uid).update({'image': imageUrl});
   }
 
- Future<bool> changePassword(String email, String oldPassword, String newPassword) async {
-  try {
-    final user = auth.currentUser;
+  Future<bool> changePassword(
+    String email,
+    String oldPassword,
+    String newPassword,
+  ) async {
+    try {
+      final user = auth.currentUser;
 
-    if (user == null) {
+      if (user == null) {
+        return false;
+      }
+
+      final credential = EmailAuthProvider.credential(
+        email: email,
+        password: oldPassword,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      await user.updatePassword(newPassword);
+
+      return true;
+    } on FirebaseAuthException catch (e) {
+      print("Firebase Error: ${e.code}");
+      return false;
+    } catch (e) {
+      print("Unknown Error: $e");
       return false;
     }
-
-    final credential = EmailAuthProvider.credential(
-      email: email,
-      password: oldPassword,
-    );
-
-    await user.reauthenticateWithCredential(credential);
-    await user.updatePassword(newPassword);
-
-    return true;
-  } on FirebaseAuthException catch (e) {
-    print("Firebase Error: ${e.code}");
-    return false;
-  } catch (e) {
-    print("Unknown Error: $e");
-    return false;
   }
-}
-Future<void> updateProfile(String name, String phoneNumber, String address) async {
+Future<void> deleteAccount(User? user) async {
   try {
-    await firestore.collection('users').doc(auth.currentUser!.uid).update({
-      'fullName': name,
-      'phoneNumber': phoneNumber,
-      'address': address,
-    });
-    log("Profile updated successfully");
+   if(user==null){
+    log("User is null");
+    return;
+   }
+
+
+    await user.delete();
+    await firestore.collection("users").doc(user.uid).delete();
+
+
+    log("Account deleted successfully");
   } catch (e) {
-    log("Error updating profile: $e");
-    rethrow; // لو حبيت ترجع الخطأ لباقي الكود
+    log("Error deleting account: ${e.toString()}");
   }
 }
 
+  Future<void> updateProfile(
+    String name,
+    String phoneNumber,
+    String address,
+  ) async {
+    try {
+      await firestore.collection('users').doc(auth.currentUser!.uid).update({
+        'fullName': name,
+        'phoneNumber': phoneNumber,
+        'address': address,
+      });
+      log("Profile updated successfully");
+    } catch (e) {
+      log("Error updating profile: $e");
+      rethrow; // لو حبيت ترجع الخطأ لباقي الكود
+    }
+  }
 
   // Future<void> verficationUser() async {
   //   User? user = FirebaseAuth.instance.currentUser;

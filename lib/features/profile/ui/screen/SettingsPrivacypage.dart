@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/core/helper/services_helper.dart';
 import 'package:myapp/core/style/style.dart';
@@ -25,7 +26,7 @@ class SettingsPrivacyPage extends StatefulWidget {
 class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
   bool notificationsEnabled = true;
   bool darkModeEnabled = false;
-
+  FirebaseAuth auth = FirebaseAuth.instance;
   final Color backgroundColor = const Color(0xFFF7F7F7);
   final Color textColor = Colors.black87;
   final Color secondaryTextColor = Colors.grey[600]!;
@@ -54,10 +55,11 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
         children: [
           const SizedBox(height: 10),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.pushNamed(context, ComplateProfileScreen.routeName);
             },
-            child: _buildAccountSection()),
+            child: _buildAccountSection(),
+          ),
           _buildDivider(),
           InkWell(
             onTap: () {
@@ -79,7 +81,71 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
           _buildSectionTitle("SUPPORT & ABOUT"),
           _buildSimpleTile(Icons.privacy_tip_outlined, "Privacy Policy"),
           _buildSimpleTile(Icons.help_outline, "Help & Support"),
-          _buildSimpleTile(Icons.info_outline, "About"),
+          Column(
+            children: [
+              Container(
+                color: Colors.white,
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  leading: Icon(
+                    Icons.warning,
+                    color: ColorsTheme.loginGradientEnd,
+                  ),
+                  title: Text(
+                    "Delete Account",
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: textColor,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  trailing: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Delete Account"),
+                            content: const Text(
+                              "Are you sure you want to delete your account?",
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("Cancel"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  ServicesHelper().deleteAccount(auth.currentUser!);
+                                  Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    AuthScreen.routeName,
+                                    (route) => false,
+                                  );
+                                },
+                                child: const Text("Delete"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: const Icon(
+                      Icons.delete_forever,
+                      size: 25,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ),
+              _buildDivider(),
+            ],
+          ),
           const SizedBox(height: 30),
           _buildLogoutButton(),
         ],
@@ -116,7 +182,6 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
           size: 16,
           color: Colors.grey,
         ),
-       
       ),
     );
   }
