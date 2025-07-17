@@ -6,7 +6,7 @@ import 'package:myapp/core/Components/firebase_local_notification.dart';
 import 'package:myapp/core/Components/local_notification.dart';
 import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
 import 'package:myapp/features/Post/logic/cubit/post_cubit/post_cubit.dart';
-import 'package:myapp/features/auth/cubit/cubit/auth_cubit.dart';
+import 'package:myapp/features/auth/logic/Cubit/auth_cubit.dart' show AuthCubit;
 import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
 import 'package:myapp/core/routing/NavigationRoutes.dart';
 import 'package:myapp/features/home/ui/screen/HomeScreen.dart';

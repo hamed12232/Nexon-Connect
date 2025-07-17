@@ -49,6 +49,7 @@ class AuthCubit extends Cubit<AuthState> {
         followers: [],
         following: [],
         likes: 0,
+        online: false,
       );
 
       await FirebaseFirestore.instance
@@ -79,6 +80,19 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       UserModel user = await servicesHelper.getUser(uid);
       emit(AuthUserLoaded(user));
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+    }
+  }
+
+  Future<void> updateName(String newName) async{
+    emit(AuthLoading());
+    try {
+     await servicesHelper.firestore
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({"fullName": newName});
+      emit(AuthSuccess());
     } catch (e) {
       emit(AuthFailure(e.toString()));
     }

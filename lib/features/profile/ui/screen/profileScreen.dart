@@ -11,7 +11,8 @@ import 'package:myapp/core/Components/Snak_bar.dart';
 import 'package:myapp/core/Components/enums.dart';
 import 'package:myapp/core/helper/services_helper.dart';
 import 'package:myapp/features/Post/logic/cubit/post_cubit/post_cubit.dart';
-import 'package:myapp/features/auth/cubit/cubit/auth_cubit.dart';
+import 'package:myapp/features/auth/logic/Cubit/auth_cubit.dart';
+import 'package:myapp/features/profile/ui/screen/SettingsPrivacypage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
 class ProfileScreen extends StatefulWidget {
@@ -32,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-      versionParam = DateTime.now().millisecondsSinceEpoch;
+    versionParam = DateTime.now().millisecondsSinceEpoch;
 
     fileName = 'profile_$userId.jpg';
     context.read<AuthCubit>().getUserData(userId);
@@ -108,7 +109,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             userModel.fullName,
             style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
           ),
-          SvgPicture.asset("assets/icons/dots.svg", height: 8),
+          InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, SettingsPrivacyPage.routeName,
+              arguments: userModel
+              );
+            },
+            child: SvgPicture.asset("assets/icons/dots.svg", height: 8),
+          ),
         ],
       ),
     );
@@ -136,7 +144,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider("${userModel.image}?v=${DateTime.now().millisecondsSinceEpoch}"),
+                backgroundImage: CachedNetworkImageProvider(
+                  "${userModel.image}?v=${DateTime.now().millisecondsSinceEpoch}",
+                ),
                 radius: 25,
               ),
             ),
@@ -195,8 +205,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildStatItem("${userModel.following.length-1}", "Following"),
-          _buildStatItem("${userModel.followers.length-1}", "Followers"),
+          userModel.following.length == 0
+              ? _buildStatItem("${userModel.following.length}", "Following")
+              : _buildStatItem(
+                "${userModel.following.length - 1}",
+                "Following",
+              ),
+          userModel.followers.length == 0
+              ? _buildStatItem("${userModel.followers.length}", "Followers")
+              : _buildStatItem(
+                "${userModel.followers.length - 1}",
+                "Followers",
+              ),
           _buildStatItem("${userModel.likes}", "Like"),
         ],
       ),

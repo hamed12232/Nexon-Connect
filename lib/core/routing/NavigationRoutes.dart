@@ -4,7 +4,10 @@ import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
 import 'package:myapp/features/discover/ui/discover_screen.dart';
 import 'package:myapp/features/home/ui/screen/HomeScreen.dart';
 import 'package:myapp/features/Inbox/ui/screen/Inbox_Screen.dart';
+import 'package:myapp/features/profile/logic/user_model.dart';
 import 'package:myapp/features/profile/ui/screen/profileScreen.dart';
+import 'package:myapp/features/profile/ui/screen/SettingsPrivacypage.dart';
+import 'package:myapp/features/profile/ui/widget/changePassword.dart';
 
 class NavigationRoutes {
   static Route generateRoute(RouteSettings settings) {
@@ -22,7 +25,22 @@ class NavigationRoutes {
         return MaterialPageRoute(builder: (context) => const ProfileScreen());
       case DiscoverScreen.routeName:
         return MaterialPageRoute(builder: (context) => const DiscoverScreen());
-      
+
+      case SettingsPrivacyPage.routeName:
+        final userModel = settings.arguments as UserModel;
+        return MaterialPageRoute(
+          builder:
+              (context) => SettingsPrivacyPage(
+                imgurl: userModel.image,
+                name: userModel.fullName,
+                email: userModel.email,
+              ),
+        );
+
+      case Changepassword.routeName:
+         final String email = settings.arguments as String;
+        return MaterialPageRoute(builder: (context) => Changepassword(email: email,));
+
       default:
         return MaterialPageRoute(builder: (context) => const AuthScreen());
     }

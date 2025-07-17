@@ -115,7 +115,7 @@ class ChatCubit extends Cubit<ChatState> {
         "id": messageDoc.id,
         "senderId": senderId,
         "text": text,
-        "timestamp": FieldValue.serverTimestamp(),
+        "timestamp": DateTime.now(),
         "repliedToMessageId": repliedToMessageId ?? "",
         "repliedToText": repliedToText ?? "",
         "repliedToSenderId": repliedToSenderId ?? "",
@@ -123,7 +123,7 @@ class ChatCubit extends Cubit<ChatState> {
 
       await _firestore.collection("chats").doc(chatId).update({
         "lastMessage": text,
-        "lastTime": FieldValue.serverTimestamp(),
+        "lastTime": DateTime.now(),
       });
 
       emit(MessageSent());

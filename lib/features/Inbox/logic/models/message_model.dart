@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MessageModel {
   final String senderId;
   final String text;
-  final DateTime timestamp;
+  final DateTime? timestamp;
   final String? repliedToMessageId;
   final String? repliedToText;
   final String? repliedToSenderId;

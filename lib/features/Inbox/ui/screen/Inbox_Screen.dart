@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:myapp/core/Components/Custom_NavBar.dart';
 import 'package:myapp/core/Components/enums.dart';
+import 'package:myapp/core/helper/services_helper.dart';
 import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
 import 'package:myapp/features/Inbox/ui/widget/Chat_list_view.dart';
 import 'package:myapp/features/Inbox/ui/widget/showFriendsBottomSheet.dart';
 import 'package:myapp/features/discover/logic/cubit/follow_cubit.dart';
+import 'package:myapp/features/profile/logic/user_model.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class InboxScreen extends StatefulWidget {
@@ -25,9 +27,21 @@ class _ChatsState extends State<InboxScreen>
   @override
   void initState() {
     context.read<ChatCubit>().loadChats(currentUser.currentUser!.uid);
+    user().then((value) {
+      setState(() {
+        userModel = value;
+      });
+    });
     super.initState();
   }
 
+  Future<UserModel> user() async {
+    return await ServicesHelper().getUser(currentUser.currentUser!.uid);
+  }
+
+  UserModel? userModel;
+  @override
+ 
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -108,7 +122,7 @@ class _ChatsState extends State<InboxScreen>
                         maxLines: 1,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 18,
                         ),
                       ),
                     ],
@@ -145,7 +159,7 @@ class _ChatsState extends State<InboxScreen>
                             fit: BoxFit.scaleDown,
                           );
                         } else {
-                          return ChatsListView(chats: state.chats);
+                          return ChatsListView(chats: state.chats, isOnline: userModel!.online);
                         }
                       } else {
                         return Center(child: Text("Something went wrong"));

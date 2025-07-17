@@ -20,7 +20,9 @@ class ChatItem extends StatefulWidget {
     required this.time,
     required this.msg,
     required this.isOnline,
-    required this.counter, required this.chatId, required this.senderId,
+    required this.counter,
+    required this.chatId,
+    required this.senderId,
   });
 
   @override
@@ -60,9 +62,7 @@ class _ChatItemState extends State<ChatItem> {
                 child: Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: CircleAvatar(
-                    backgroundImage: CachedNetworkImageProvider(
-                      "${widget.dp}",
-                    ),
+                    backgroundImage: CachedNetworkImageProvider("${widget.dp}"),
                   ),
                 ),
               ),
@@ -94,12 +94,11 @@ class _ChatItemState extends State<ChatItem> {
         title: Text(
           "${widget.name}",
           maxLines: 1,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
           "${widget.msg}",
+          style: TextStyle(fontWeight: FontWeight.w300, fontSize: 13),
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
@@ -109,37 +108,31 @@ class _ChatItemState extends State<ChatItem> {
             SizedBox(height: 10),
             Text(
               "${widget.time}",
-              style: TextStyle(
-                fontWeight: FontWeight.w300,
-                fontSize: 11,
-              ),
+              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 11),
             ),
             SizedBox(height: 5),
             widget.counter == 0
                 ? SizedBox()
                 : Container(
-                    padding: EdgeInsets.all(1),
-                    decoration: BoxDecoration(
-                      color: Color(0xff00d289),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    constraints: BoxConstraints(
-                      minWidth: 11,
-                      minHeight: 11,
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 1, left: 5, right: 5),
-                      child: Text(
-                        "${widget.counter}",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10,
-                        ),
-                        textAlign: TextAlign.center,
+                  padding: EdgeInsets.all(1),
+                  decoration: BoxDecoration(
+                    color: Color(0xff00d289),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  constraints: BoxConstraints(minWidth: 11, minHeight: 11),
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 1, left: 5, right: 5),
+                    child: Text(
+                      "${widget.counter}",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
+                ),
           ],
         ),
         onTap: () {

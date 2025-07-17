@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
 import 'package:myapp/features/Inbox/ui/widget/Chat_bubble.dart';
 
@@ -86,9 +88,11 @@ class _ConversationState extends State<Conversation> {
                       Text(
                         widget.name!,
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                           fontSize: 19,
+                                fontWeight: FontWeight.w700,
+                         
                           color: Colors.black,
-                          fontSize: 14,
+                         
                         ),
                       ),
                       SizedBox(height: 5),
@@ -161,7 +165,7 @@ class _ConversationState extends State<Conversation> {
                             //             : Colors.black,
                             return ChatBubble(
                               message: messageData!['text'] ?? '',
-                              time: "22pm",
+                              time: DateFormat('hh:mm a').format((messageData['timestamp'] as Timestamp).toDate()),
                               isMe: messageData['senderId'] == widget.senderId,
 
                               type: "text",

@@ -1,16 +1,13 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:myapp/core/Components/local_notification.dart';
 import 'package:myapp/features/Post/ui/screen/post_screen.dart';
-import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
 
+// ignore: camel_case_types
 class Custom_appBarWidget extends StatelessWidget {
-  const Custom_appBarWidget({
-    super.key,
-    required this.user, 
-  });
+  const Custom_appBarWidget({super.key, required this.user});
   final FirebaseAuth user;
 
   @override
@@ -19,48 +16,35 @@ class Custom_appBarWidget extends StatelessWidget {
       children: [
         Row(
           children: [
-            GestureDetector(
-              onTap: () async {
-                await user.signOut();
-                Navigator.pushReplacementNamed(
-                  context,
-                  AuthScreen.routeName,
-                );
-              },
-              child: SvgPicture.asset(
-                "assets/icons/menu.svg",
-                // ignore: deprecated_member_use
-                color: Color(0xff651CE5),
-                height: 50,
-              ),
+            Image.asset(
+              "assets/images/logo.png",
+              height: 60,
+              width: 60,
+              // ignore: deprecated_member_use
             ),
-            SizedBox(width: 20),
+            SizedBox(width: 10),
+            Text(
+              "Nexon",
+              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17),
+            ),
+            SizedBox(width: 10),
+
             InkWell(
               onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  PostScreen.routeName,
-                );
+                Navigator.pushNamed(context, PostScreen.routeName);
               },
               child: Container(
-                width: 50,
-                height: 50,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
                   color: Color(0xff651CE5),
                   borderRadius: BorderRadius.circular(50),
                 ),
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 35,
-                ),
+                child: Lottie.asset("assets/images/add.json"),
               ),
             ),
-            SizedBox(width: 20),
-            SvgPicture.asset(
-              "assets/icons/search.svg",
-              height: 30,
-            ),
+            //  SizedBox(width: 20),
+            //  SvgPicture.asset("assets/icons/search.svg", height: 30),
           ],
         ),
         Spacer(),
@@ -88,15 +72,10 @@ class Custom_appBarWidget extends StatelessWidget {
                             .withOpacity(0.5),
                             spreadRadius: 2,
                             blurRadius: 5,
-                            offset: Offset(
-                              0,
-                              3,
-                            ), // changes position of shadow
+                            offset: Offset(0, 3), // changes position of shadow
                           ),
                         ],
-                        borderRadius: BorderRadius.circular(
-                          50,
-                        ),
+                        borderRadius: BorderRadius.circular(50),
                         color: Colors.white,
                       ),
                       height: 45,
@@ -121,15 +100,13 @@ class Custom_appBarWidget extends StatelessWidget {
                         fontSize: 18,
                       ),
                     ),
-                  ),   
+                  ),
                   InkWell(
-                      onTap: () {
-               LocalNotification().showRepeatedNotification();
-              },
+                    onTap: () {
+                      LocalNotification().showRepeatedNotification();
+                    },
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                        right: 15,
-                      ),
+                      padding: const EdgeInsets.only(right: 15),
                       child: SvgPicture.asset(
                         "assets/icons/tick.svg",
                         height: 21,

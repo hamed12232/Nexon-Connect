@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:myapp/features/auth/cubit/cubit/auth_cubit.dart';
+import 'package:myapp/features/auth/logic/Cubit/auth_cubit.dart';
 import 'package:myapp/features/home/ui/screen/HomeScreen.dart';
 import 'package:myapp/core/Components/Snak_bar.dart';
 // ignore: library_prefixes
@@ -278,14 +278,10 @@ class _AuthScreenState extends State<AuthScreen>
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: Theme.ColorsTheme.loginGradientStart,
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
-                    ),
-                    BoxShadow(
-                      color: Theme.ColorsTheme.loginGradientEnd,
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
+                      color: Colors.white,
+                      offset: Offset(2.6, 2.0),
+                      blurRadius: 2.0,
+                      spreadRadius: 1,
                     ),
                   ],
                   gradient: LinearGradient(
@@ -612,14 +608,10 @@ class _AuthScreenState extends State<AuthScreen>
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: Theme.ColorsTheme.loginGradientStart,
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
-                    ),
-                    BoxShadow(
-                      color: Theme.ColorsTheme.loginGradientEnd,
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
+                      color: Colors.white,
+                      offset: Offset(2.6, 2.0),
+                      blurRadius: 2.0,
+                      spreadRadius: 1,
                     ),
                   ],
                   gradient: LinearGradient(

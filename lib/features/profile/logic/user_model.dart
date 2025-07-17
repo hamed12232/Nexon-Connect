@@ -6,6 +6,7 @@ class UserModel {
   final List followers;
   final List following;
   final int likes;
+  final bool online;
 
   UserModel({
     required this.uid,
@@ -15,6 +16,8 @@ class UserModel {
     required this.followers,
     required this.following,
     required this.likes,
+    
+    required this.online,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> map, String uid) {
@@ -22,10 +25,12 @@ class UserModel {
       uid: uid,
       fullName: map['fullName'],
       email: map['email'],
-      image: map['image']  ,
+      image: map['image'],
       followers: map['followers'] ?? [],
       following: map['following'] ?? [],
-      likes: map['likes'] ?? 0,
+      likes: map['likes'] ?? 0, 
+      online: map['online'] ?? false,
+
     );
   }
 
@@ -37,7 +42,7 @@ class UserModel {
       'followers': followers,
       'following': following,
       'likes': likes,
+      'online': online,
     };
   }
-  
 }

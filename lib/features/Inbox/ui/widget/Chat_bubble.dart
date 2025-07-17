@@ -126,6 +126,8 @@ class _ChatBubbleState extends State<ChatBubble> {
                             ? Text(
                               widget.message!,
                               style: TextStyle(
+                                fontSize: 19,
+                                fontWeight: FontWeight.w700,
                                 color:
                                     widget.isMe!
                                         ? Colors.white
