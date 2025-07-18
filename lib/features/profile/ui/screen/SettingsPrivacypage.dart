@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/core/helper/services_helper.dart';
 import 'package:myapp/core/style/style.dart';
 import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
+import 'package:myapp/features/profile/ui/widget/PrivacyPolicyScreen.dart';
 import 'package:myapp/features/profile/ui/widget/accountSection.dart';
 import 'package:myapp/features/profile/ui/widget/changePassword.dart';
 
@@ -79,7 +80,11 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
             setState(() => darkModeEnabled = value);
           }),
           _buildSectionTitle("SUPPORT & ABOUT"),
-          _buildSimpleTile(Icons.privacy_tip_outlined, "Privacy Policy"),
+          GestureDetector(
+            onTap: (){
+              Navigator.pushNamed(context, PrivacyPolicyScreen.routeName);
+            },
+            child: _buildSimpleTile(Icons.privacy_tip_outlined, "Privacy Policy")),
           _buildSimpleTile(Icons.help_outline, "Help & Support"),
           Column(
             children: [

@@ -7,6 +7,7 @@ import 'package:myapp/features/Inbox/ui/screen/Inbox_Screen.dart';
 import 'package:myapp/features/profile/logic/user_model.dart';
 import 'package:myapp/features/profile/ui/screen/profileScreen.dart';
 import 'package:myapp/features/profile/ui/screen/SettingsPrivacypage.dart';
+import 'package:myapp/features/profile/ui/widget/PrivacyPolicyScreen.dart';
 import 'package:myapp/features/profile/ui/widget/accountSection.dart';
 import 'package:myapp/features/profile/ui/widget/changePassword.dart';
 
@@ -44,7 +45,8 @@ class NavigationRoutes {
 
       case ComplateProfileScreen.routeName:
         return MaterialPageRoute(builder: (context) => const ComplateProfileScreen());
-
+      case PrivacyPolicyScreen.routeName:
+        return MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen());
       default:
         return MaterialPageRoute(builder: (context) => const AuthScreen());
     }
