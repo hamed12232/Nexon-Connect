@@ -6,12 +6,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:myapp/core/Components/local_notification.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebaseLocalNotification {
   static final FirebaseLocalNotification _instance =
       FirebaseLocalNotification._internal();
   factory FirebaseLocalNotification() => _instance;
   FirebaseLocalNotification._internal();
+  static const String notificationKey = "notifications_enabled";
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
@@ -23,20 +25,36 @@ class FirebaseLocalNotification {
     handleForeground();
   }
 
+  Future<void> saveNotificationSetting(bool isEnabled) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(notificationKey, isEnabled);
+  }
+
+  Future<bool> getNotificationSetting() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(notificationKey) ?? true; // افتراضي شغال
+  }
+
   Future<void> handleMessages(RemoteMessage message) async {
     await Firebase.initializeApp();
     log(message.notification?.title ?? "null");
   }
 
   void handleForeground() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      LocalNotification().showBasicNotification(message);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      final isEnabled = await getNotificationSetting();
+      if (isEnabled) {
+        LocalNotification().showBasicNotification(message);
+        log("notification received");
+      }else{
+        log("notification disabled");
+      }
     });
   }
 
   Future<String> getAccessToken() async {
     final jsonString = await rootBundle.loadString(
-      "assets/demosocialapp-ef38c-be73771d867a.json"
+      "assets/demosocialapp-ef38c-be73771d867a.json",
     );
     final clientCredentials = auth.ServiceAccountCredentials.fromJson(
       jsonString,

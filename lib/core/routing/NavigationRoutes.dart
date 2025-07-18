@@ -8,6 +8,7 @@ import 'package:myapp/features/profile/logic/user_model.dart';
 import 'package:myapp/features/profile/ui/screen/profileScreen.dart';
 import 'package:myapp/features/profile/ui/screen/SettingsPrivacypage.dart';
 import 'package:myapp/features/profile/ui/widget/PrivacyPolicyScreen.dart';
+import 'package:myapp/features/profile/ui/widget/SupportAndHelpScreen.dart';
 import 'package:myapp/features/profile/ui/widget/accountSection.dart';
 import 'package:myapp/features/profile/ui/widget/changePassword.dart';
 
@@ -40,13 +41,24 @@ class NavigationRoutes {
         );
 
       case Changepassword.routeName:
-         final String email = settings.arguments as String;
-        return MaterialPageRoute(builder: (context) => Changepassword(email: email,));
+        final String email = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => Changepassword(email: email),
+        );
 
       case ComplateProfileScreen.routeName:
-        return MaterialPageRoute(builder: (context) => const ComplateProfileScreen());
+        return MaterialPageRoute(
+          builder: (context) => const ComplateProfileScreen(),
+        );
       case PrivacyPolicyScreen.routeName:
-        return MaterialPageRoute(builder: (context) => const PrivacyPolicyScreen());
+        return MaterialPageRoute(
+          builder: (context) => const PrivacyPolicyScreen(),
+        );
+      case ContactSupportScreen.routeName:
+        return MaterialPageRoute(
+          builder: (context) => const ContactSupportScreen(),
+        );
+
       default:
         return MaterialPageRoute(builder: (context) => const AuthScreen());
     }
