@@ -17,13 +17,13 @@ class FirebaseLocalNotification {
   static const String notificationKey = "notifications_enabled";
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-StreamSubscription<RemoteMessage>? _foregroundSubscription;
+  StreamSubscription<RemoteMessage>? _foregroundSubscription;
 
   Future<void> initNotification() async {
     await _firebaseMessaging.requestPermission();
     String? token = await _firebaseMessaging.getToken();
     log("Token: $token");
-    FirebaseMessaging.onBackgroundMessage(handleMessages);
+    handleBackground();
     handleForeground();
   }
 
@@ -43,16 +43,42 @@ StreamSubscription<RemoteMessage>? _foregroundSubscription;
   }
 
   void handleForeground() {
-      _foregroundSubscription?.cancel(); // cancel the old listener
+    _foregroundSubscription?.cancel(); // cancel the old listener
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       final isEnabled = await getNotificationSetting();
       if (isEnabled) {
-        LocalNotification().showBasicNotification(message);
+        final title = message.notification?.title ?? message.data['title'];
+        final body = message.notification?.body ?? message.data['body'];
+
+        LocalNotification().showBasicNotification(title, body);
         log("notification received");
-      }else{
+      } else {
         log("notification disabled");
       }
+    });
+  }
+
+  void handleBackground() {
+    FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
+      await Firebase.initializeApp();
+
+      final prefs = await SharedPreferences.getInstance();
+      final isEnabled =
+          prefs.getBool(FirebaseLocalNotification.notificationKey) ?? true;
+
+      if (!isEnabled) {
+        log("notification disabled (background)");
+        return;
+      }
+
+      final title = message.data['title'];
+      final body = message.data['body'];
+
+      LocalNotification().showBasicNotification(
+        title ,
+        body ,
+      );
     });
   }
 
@@ -87,14 +113,15 @@ StreamSubscription<RemoteMessage>? _foregroundSubscription;
     };
 
     final body = jsonEncode({
-  "message": {
-    "token": deviceToken,
-    "data": {
-      "title": "New Follower!",
-      "body": "$follower started following you"
-    }
-  }
-});
+      "message": {
+        "token": deviceToken,
+        "data": {
+          "title": "New Follower!",
+          "body": "Ahmed started following you",
+          "type": "follow",
+        },
+      },
+    });
 
     final response = await http.post(url, headers: headers, body: body);
 

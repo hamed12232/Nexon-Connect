@@ -25,7 +25,10 @@ class LocalNotification {
     );
   }
 
-  void showBasicNotification(RemoteMessage message) async {
+  void showBasicNotification(
+    String title,
+    String body,
+  ) async {
     NotificationDetails notificationDetails = NotificationDetails(
       android: AndroidNotificationDetails(
         "channelId",
@@ -38,8 +41,8 @@ class LocalNotification {
 
     await flutterLocalNotificationsPlugin.show(
       1,
-      message.notification?.title,
-      message.notification?.body,
+     title,
+      body,
       notificationDetails,
     );
   }
