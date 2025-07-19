@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/core/Components/firebase_local_notification.dart';
+import 'package:myapp/core/Components/firebase_notification.dart';
 import 'package:myapp/core/helper/services_helper.dart';
 import 'package:myapp/core/style/style.dart';
 import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
@@ -36,13 +36,12 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
   final Color textColor = Colors.black87;
   final Color secondaryTextColor = Colors.grey[600]!;
   final Color dividerColor = Colors.grey[300]!;
-  FirebaseLocalNotification firebaseLocalNotification =
-      FirebaseLocalNotification();
+  FirebaseNotification firebaseNotification = FirebaseNotification();
 
   @override
   void initState() {
     super.initState();
-    firebaseLocalNotification.getNotificationSetting().then((value) {
+    firebaseNotification.getNotificationSetting().then((value) {
       setState(() {
         notificationsEnabled = value;
       });
@@ -93,8 +92,8 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
             value,
           ) async {
             setState(() => notificationsEnabled = value);
-            await firebaseLocalNotification.saveNotificationSetting(value);
-            firebaseLocalNotification.handleForeground();
+            await firebaseNotification.saveNotificationSetting(value);
+            firebaseNotification.handleForeground();
 
             log("Notifications turned ${value ? "on" : "off"} by user");
           }),

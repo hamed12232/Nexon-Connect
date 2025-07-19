@@ -9,11 +9,11 @@ import 'package:http/http.dart' as http;
 import 'package:myapp/core/Components/local_notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class FirebaseLocalNotification {
-  static final FirebaseLocalNotification _instance =
-      FirebaseLocalNotification._internal();
-  factory FirebaseLocalNotification() => _instance;
-  FirebaseLocalNotification._internal();
+class FirebaseNotification {
+  static final FirebaseNotification _instance =
+      FirebaseNotification._internal();
+  factory FirebaseNotification() => _instance;
+  FirebaseNotification._internal();
   static const String notificationKey = "notifications_enabled";
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -65,7 +65,7 @@ class FirebaseLocalNotification {
 
       final prefs = await SharedPreferences.getInstance();
       final isEnabled =
-          prefs.getBool(FirebaseLocalNotification.notificationKey) ?? true;
+          prefs.getBool(FirebaseNotification.notificationKey) ?? true;
 
       if (!isEnabled) {
         log("notification disabled (background)");
@@ -75,10 +75,7 @@ class FirebaseLocalNotification {
       final title = message.data['title'];
       final body = message.data['body'];
 
-      LocalNotification().showBasicNotification(
-        title ,
-        body ,
-      );
+      LocalNotification().showBasicNotification(title, body);
     });
   }
 
@@ -117,7 +114,7 @@ class FirebaseLocalNotification {
         "token": deviceToken,
         "data": {
           "title": "New Follower!",
-          "body": "Ahmed started following you",
+          "body": "$follower started following you",
           "type": "follow",
         },
       },

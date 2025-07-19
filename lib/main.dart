@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/core/Components/firebase_local_notification.dart';
+import 'package:myapp/core/Components/firebase_notification.dart';
 import 'package:myapp/core/Components/local_notification.dart';
 import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
 import 'package:myapp/features/Post/logic/cubit/post_cubit/post_cubit.dart';
@@ -28,14 +28,14 @@ void main() async {
   }
   await Future.wait([
     LocalNotification().init(),
-     FirebaseLocalNotification().initNotification()
+    FirebaseNotification().initNotification(),
   ]);
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => AuthCubit()),
         BlocProvider(create: (_) => PostCubit()),
-        BlocProvider(create: (_) => ChatCubit())
+        BlocProvider(create: (_) => ChatCubit()),
       ],
       child: MyApp(),
     ),
