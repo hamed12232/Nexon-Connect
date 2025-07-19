@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -34,10 +36,13 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
   final Color textColor = Colors.black87;
   final Color secondaryTextColor = Colors.grey[600]!;
   final Color dividerColor = Colors.grey[300]!;
+  FirebaseLocalNotification firebaseLocalNotification =
+      FirebaseLocalNotification();
 
+  @override
   void initState() {
     super.initState();
-    FirebaseLocalNotification().getNotificationSetting().then((value) {
+    firebaseLocalNotification.getNotificationSetting().then((value) {
       setState(() {
         notificationsEnabled = value;
       });
@@ -84,9 +89,14 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
             child: _buildSimpleTile(Icons.lock_outline, "Change Password"),
           ),
           _buildSectionTitle("PREFERENCES"),
-          _buildSwitchTile("Notifications", notificationsEnabled, (value) {
+          _buildSwitchTile("Notifications", notificationsEnabled, (
+            value,
+          ) async {
             setState(() => notificationsEnabled = value);
-            FirebaseLocalNotification().saveNotificationSetting(value);
+            await firebaseLocalNotification.saveNotificationSetting(value);
+            firebaseLocalNotification.handleForeground();
+
+            log("Notifications turned ${value ? "on" : "off"} by user");
           }),
           _buildSwitchTile("Dark Mode", darkModeEnabled, (value) {
             setState(() => darkModeEnabled = value);

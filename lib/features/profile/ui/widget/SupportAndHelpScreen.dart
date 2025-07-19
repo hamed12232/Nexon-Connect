@@ -1,5 +1,5 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:myapp/core/style/style.dart';
 
 class ContactSupportScreen extends StatelessWidget {
   const ContactSupportScreen({super.key});

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:googleapis_auth/auth_io.dart' as auth;
@@ -16,6 +17,7 @@ class FirebaseLocalNotification {
   static const String notificationKey = "notifications_enabled";
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+StreamSubscription<RemoteMessage>? _foregroundSubscription;
 
   Future<void> initNotification() async {
     await _firebaseMessaging.requestPermission();
@@ -41,6 +43,8 @@ class FirebaseLocalNotification {
   }
 
   void handleForeground() {
+      _foregroundSubscription?.cancel(); // cancel the old listener
+
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       final isEnabled = await getNotificationSetting();
       if (isEnabled) {
@@ -83,14 +87,14 @@ class FirebaseLocalNotification {
     };
 
     final body = jsonEncode({
-      "message": {
-        "token": deviceToken,
-        "notification": {
-          "title": "New Follower!",
-          "body": "$follower started following you",
-        },
-      },
-    });
+  "message": {
+    "token": deviceToken,
+    "data": {
+      "title": "New Follower!",
+      "body": "$follower started following you"
+    }
+  }
+});
 
     final response = await http.post(url, headers: headers, body: body);
 
