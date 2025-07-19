@@ -23,7 +23,6 @@ class FirebaseNotification {
     await _firebaseMessaging.requestPermission();
     String? token = await _firebaseMessaging.getToken();
     log("Token: $token");
-    handleBackground();
     handleForeground();
   }
 
@@ -59,25 +58,6 @@ class FirebaseNotification {
     });
   }
 
-  void handleBackground() {
-    FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
-      await Firebase.initializeApp();
-
-      final prefs = await SharedPreferences.getInstance();
-      final isEnabled =
-          prefs.getBool(FirebaseNotification.notificationKey) ?? true;
-
-      if (!isEnabled) {
-        log("notification disabled (background)");
-        return;
-      }
-
-      final title = message.data['title'];
-      final body = message.data['body'];
-
-      LocalNotification().showBasicNotification(title, body);
-    });
-  }
 
   Future<String> getAccessToken() async {
     final jsonString = await rootBundle.loadString(

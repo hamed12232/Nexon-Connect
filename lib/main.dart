@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:myapp/core/Components/OnBackgroundFunction.dart';
 import 'package:myapp/core/Components/firebase_notification.dart';
 import 'package:myapp/core/Components/local_notification.dart';
 import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
@@ -30,6 +32,8 @@ void main() async {
     LocalNotification().init(),
     FirebaseNotification().initNotification(),
   ]);
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   runApp(
     MultiBlocProvider(
       providers: [
