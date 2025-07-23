@@ -73,7 +73,7 @@ const authOutlineInputBorder = OutlineInputBorder(
 );
 
 class ComplateProfileForm extends StatefulWidget {
-  ComplateProfileForm({super.key});
+  const ComplateProfileForm({super.key});
 
   @override
   State<ComplateProfileForm> createState() => _ComplateProfileFormState();
@@ -171,14 +171,15 @@ class _ComplateProfileFormState extends State<ComplateProfileForm> {
                 // ignore: use_build_context_synchronously
                 context: context,
                 barrierDismissible: false,
-                builder:
-                    (_) => Center(
-                      child: SizedBox(
-                        width: 150,
-                        height: 150,
-                        child: Lottie.asset("assets/images/Check Mark - Success.json"),
-                      ),
+                builder: (_) => Center(
+                  child: SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: Lottie.asset(
+                      "assets/images/Check Mark - Success.json",
                     ),
+                  ),
+                ),
               );
 
               await Future.delayed(const Duration(seconds: 2));

@@ -3,9 +3,12 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:myapp/core/Components/firebase_notification.dart';
+import 'package:myapp/core/helper/cache_helper.dart';
 import 'package:myapp/core/helper/services_helper.dart';
 import 'package:myapp/core/style/style.dart';
+import 'package:myapp/core/style/theme/theme_cubit.dart';
 import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
 import 'package:myapp/features/profile/ui/widget/PrivacyPolicyScreen.dart';
 import 'package:myapp/features/profile/ui/widget/SupportAndHelpScreen.dart';
@@ -99,6 +102,9 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
           }),
           _buildSwitchTile("Dark Mode", darkModeEnabled, (value) {
             setState(() => darkModeEnabled = value);
+            ThemeCubit.get(context).selectThemeMode(
+              (value ? ThemeMode.dark : ThemeMode.light) as ThemeModeState,
+            );
           }),
           _buildSectionTitle("SUPPORT & ABOUT"),
           GestureDetector(

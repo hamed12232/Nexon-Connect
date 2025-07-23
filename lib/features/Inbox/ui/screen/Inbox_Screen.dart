@@ -41,12 +41,12 @@ class _ChatsState extends State<InboxScreen>
 
   UserModel? userModel;
   @override
- 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Stack(
           children: [
             Column(
@@ -70,17 +70,15 @@ class _ChatsState extends State<InboxScreen>
                                   top: Radius.circular(20),
                                 ),
                               ),
-                              builder:
-                                  (_) => BlocProvider(
-                                    create:
-                                        (context) =>
-                                            FollowCubit()..loadSuggestedUsers(
-                                              currentUser.currentUser!.uid,
-                                            ),
-                                    child: Showfriendsbottomsheet(
-                                      user1: currentUser.currentUser!.uid,
-                                    ),
+                              builder: (_) => BlocProvider(
+                                create: (context) => FollowCubit()
+                                  ..loadSuggestedUsers(
+                                    currentUser.currentUser!.uid,
                                   ),
+                                child: Showfriendsbottomsheet(
+                                  user1: currentUser.currentUser!.uid,
+                                ),
+                              ),
                             );
                             // context.read<ChatCubit>().createChat(currentUser.currentUser!.uid, "QYn9zhHJH8drNneWtjnp1nczcOl2");
                           },
@@ -137,17 +135,16 @@ class _ChatsState extends State<InboxScreen>
                           child: ListView.builder(
                             padding: const EdgeInsets.all(20),
                             itemCount: 6,
-                            itemBuilder:
-                                (context, index) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 12),
-                                  child: Container(
-                                    height: 70,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                  ),
+                            itemBuilder: (context, index) => Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: Container(
+                                height: 70,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
+                              ),
+                            ),
                           ),
                         );
                       } else if (state is ChatError) {
@@ -159,7 +156,10 @@ class _ChatsState extends State<InboxScreen>
                             fit: BoxFit.scaleDown,
                           );
                         } else {
-                          return ChatsListView(chats: state.chats, isOnline: userModel!.online);
+                          return ChatsListView(
+                            chats: state.chats,
+                            isOnline: userModel!.online,
+                          );
                         }
                       } else {
                         return Center(child: Text("Something went wrong"));

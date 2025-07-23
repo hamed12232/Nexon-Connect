@@ -24,6 +24,7 @@ class _DiscoverState extends State<DiscoverScreen> {
       create: (context) => FollowCubit()..loadSuggestedUsers(cUser!.uid),
       child: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.white,
           body: Stack(
             children: [
               Padding(
@@ -46,7 +47,6 @@ class _DiscoverState extends State<DiscoverScreen> {
                               vertical: 10,
                             ),
                             child: ListTile(
-                              
                               leading: Container(
                                 decoration: BoxDecoration(
                                   boxShadow: [
@@ -93,16 +93,16 @@ class _DiscoverState extends State<DiscoverScreen> {
                                     stops: [0.1, 0.9],
                                     colors:
                                         following.contains(
-                                              state.users[index].id,
-                                            )
-                                            ? [
-                                              Colors.black.withOpacity(0.5),
-                                              Colors.grey,
-                                            ]
-                                            : [
-                                              Color(0xff651CE5),
-                                              Color(0xff811ce5),
-                                            ],
+                                          state.users[index].id,
+                                        )
+                                        ? [
+                                            Colors.black.withOpacity(0.5),
+                                            Colors.grey,
+                                          ]
+                                        : [
+                                            Color(0xff651CE5),
+                                            Color(0xff811ce5),
+                                          ],
                                   ),
                                 ),
                                 child: TextButton(
@@ -133,9 +133,7 @@ class _DiscoverState extends State<DiscoverScreen> {
                                   ),
                                 ),
                               ),
-                              onTap: () {
-                                
-                              },
+                              onTap: () {},
                             ),
                           );
                         },

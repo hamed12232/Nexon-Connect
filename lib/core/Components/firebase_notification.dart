@@ -2,19 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:googleapis_auth/auth_io.dart' as auth;
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:myapp/core/Components/local_notification.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:myapp/core/helper/cache_helper.dart';
+import 'package:myapp/core/helper/cache_helper_key.dart';
 
 class FirebaseNotification {
   static final FirebaseNotification _instance =
       FirebaseNotification._internal();
   factory FirebaseNotification() => _instance;
   FirebaseNotification._internal();
-  static const String notificationKey = "notifications_enabled";
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   StreamSubscription<RemoteMessage>? _foregroundSubscription;
@@ -27,18 +26,15 @@ class FirebaseNotification {
   }
 
   Future<void> saveNotificationSetting(bool isEnabled) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(notificationKey, isEnabled);
+    await CachHelper().saveData(
+      key: CacheHelperKey.notificationKey,
+      value: isEnabled,
+    );
   }
 
   Future<bool> getNotificationSetting() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(notificationKey) ?? true; // افتراضي شغال
-  }
-
-  Future<void> handleMessages(RemoteMessage message) async {
-    await Firebase.initializeApp();
-    log(message.notification?.title ?? "null");
+    return await CachHelper().getData(key: CacheHelperKey.notificationKey) ??
+        true; // افتراضي شغال
   }
 
   void handleForeground() {
@@ -57,7 +53,6 @@ class FirebaseNotification {
       }
     });
   }
-
 
   Future<String> getAccessToken() async {
     final jsonString = await rootBundle.loadString(

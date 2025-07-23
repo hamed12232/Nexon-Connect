@@ -45,6 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Stack(
           children: [
             BlocBuilder<AuthCubit, AuthState>(
@@ -83,8 +84,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(height: 20),
           _buildStats(userModel),
           const SizedBox(height: 20),
-          _buildActions(),
-          const SizedBox(height: 30),
+          // _buildActions(),
+          // const SizedBox(height: 30),
           _buildTabBar(),
           const SizedBox(height: 15),
           _buildGrid(),
@@ -111,11 +112,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           InkWell(
             onTap: () {
-              Navigator.pushNamed(context, SettingsPrivacyPage.routeName,
-              arguments: userModel
+              Navigator.pushNamed(
+                context,
+                SettingsPrivacyPage.routeName,
+                arguments: userModel,
               );
             },
-            child: SvgPicture.asset("assets/icons/dots.svg", height: 8),
+            child: SizedBox(
+              height: 30,
+              width: 30,
+              child: SvgPicture.asset("assets/icons/dots.svg", height: 8),
+            ),
           ),
         ],
       ),
@@ -208,15 +215,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           userModel.following.length == 0
               ? _buildStatItem("${userModel.following.length}", "Following")
               : _buildStatItem(
-                "${userModel.following.length - 1}",
-                "Following",
-              ),
+                  "${userModel.following.length - 1}",
+                  "Following",
+                ),
           userModel.followers.length == 0
               ? _buildStatItem("${userModel.followers.length}", "Followers")
               : _buildStatItem(
-                "${userModel.followers.length - 1}",
-                "Followers",
-              ),
+                  "${userModel.followers.length - 1}",
+                  "Followers",
+                ),
           _buildStatItem("${userModel.likes}", "Like"),
         ],
       ),
@@ -355,13 +362,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         post.postImage ?? '',
                         fit: BoxFit.fill,
                         errorBuilder: (_, __, ___) => const Icon(Icons.error),
-                        loadingBuilder:
-                            (context, child, loadingProgress) =>
-                                loadingProgress == null
-                                    ? child
-                                    : const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
+                        loadingBuilder: (context, child, loadingProgress) =>
+                            loadingProgress == null
+                            ? child
+                            : const Center(child: CircularProgressIndicator()),
                       ),
                     ),
                     Positioned(

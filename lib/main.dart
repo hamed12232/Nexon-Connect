@@ -6,6 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/core/Components/OnBackgroundFunction.dart';
 import 'package:myapp/core/Components/firebase_notification.dart';
 import 'package:myapp/core/Components/local_notification.dart';
+import 'package:myapp/core/helper/cache_helper.dart';
+import 'package:myapp/core/style/theme/theme_cubit.dart';
+import 'package:myapp/core/style/theme/theme_data.dart';
 import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
 import 'package:myapp/features/Post/logic/cubit/post_cubit/post_cubit.dart';
 import 'package:myapp/features/auth/logic/Cubit/auth_cubit.dart' show AuthCubit;
@@ -31,6 +34,7 @@ void main() async {
   await Future.wait([
     LocalNotification().init(),
     FirebaseNotification().initNotification(),
+    CachHelper().init(),
   ]);
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
@@ -40,6 +44,7 @@ void main() async {
         BlocProvider(create: (_) => AuthCubit()),
         BlocProvider(create: (_) => PostCubit()),
         BlocProvider(create: (_) => ChatCubit()),
+        BlocProvider(create: (_) => ThemeCubit()),
       ],
       child: MyApp(),
     ),
@@ -48,34 +53,24 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
-  final MaterialColor colorCustom = MaterialColor(0xff651CE5, color);
   final user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Colors.white,
-        fontFamily: "Sans serif",
-        primarySwatch: colorCustom,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      initialRoute: user != null ? HomeScreen.routeName : AuthScreen.routeName,
-      onGenerateRoute: NavigationRoutes.generateRoute,
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, state) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: lightTheme,
+          darkTheme: darkTheme,
+
+          themeMode: ThemeCubit.get(context).getTheme(),
+          initialRoute: user != null
+              ? HomeScreen.routeName
+              : AuthScreen.routeName,
+          onGenerateRoute: NavigationRoutes.generateRoute,
+        );
+      },
     );
   }
 }
-
-Map<int, Color> color = {
-  50: Color.fromRGBO(102, 28, 229, .1),
-  100: Color.fromRGBO(102, 28, 229, .2),
-  200: Color.fromRGBO(102, 28, 229, .3),
-  300: Color.fromRGBO(102, 28, 229, .4),
-  400: Color.fromRGBO(102, 28, 229, .5),
-  500: Color.fromRGBO(102, 28, 229, .6),
-  600: Color.fromRGBO(102, 28, 229, .7),
-  700: Color.fromRGBO(102, 28, 229, .8),
-  800: Color.fromRGBO(102, 28, 229, .9),
-  900: Color.fromRGBO(102, 28, 229, 1),
-};
