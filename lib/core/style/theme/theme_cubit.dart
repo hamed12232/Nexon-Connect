@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,13 +9,10 @@ part 'theme_state.dart';
 enum ThemeModeState { light, dark, system }
 
 class ThemeCubit extends Cubit<ThemeState> {
-  ThemeCubit() : super(ThemeInitial()) {
-    loadTheme();
-  }
-  // select theme mode and save
-  // get current theme mode
-  // load theme mode
+  ThemeCubit() : super(ThemeInitial());
+
   static ThemeCubit get(context) => BlocProvider.of(context);
+
   ThemeModeState currentTheme = ThemeModeState.system;
 
   Future<void> selectThemeMode(ThemeModeState themeMode) async {
@@ -25,7 +21,7 @@ class ThemeCubit extends Cubit<ThemeState> {
       key: CacheHelperKey.themeMode,
       value: currentTheme.name,
     );
-    emit(ThemeChanged());
+    emit(ThemeChanged(currentTheme)); // Pass the current theme to the state
   }
 
   ThemeMode getTheme() {
@@ -47,6 +43,15 @@ class ThemeCubit extends Cubit<ThemeState> {
         orElse: () => ThemeModeState.system,
       );
     }
-    emit(ThemeChanged());
+    emit(ThemeChanged(currentTheme)); // Emit with the loaded theme
   }
+
+  // Helper method to check if current theme is dark
+  bool get isDarkMode => currentTheme == ThemeModeState.dark;
+
+  // Helper method to check if current theme is light
+  bool get isLightMode => currentTheme == ThemeModeState.light;
+
+  // Helper method to check if current theme is system
+  bool get isSystemMode => currentTheme == ThemeModeState.system;
 }

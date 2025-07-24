@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/style/style.dart';
+import 'package:myapp/features/profile/ui/widget/SupportAndHelpScreen.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
@@ -7,35 +7,45 @@ class PrivacyPolicyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: const Color(0xFFEFF3FA),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor:
+            theme.appBarTheme.backgroundColor ?? theme.primaryColor,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Privacy Policy',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+          style: TextStyle(
+            color: theme.textTheme.titleLarge?.color,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: theme.iconTheme.color),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
       body: Container(
-        color: Colors.white,
+        color: theme.cardColor,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Last Updated: July 26, 2025',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: theme.textTheme.bodyLarge?.color,
+              ),
             ),
             const SizedBox(height: 20),
             _buildPrivacyItem(
+              context: context,
               icon: Icons.shield_outlined,
               title: 'Data Collection',
               description:
@@ -43,6 +53,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             ),
             const SizedBox(height: 15),
             _buildPrivacyItem(
+              context: context,
               icon: Icons.settings_outlined,
               title: 'Data Use',
               description:
@@ -50,6 +61,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             ),
             const SizedBox(height: 15),
             _buildPrivacyItem(
+              context: context,
               icon: Icons.person_outline,
               title: 'User Rights',
               description:
@@ -64,20 +76,24 @@ class PrivacyPolicyScreen extends StatelessWidget {
   }
 
   Widget _buildPrivacyItem({
+    required BuildContext context,
     required IconData icon,
     required String title,
     required String description,
   }) {
+    final theme = Theme.of(context);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: const Color(0xFFF1F4F9),
+            color: theme.dividerColor.withOpacity(
+              theme.brightness == Brightness.dark ? 0.2 : 0.7,
+            ),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(icon, color: Colors.black, size: 24),
+          child: Icon(icon, color: theme.iconTheme.color, size: 24),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -86,15 +102,19 @@ class PrivacyPolicyScreen extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
+                  color: theme.textTheme.titleLarge?.color,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 description,
-                style: const TextStyle(fontSize: 13, color: Colors.grey),
+                style: TextStyle(
+                  fontSize: 13,
+                  color: theme.textTheme.bodyMedium?.color,
+                ),
               ),
             ],
           ),
@@ -104,6 +124,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
   }
 
   Widget _buildBottomButtons(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         SizedBox(
@@ -111,7 +132,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
           height: 50,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: ColorsTheme.loginGradientEnd,
+              backgroundColor: theme.colorScheme.primary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -119,9 +140,13 @@ class PrivacyPolicyScreen extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text(
+            child: Text(
               "I Agree",
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white),
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: theme.colorScheme.onPrimary,
+              ),
             ),
           ),
         ),
@@ -134,16 +159,18 @@ class PrivacyPolicyScreen extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              side: const BorderSide(color: Color(0xFFE0E0E0)),
-              backgroundColor: const Color(0xFFF7F7F7),
+              side: BorderSide(color: theme.dividerColor),
+              backgroundColor: theme.scaffoldBackgroundColor,
             ),
-            onPressed: () {},
-            child: const Text(
+            onPressed: () {
+              Navigator.pushNamed(context, ContactSupportScreen.routeName);
+            },
+            child: Text(
               "Need Help",
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 16,
-                color: Colors.black87,
+                color: theme.textTheme.bodyLarge?.color,
               ),
             ),
           ),

@@ -42,14 +42,12 @@ class _ConversationState extends State<Conversation> {
             },
             child: Padding(
               padding: const EdgeInsets.all(15.0),
-              child: SvgPicture.asset(
-                "assets/icons/back-arrow.svg",
-                color: Colors.black,
-              ),
+              child: SvgPicture.asset("assets/icons/back-arrow.svg"),
             ),
           ),
           titleSpacing: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+          foregroundColor: Theme.of(context).appBarTheme.foregroundColor,
           title: InkWell(
             child: Row(
               children: <Widget>[
@@ -81,32 +79,16 @@ class _ConversationState extends State<Conversation> {
                   ),
                 ),
                 SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        widget.name!,
-                        style: TextStyle(
-                           fontSize: 19,
-                                fontWeight: FontWeight.w700,
-                         
-                          color: Colors.black,
-                         
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        "Online",
-                        style: TextStyle(
-                          color: Color(0xff651CE5),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
+                Text(
+                  widget.name!,
+                  style: TextStyle(
+                    fontSize: 19,
+                    fontWeight: FontWeight.w700,
+
+                    color: Colors.black,
                   ),
                 ),
+                SizedBox(height: 5),
               ],
             ),
             onTap: () {},
@@ -119,11 +101,15 @@ class _ConversationState extends State<Conversation> {
         body: Stack(
           children: [
             Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-              child: Image.asset("assets/images/background.png",fit: BoxFit.fill,)),
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Image.asset(
+                "assets/images/background.png",
+                fit: BoxFit.fill,
+              ),
+            ),
             Column(
               children: [
                 Expanded(
@@ -157,15 +143,12 @@ class _ConversationState extends State<Conversation> {
                                 messages[messages.length - 1 - index].data()
                                     as Map<String, dynamic>?;
 
-                            //       messageData['senderId'] == widget.senderId,
-                            //   textStyle: TextStyle(
-                            //     color:
-                            //         messageData['senderId'] == widget.senderId
-                            //             ? Colors.white
-                            //             : Colors.black,
                             return ChatBubble(
                               message: messageData!['text'] ?? '',
-                              time: DateFormat('hh:mm a').format((messageData['timestamp'] as Timestamp).toDate()),
+                              time: DateFormat('hh:mm a').format(
+                                (messageData['timestamp'] as Timestamp)
+                                    .toDate(),
+                              ),
                               isMe: messageData['senderId'] == widget.senderId,
 
                               type: "text",
@@ -183,7 +166,7 @@ class _ConversationState extends State<Conversation> {
                   alignment: Alignment.bottomCenter,
                   child: BottomAppBar(
                     elevation: 10,
-                    color: Theme.of(context).primaryColor,
+
                     child: Container(
                       constraints: BoxConstraints(maxHeight: 100),
                       child: Row(
@@ -206,13 +189,7 @@ class _ConversationState extends State<Conversation> {
                               ),
                               child: TextField(
                                 controller: _textController,
-                                style: TextStyle(
-                                  fontSize: 15.0,
-                                  color:
-                                      Theme.of(
-                                        context,
-                                      ).textTheme.titleLarge!.color,
-                                ),
+                                style: TextStyle(fontSize: 15.0),
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(10.0),
                                   enabledBorder: InputBorder.none,
@@ -221,10 +198,9 @@ class _ConversationState extends State<Conversation> {
                                   hintText: "Write your message...",
                                   hintStyle: TextStyle(
                                     fontSize: 15.0,
-                                    color:
-                                        Theme.of(
-                                          context,
-                                        ).textTheme.titleLarge!.color,
+                                    color: Theme.of(
+                                      context,
+                                    ).textTheme.titleLarge!.color,
                                   ),
                                 ),
                                 maxLines: null,

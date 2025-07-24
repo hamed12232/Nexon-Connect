@@ -58,7 +58,7 @@ class _PostScreenState extends State<PostScreen> {
                 );
                 Navigator.pop(context);
                 showInSnackBar("Post created successfully", context);
-              }else{
+              } else {
                 showInSnackBar("Please add text or image", context);
               }
             },
@@ -133,50 +133,11 @@ class _PostScreenState extends State<PostScreen> {
               ],
             ),
             const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildIconButton(
-                  icon: FontAwesomeIcons.image,
-                  label: 'Photo',
-                  color: Colors.green,
-                ),
-                _buildIconButton(
-                  icon: FontAwesomeIcons.video,
-                  label: 'Video',
-                  color: Colors.red,
-                ),
-                _buildIconButton(
-                  // ignore: deprecated_member_use
-                  icon: FontAwesomeIcons.smile,
-                  label: 'Feeling',
-                  color: Colors.orange,
-                ),
-              ],
-            ),
+
             const SizedBox(height: 10),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildIconButton({
-    required IconData icon,
-    required String label,
-    required Color color,
-  }) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 20,
-          // ignore: deprecated_member_use
-          backgroundColor: color.withOpacity(0.1),
-          child: Icon(icon, size: 20, color: color),
-        ),
-        const SizedBox(height: 4),
-        Text(label, style: const TextStyle(fontSize: 12)),
-      ],
     );
   }
 

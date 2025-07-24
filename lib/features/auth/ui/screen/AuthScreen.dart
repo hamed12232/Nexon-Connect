@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:myapp/features/auth/logic/Cubit/auth_cubit.dart';
+import 'package:myapp/features/auth/ui/screen/forgot_password.dart';
 import 'package:myapp/features/home/ui/screen/HomeScreen.dart';
 import 'package:myapp/core/Components/Snak_bar.dart';
 // ignore: library_prefixes
@@ -84,10 +85,9 @@ class _AuthScreenState extends State<AuthScreen>
             return SingleChildScrollView(
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                height:
-                    MediaQuery.of(context).size.height >= 775.0
-                        ? MediaQuery.of(context).size.height
-                        : 775.0,
+                height: MediaQuery.of(context).size.height >= 775.0
+                    ? MediaQuery.of(context).size.height
+                    : 775.0,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -230,7 +230,7 @@ class _AuthScreenState extends State<AuthScreen>
                       Padding(
                         padding: EdgeInsets.only(
                           top: 20.0,
-                          bottom: 20.0,
+                          bottom: 10.0,
                           left: 25.0,
                           right: 25.0,
                         ),
@@ -273,7 +273,7 @@ class _AuthScreenState extends State<AuthScreen>
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 170.0),
+                margin: EdgeInsets.only(top: 190.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   boxShadow: <BoxShadow>[
@@ -321,7 +321,9 @@ class _AuthScreenState extends State<AuthScreen>
           Padding(
             padding: EdgeInsets.only(top: 10.0),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, ForgotPasswordScreen.routeName);
+              },
               child: Text(
                 "Forgot Password?",
                 style: TextStyle(
@@ -384,8 +386,8 @@ class _AuthScreenState extends State<AuthScreen>
               Padding(
                 padding: EdgeInsets.only(top: 10.0, right: 40.0),
                 child: GestureDetector(
-                  onTap:
-                      () => showInSnackBar("Facebook button pressed", context),
+                  onTap: () =>
+                      showInSnackBar("Facebook button pressed", context),
                   child: Container(
                     padding: const EdgeInsets.all(15.0),
                     decoration: BoxDecoration(
@@ -445,8 +447,8 @@ class _AuthScreenState extends State<AuthScreen>
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(
-                          top: 20.0,
-                          bottom: 20.0,
+                          top: 15.0,
+                          bottom: 15.0,
                           left: 25.0,
                           right: 25.0,
                         ),
@@ -481,8 +483,8 @@ class _AuthScreenState extends State<AuthScreen>
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          top: 20.0,
-                          bottom: 20.0,
+                          top: 15.0,
+                          bottom: 15.0,
                           left: 25.0,
                           right: 25.0,
                         ),
@@ -516,8 +518,8 @@ class _AuthScreenState extends State<AuthScreen>
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          top: 20.0,
-                          bottom: 20.0,
+                          top: 15.0,
+                          bottom: 15.0,
                           left: 25.0,
                           right: 25.0,
                         ),
@@ -561,8 +563,8 @@ class _AuthScreenState extends State<AuthScreen>
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          top: 20.0,
-                          bottom: 20.0,
+                          top: 15.0,
+                          bottom: 0.0,
                           left: 25.0,
                           right: 25.0,
                         ),

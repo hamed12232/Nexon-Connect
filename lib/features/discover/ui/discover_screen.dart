@@ -24,7 +24,6 @@ class _DiscoverState extends State<DiscoverScreen> {
       create: (context) => FollowCubit()..loadSuggestedUsers(cUser!.uid),
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.white,
           body: Stack(
             children: [
               Padding(

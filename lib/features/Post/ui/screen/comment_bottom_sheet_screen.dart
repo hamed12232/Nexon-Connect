@@ -62,15 +62,9 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: Theme.of(context).colorScheme.surface,
+
                   borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
                 ),
                 child: Row(
                   children: [
@@ -79,7 +73,7 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
                         controller: _controller,
                         decoration: const InputDecoration(
                           hintText: "Add a comment...",
-                          border: InputBorder.none,
+                          //   border: InputBorder.none,
                         ),
                         onSubmitted: (value) {
                           _sendComment();

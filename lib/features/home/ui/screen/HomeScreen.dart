@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/features/Post/logic/cubit/post_cubit/post_cubit.dart';
 import 'package:myapp/features/home/ui/screen/HomeScreenContent.dart';
 
-
 class HomeScreen extends StatefulWidget {
   static const String routeName = "/home";
   const HomeScreen({super.key});
@@ -24,13 +23,6 @@ class _HomeState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
-        statusBarBrightness: Brightness.dark,
-        statusBarIconBrightness: Brightness.dark,
-      ),
-    );
     return HomeScreenContent(user: user);
   }
 }

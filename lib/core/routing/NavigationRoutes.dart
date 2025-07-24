@@ -11,6 +11,7 @@ import 'package:myapp/features/profile/ui/widget/PrivacyPolicyScreen.dart';
 import 'package:myapp/features/profile/ui/widget/SupportAndHelpScreen.dart';
 import 'package:myapp/features/profile/ui/widget/accountSection.dart';
 import 'package:myapp/features/profile/ui/widget/changePassword.dart';
+import 'package:myapp/features/auth/ui/screen/forgot_password.dart';
 
 class NavigationRoutes {
   static Route generateRoute(RouteSettings settings) {
@@ -32,12 +33,11 @@ class NavigationRoutes {
       case SettingsPrivacyPage.routeName:
         final userModel = settings.arguments as UserModel;
         return MaterialPageRoute(
-          builder:
-              (context) => SettingsPrivacyPage(
-                imgurl: userModel.image,
-                name: userModel.fullName,
-                email: userModel.email,
-              ),
+          builder: (context) => SettingsPrivacyPage(
+            imgurl: userModel.image,
+            name: userModel.fullName,
+            email: userModel.email,
+          ),
         );
 
       case Changepassword.routeName:
@@ -57,6 +57,10 @@ class NavigationRoutes {
       case ContactSupportScreen.routeName:
         return MaterialPageRoute(
           builder: (context) => const ContactSupportScreen(),
+        );
+      case ForgotPasswordScreen.routeName:
+        return MaterialPageRoute(
+          builder: (context) => const ForgotPasswordScreen(),
         );
 
       default:

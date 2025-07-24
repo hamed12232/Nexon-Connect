@@ -3,9 +3,8 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/core/Components/firebase_notification.dart';
-import 'package:myapp/core/helper/cache_helper.dart';
 import 'package:myapp/core/helper/services_helper.dart';
 import 'package:myapp/core/style/style.dart';
 import 'package:myapp/core/style/theme/theme_cubit.dart';
@@ -33,7 +32,6 @@ class SettingsPrivacyPage extends StatefulWidget {
 
 class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
   bool notificationsEnabled = true;
-  bool darkModeEnabled = false;
   FirebaseAuth auth = FirebaseAuth.instance;
   final Color backgroundColor = const Color(0xFFF7F7F7);
   final Color textColor = Colors.black87;
@@ -54,17 +52,15 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
       appBar: AppBar(
         title: const Text(
           'Settings & Privacy',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+          style: TextStyle(fontWeight: FontWeight.w600),
         ),
-        backgroundColor: backgroundColor,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -100,12 +96,17 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
 
             log("Notifications turned ${value ? "on" : "off"} by user");
           }),
-          _buildSwitchTile("Dark Mode", darkModeEnabled, (value) {
-            setState(() => darkModeEnabled = value);
-            ThemeCubit.get(context).selectThemeMode(
-              (value ? ThemeMode.dark : ThemeMode.light) as ThemeModeState,
-            );
-          }),
+          BlocBuilder<ThemeCubit, ThemeState>(
+            builder: (context, state) {
+              final themeCubit = ThemeCubit.get(context);
+              final isDark = themeCubit.isDarkMode;
+              return _buildSwitchTile("Dark Mode", isDark, (value) async {
+                await themeCubit.selectThemeMode(
+                  value ? ThemeModeState.dark : ThemeModeState.light,
+                );
+              });
+            },
+          ),
           _buildSectionTitle("SUPPORT & ABOUT"),
           GestureDetector(
             onTap: () {
@@ -124,65 +125,58 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
           ),
           Column(
             children: [
-              Container(
-                color: Colors.white,
-                child: ListTile(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
-                  leading: Icon(
-                    Icons.warning,
-                    color: ColorsTheme.loginGradientEnd,
-                  ),
-                  title: Text(
-                    "Delete Account",
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: textColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  trailing: GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("Delete Account"),
-                            content: const Text(
-                              "Are you sure you want to delete your account?",
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                leading: Icon(
+                  Icons.warning,
+                  color: ColorsTheme.loginGradientEnd,
+                ),
+                title: Text(
+                  "Delete Account",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                ),
+                trailing: GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("Delete Account"),
+                          content: const Text(
+                            "Are you sure you want to delete your account?",
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text("Cancel"),
                             ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text("Cancel"),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  ServicesHelper().deleteAccount(
-                                    auth.currentUser!,
-                                  );
-                                  Navigator.pushNamedAndRemoveUntil(
-                                    context,
-                                    AuthScreen.routeName,
-                                    (route) => false,
-                                  );
-                                },
-                                child: const Text("Delete"),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: const Icon(
-                      Icons.delete_forever,
-                      size: 25,
-                      color: Colors.red,
-                    ),
+                            TextButton(
+                              onPressed: () {
+                                ServicesHelper().deleteAccount(
+                                  auth.currentUser!,
+                                );
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  AuthScreen.routeName,
+                                  (route) => false,
+                                );
+                              },
+                              child: const Text("Delete"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: const Icon(
+                    Icons.delete_forever,
+                    size: 25,
+                    color: Colors.red,
                   ),
                 ),
               ),
@@ -197,34 +191,24 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
   }
 
   Widget _buildAccountSection() {
-    return Container(
-      color: Colors.white,
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 12,
-        ),
-        leading: CircleAvatar(
-          backgroundImage: CachedNetworkImageProvider(widget.imgurl),
-          radius: 30,
-        ),
-        title: Text(
-          widget.name,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: textColor,
-          ),
-        ),
-        subtitle: Text(
-          "@${widget.name}",
-          style: TextStyle(color: secondaryTextColor),
-        ),
-        trailing: const Icon(
-          Icons.arrow_forward_ios,
-          size: 16,
-          color: Colors.grey,
-        ),
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      leading: CircleAvatar(
+        backgroundImage: CachedNetworkImageProvider(widget.imgurl),
+        radius: 30,
+      ),
+      title: Text(
+        widget.name,
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      ),
+      subtitle: Text(
+        "@${widget.name}",
+        style: TextStyle(color: secondaryTextColor),
+      ),
+      trailing: const Icon(
+        Icons.arrow_forward_ios,
+        size: 16,
+        color: Colors.grey,
       ),
     );
   }
@@ -236,27 +220,20 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
   Widget _buildSimpleTile(IconData icon, String title) {
     return Column(
       children: [
-        Container(
-          color: Colors.white,
-          child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
-            leading: Icon(icon, color: ColorsTheme.loginGradientEnd),
-            title: Text(
-              title,
-              style: TextStyle(
-                fontSize: 15,
-                color: textColor,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: const Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: Colors.grey,
-            ),
+        ListTile(
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
+          leading: Icon(icon, color: ColorsTheme.loginGradientEnd),
+          title: Text(
+            title,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+          ),
+          trailing: const Icon(
+            Icons.arrow_forward_ios,
+            size: 16,
+            color: Colors.grey,
           ),
         ),
         _buildDivider(),
@@ -271,26 +248,19 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
   ) {
     return Column(
       children: [
-        Container(
-          color: Colors.white,
-          child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
-            ),
-            title: Text(
-              title,
-              style: TextStyle(
-                fontSize: 15,
-                color: textColor,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            trailing: Switch(
-              value: value,
-              onChanged: onChanged,
-              activeColor: ColorsTheme.loginGradientEnd,
-            ),
+        ListTile(
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
+          title: Text(
+            title,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+          ),
+          trailing: Switch(
+            value: value,
+            onChanged: onChanged,
+            activeColor: ColorsTheme.loginGradientEnd,
           ),
         ),
         _buildDivider(),
@@ -303,11 +273,7 @@ class _SettingsPrivacyPageState extends State<SettingsPrivacyPage> {
       padding: const EdgeInsets.fromLTRB(16, 20, 0, 8),
       child: Text(
         title,
-        style: TextStyle(
-          fontSize: 12,
-          color: secondaryTextColor,
-          fontWeight: FontWeight.bold,
-        ),
+        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
       ),
     );
   }

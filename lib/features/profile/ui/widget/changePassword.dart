@@ -18,12 +18,17 @@ class _ChangepasswordState extends State<Changepassword> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           "Change Password",
-          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
+            color: theme.textTheme.titleLarge?.color,
+          ),
         ),
       ),
       body: Center(
@@ -36,14 +41,12 @@ class _ChangepasswordState extends State<Changepassword> {
               ),
             ),
             const SizedBox(height: 20),
-
             _buildEmailTextField(
               context,
               _oldpasswordController,
               "Old Password",
             ),
             const SizedBox(height: 20),
-
             _buildEmailTextField(
               context,
               _newpasswordController,
@@ -59,17 +62,18 @@ class _ChangepasswordState extends State<Changepassword> {
   }
 
   Widget _buildSendPasswordButton(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       width: MediaQuery.of(context).size.width * 0.8,
       height: 43,
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xff651CE5), Color(0xff811ce5)],
+        gradient: LinearGradient(
+          colors: [theme.colorScheme.primary, theme.colorScheme.secondary],
         ),
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xff651CE5).withOpacity(0.3),
+            color: theme.colorScheme.primary.withOpacity(0.3),
             blurRadius: 8,
           ),
         ],
@@ -91,11 +95,10 @@ class _ChangepasswordState extends State<Changepassword> {
             );
           }
         },
-
-        child: const Text(
+        child: Text(
           'Confirm',
           style: TextStyle(
-            color: Colors.white,
+            color: theme.colorScheme.onPrimary,
             fontSize: 22,
             fontWeight: FontWeight.w800,
           ),
@@ -109,26 +112,26 @@ class _ChangepasswordState extends State<Changepassword> {
     TextEditingController textController,
     String password,
   ) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(30), // ده المهم عشان الكيرف
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(30),
       ),
       child: TextField(
         controller: textController,
         style: TextStyle(
           fontSize: 15.0,
-          color: Theme.of(context).textTheme.titleLarge!.color,
+          color: theme.textTheme.titleLarge?.color,
         ),
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(10.0),
           enabledBorder: InputBorder.none,
           border: InputBorder.none,
-
           hintText: password,
           hintStyle: TextStyle(
             fontSize: 15.0,
-            color: Theme.of(context).textTheme.titleLarge!.color,
+            color: theme.textTheme.bodyMedium?.color,
           ),
         ),
         maxLines: null,

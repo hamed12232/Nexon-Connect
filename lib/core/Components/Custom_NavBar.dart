@@ -23,15 +23,14 @@ class CustomNavBar extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(30, 5, 30, 30),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.background,
             borderRadius: BorderRadius.circular(35),
             boxShadow: [
               BoxShadow(
-                // ignore: deprecated_member_use
-                color: Colors.black.withOpacity(0.2),
+                color: Theme.of(context).shadowColor.withOpacity(0.2),
                 spreadRadius: 3,
                 blurRadius: 8,
-                offset: Offset(0, 10), // changes position of shadow
+                offset: Offset(0, 10),
               ),
             ],
           ),
@@ -45,25 +44,22 @@ class CustomNavBar extends StatelessWidget {
 
                   children: [
                     Container(
-                      decoration:
-                          MenuState.home == selectedMenu
-                              ? BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    // ignore: deprecated_member_use
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 3,
-                                    blurRadius: 8,
-                                    offset: Offset(
-                                      0,
-                                      5,
-                                    ), // changes position of shadow
-                                  ),
-                                ],
-                              )
-                              : null,
+                      decoration: MenuState.home == selectedMenu
+                          ? BoxDecoration(
+                              color: Theme.of(context).colorScheme.background,
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(
+                                    context,
+                                  ).shadowColor.withOpacity(0.3),
+                                  spreadRadius: 3,
+                                  blurRadius: 8,
+                                  offset: Offset(0, 5),
+                                ),
+                              ],
+                            )
+                          : null,
                       child: GestureDetector(
                         onTap: () {
                           if (!(route!.settings.name == "/home")) {
@@ -77,16 +73,19 @@ class CustomNavBar extends StatelessWidget {
                               width: 60,
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(18, 18, 18, 0),
-                                child:
-                                    MenuState.home == selectedMenu
-                                        ? SvgPicture.asset(
-                                          "assets/icons/home.svg",
-                                          // ignore: deprecated_member_use
-                                          color: Color(0xff651CE5),
-                                        )
-                                        : SvgPicture.asset(
-                                          "assets/icons/home-outline.svg",
-                                        ),
+                                child: MenuState.home == selectedMenu
+                                    ? SvgPicture.asset(
+                                        "assets/icons/home.svg",
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      )
+                                    : SvgPicture.asset(
+                                        "assets/icons/home-outline.svg",
+                                        color: Theme.of(
+                                          context,
+                                        ).iconTheme.color,
+                                      ),
                               ),
                             ),
                             Padding(
@@ -94,10 +93,11 @@ class CustomNavBar extends StatelessWidget {
                               child: Text(
                                 "Home",
                                 style: TextStyle(
-                                  color:
-                                      MenuState.home == selectedMenu
-                                          ? Color(0xff651CE5)
-                                          : Colors.black,
+                                  color: MenuState.home == selectedMenu
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium?.color,
                                 ),
                               ),
                             ),
@@ -108,29 +108,29 @@ class CustomNavBar extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         if (!(route!.settings.name == "/discover")) {
-                          Navigator.pushNamed(context, DiscoverScreen.routeName);
+                          Navigator.pushNamed(
+                            context,
+                            DiscoverScreen.routeName,
+                          );
                         }
                       },
                       child: Container(
-                        decoration:
-                            MenuState.discover == selectedMenu
-                                ? BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(15),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      // ignore: deprecated_member_use
-                                      color: Colors.grey.withOpacity(0.3),
-                                      spreadRadius: 3,
-                                      blurRadius: 8,
-                                      offset: Offset(
-                                        0,
-                                        5,
-                                      ), // changes position of shadow
-                                    ),
-                                  ],
-                                )
-                                : null,
+                        decoration: MenuState.discover == selectedMenu
+                            ? BoxDecoration(
+                                color: Theme.of(context).colorScheme.background,
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(
+                                      context,
+                                    ).shadowColor.withOpacity(0.3),
+                                    spreadRadius: 3,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 5),
+                                  ),
+                                ],
+                              )
+                            : null,
                         child: Column(
                           children: [
                             SizedBox(
@@ -138,16 +138,19 @@ class CustomNavBar extends StatelessWidget {
                               width: 60,
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(18, 18, 18, 0),
-                                child:
-                                    MenuState.discover == selectedMenu
-                                        ? SvgPicture.asset(
-                                          "assets/icons/discover.svg",
-                                          // ignore: deprecated_member_use
-                                          color: Color(0xff651CE5),
-                                        )
-                                        : SvgPicture.asset(
-                                          "assets/icons/discover-outline.svg",
-                                        ),
+                                child: MenuState.discover == selectedMenu
+                                    ? SvgPicture.asset(
+                                        "assets/icons/discover.svg",
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      )
+                                    : SvgPicture.asset(
+                                        "assets/icons/discover-outline.svg",
+                                        color: Theme.of(
+                                          context,
+                                        ).iconTheme.color,
+                                      ),
                               ),
                             ),
                             Padding(
@@ -155,10 +158,11 @@ class CustomNavBar extends StatelessWidget {
                               child: Text(
                                 "Discover",
                                 style: TextStyle(
-                                  color:
-                                      MenuState.discover == selectedMenu
-                                          ? Color(0xff651CE5)
-                                          : Colors.black,
+                                  color: MenuState.discover == selectedMenu
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium?.color,
                                 ),
                               ),
                             ),
@@ -167,25 +171,22 @@ class CustomNavBar extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      decoration:
-                          MenuState.inbox == selectedMenu
-                              ? BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    // ignore: deprecated_member_use
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 3,
-                                    blurRadius: 8,
-                                    offset: Offset(
-                                      0,
-                                      5,
-                                    ), // changes position of shadow
-                                  ),
-                                ],
-                              )
-                              : null,
+                      decoration: MenuState.inbox == selectedMenu
+                          ? BoxDecoration(
+                              color: Theme.of(context).colorScheme.background,
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(
+                                    context,
+                                  ).shadowColor.withOpacity(0.3),
+                                  spreadRadius: 3,
+                                  blurRadius: 8,
+                                  offset: Offset(0, 5),
+                                ),
+                              ],
+                            )
+                          : null,
                       child: GestureDetector(
                         onTap: () {
                           if (!(route!.settings.name == "/inbox")) {
@@ -199,16 +200,19 @@ class CustomNavBar extends StatelessWidget {
                               width: 60,
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
-                                child:
-                                    MenuState.inbox == selectedMenu
-                                        ? SvgPicture.asset(
-                                          "assets/icons/mail.svg",
-                                          // ignore: deprecated_member_use
-                                          color: Color(0xff651CE5),
-                                        )
-                                        : SvgPicture.asset(
-                                          "assets/icons/mail-outline.svg",
-                                        ),
+                                child: MenuState.inbox == selectedMenu
+                                    ? SvgPicture.asset(
+                                        "assets/icons/mail.svg",
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      )
+                                    : SvgPicture.asset(
+                                        "assets/icons/mail-outline.svg",
+                                        color: Theme.of(
+                                          context,
+                                        ).iconTheme.color,
+                                      ),
                               ),
                             ),
                             Padding(
@@ -216,10 +220,11 @@ class CustomNavBar extends StatelessWidget {
                               child: Text(
                                 "Inbox",
                                 style: TextStyle(
-                                  color:
-                                      MenuState.inbox == selectedMenu
-                                          ? Color(0xff651CE5)
-                                          : Colors.black,
+                                  color: MenuState.inbox == selectedMenu
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium?.color,
                                 ),
                               ),
                             ),
@@ -228,25 +233,22 @@ class CustomNavBar extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      decoration:
-                          MenuState.profile == selectedMenu
-                              ? BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    // ignore: deprecated_member_use
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 3,
-                                    blurRadius: 8,
-                                    offset: Offset(
-                                      0,
-                                      5,
-                                    ), // changes position of shadow
-                                  ),
-                                ],
-                              )
-                              : null,
+                      decoration: MenuState.profile == selectedMenu
+                          ? BoxDecoration(
+                              color: Theme.of(context).colorScheme.background,
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(
+                                    context,
+                                  ).shadowColor.withOpacity(0.3),
+                                  spreadRadius: 3,
+                                  blurRadius: 8,
+                                  offset: Offset(0, 5),
+                                ),
+                              ],
+                            )
+                          : null,
                       child: GestureDetector(
                         onTap: () {
                           if (!(route!.settings.name == "/profile")) {
@@ -263,16 +265,19 @@ class CustomNavBar extends StatelessWidget {
                               width: 60,
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(18, 18, 18, 0),
-                                child:
-                                    MenuState.profile == selectedMenu
-                                        ? SvgPicture.asset(
-                                          "assets/icons/profile.svg",
-                                          // ignore: deprecated_member_use
-                                          color: Color(0xff651CE5),
-                                        )
-                                        : SvgPicture.asset(
-                                          "assets/icons/profile-outline.svg",
-                                        ),
+                                child: MenuState.profile == selectedMenu
+                                    ? SvgPicture.asset(
+                                        "assets/icons/profile.svg",
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      )
+                                    : SvgPicture.asset(
+                                        "assets/icons/profile-outline.svg",
+                                        color: Theme.of(
+                                          context,
+                                        ).iconTheme.color,
+                                      ),
                               ),
                             ),
                             Padding(
@@ -280,10 +285,11 @@ class CustomNavBar extends StatelessWidget {
                               child: Text(
                                 "Profile",
                                 style: TextStyle(
-                                  color:
-                                      MenuState.profile == selectedMenu
-                                          ? Color(0xff651CE5)
-                                          : Colors.black,
+                                  color: MenuState.profile == selectedMenu
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(
+                                          context,
+                                        ).textTheme.bodyMedium?.color,
                                 ),
                               ),
                             ),

@@ -41,6 +41,10 @@ class ServicesHelper {
     await firestore.collection('users').doc(uid).update({'image': imageUrl});
   }
 
+  Future<void> sendResetEmail(String email) async {
+    await auth.sendPasswordResetEmail(email: email);
+  }
+
   Future<bool> changePassword(
     String email,
     String oldPassword,
@@ -70,23 +74,22 @@ class ServicesHelper {
       return false;
     }
   }
-Future<void> deleteAccount(User? user) async {
-  try {
-   if(user==null){
-    log("User is null");
-    return;
-   }
 
+  Future<void> deleteAccount(User? user) async {
+    try {
+      if (user == null) {
+        log("User is null");
+        return;
+      }
 
-    await user.delete();
-    await firestore.collection("users").doc(user.uid).delete();
+      await user.delete();
+      await firestore.collection("users").doc(user.uid).delete();
 
-
-    log("Account deleted successfully");
-  } catch (e) {
-    log("Error deleting account: ${e.toString()}");
+      log("Account deleted successfully");
+    } catch (e) {
+      log("Error deleting account: ${e.toString()}");
+    }
   }
-}
 
   Future<void> updateProfile(
     String name,

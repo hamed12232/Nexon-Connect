@@ -15,13 +15,15 @@ class ComplateProfileScreen extends StatefulWidget {
 class _ComplateProfileScreenState extends State<ComplateProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
+        backgroundColor:
+            theme.appBarTheme.backgroundColor ?? theme.primaryColor,
+        title: Text(
           "Edit Profile",
-          style: TextStyle(color: Color(0xFF757575)),
+          style: TextStyle(color: theme.textTheme.bodyLarge?.color),
         ),
       ),
       body: SafeArea(
@@ -33,29 +35,29 @@ class _ComplateProfileScreenState extends State<ComplateProfileScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 16),
-                  const Text(
+                  Text(
                     "Complete Profile",
                     style: TextStyle(
-                      color: Colors.black,
+                      color: theme.textTheme.displayLarge?.color,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     "Complete your details or continue \nwith social media",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Color(0xFF757575)),
+                    style: TextStyle(color: theme.textTheme.bodyMedium?.color),
                   ),
                   // const SizedBox(height: 16),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                   ComplateProfileForm(),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.15),
 
-                  const Text(
+                  Text(
                     "By continuing your confirm that you agree \nwith our Term and Condition",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Color(0xFF757575)),
+                    style: TextStyle(color: theme.textTheme.bodyMedium?.color),
                   ),
                 ],
               ),
@@ -68,7 +70,9 @@ class _ComplateProfileScreenState extends State<ComplateProfileScreen> {
 }
 
 const authOutlineInputBorder = OutlineInputBorder(
-  borderSide: BorderSide(color: Color(0xFF757575)),
+  borderSide: BorderSide(
+    color: Color(0xFF757575),
+  ), // You can also use Theme.of(context).dividerColor
   borderRadius: BorderRadius.all(Radius.circular(100)),
 );
 
@@ -88,6 +92,7 @@ class _ComplateProfileFormState extends State<ComplateProfileForm> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Form(
       child: Column(
         children: [
@@ -101,16 +106,20 @@ class _ComplateProfileFormState extends State<ComplateProfileForm> {
                 hintText: "Enter your  name",
                 labelText: "full Name",
                 floatingLabelBehavior: FloatingLabelBehavior.always,
-                hintStyle: const TextStyle(color: Color(0xFF757575)),
+                hintStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 16,
                 ),
                 suffix: SvgPicture.string(userIcon),
-                border: authOutlineInputBorder,
-                enabledBorder: authOutlineInputBorder,
+                border: authOutlineInputBorder.copyWith(
+                  borderSide: BorderSide(color: theme.dividerColor),
+                ),
+                enabledBorder: authOutlineInputBorder.copyWith(
+                  borderSide: BorderSide(color: theme.dividerColor),
+                ),
                 focusedBorder: authOutlineInputBorder.copyWith(
-                  borderSide: const BorderSide(color: Color(0xFFFF7643)),
+                  borderSide: BorderSide(color: theme.colorScheme.primary),
                 ),
               ),
             ),
@@ -122,16 +131,20 @@ class _ComplateProfileFormState extends State<ComplateProfileForm> {
               hintText: "Enter your phone number",
               labelText: "Phone Number",
               floatingLabelBehavior: FloatingLabelBehavior.always,
-              hintStyle: const TextStyle(color: Color(0xFF757575)),
+              hintStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 24,
                 vertical: 16,
               ),
               suffix: SvgPicture.string(phoneIcon),
-              border: authOutlineInputBorder,
-              enabledBorder: authOutlineInputBorder,
+              border: authOutlineInputBorder.copyWith(
+                borderSide: BorderSide(color: theme.dividerColor),
+              ),
+              enabledBorder: authOutlineInputBorder.copyWith(
+                borderSide: BorderSide(color: theme.dividerColor),
+              ),
               focusedBorder: authOutlineInputBorder.copyWith(
-                borderSide: const BorderSide(color: Color(0xFFFF7643)),
+                borderSide: BorderSide(color: theme.colorScheme.primary),
               ),
             ),
           ),
@@ -144,16 +157,20 @@ class _ComplateProfileFormState extends State<ComplateProfileForm> {
                 hintText: "Enter your address",
                 labelText: "Address",
                 floatingLabelBehavior: FloatingLabelBehavior.always,
-                hintStyle: const TextStyle(color: Color(0xFF757575)),
+                hintStyle: TextStyle(color: theme.textTheme.bodyMedium?.color),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 16,
                 ),
                 suffix: SvgPicture.string(locationPointIcon),
-                border: authOutlineInputBorder,
-                enabledBorder: authOutlineInputBorder,
+                border: authOutlineInputBorder.copyWith(
+                  borderSide: BorderSide(color: theme.dividerColor),
+                ),
+                enabledBorder: authOutlineInputBorder.copyWith(
+                  borderSide: BorderSide(color: theme.dividerColor),
+                ),
                 focusedBorder: authOutlineInputBorder.copyWith(
-                  borderSide: const BorderSide(color: Color(0xFFFF7643)),
+                  borderSide: BorderSide(color: theme.colorScheme.primary),
                 ),
               ),
             ),
@@ -194,8 +211,8 @@ class _ComplateProfileFormState extends State<ComplateProfileForm> {
 
             style: ElevatedButton.styleFrom(
               elevation: 0,
-              backgroundColor: const Color(0xFF4f46e5),
-              foregroundColor: Colors.white,
+              backgroundColor: theme.colorScheme.primary,
+              foregroundColor: theme.colorScheme.onPrimary,
               minimumSize: const Size(double.infinity, 48),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16)),

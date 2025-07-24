@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   primaryColor: const Color(0xFF651CE5),
-  scaffoldBackgroundColor: const Color(0xFF181A20),
+  scaffoldBackgroundColor: const Color(0xFF0c1014),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   useMaterial3: true,
   fontFamily: 'SansSerif',
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color(0xFF232946),
+    backgroundColor: Color(0xFF651CE5),
     foregroundColor: Colors.white,
     elevation: 0,
     iconTheme: IconThemeData(color: Colors.white),
@@ -21,13 +21,11 @@ final ThemeData darkTheme = ThemeData(
   colorScheme: ColorScheme.dark(
     primary: Color(0xFF651CE5),
     secondary: Color(0xFF0F3460),
-    surface: Color(0xFF232946),
-    background: Color(0xFF181A20),
+    surface: Color(0xFF0c1014),
     error: Colors.redAccent,
     onPrimary: Colors.white,
     onSecondary: Colors.white,
     onSurface: Colors.white,
-    onBackground: Colors.white,
     onError: Colors.white,
   ),
   textTheme: const TextTheme(
@@ -43,12 +41,25 @@ final ThemeData darkTheme = ThemeData(
   ),
   cardColor: const Color(0xFF232946),
   dividerColor: Colors.white24,
-  inputDecorationTheme: const InputDecorationTheme(
+  inputDecorationTheme: InputDecorationTheme(
     filled: true,
-    fillColor: Color(0xFF232946),
-    border: OutlineInputBorder(),
-    hintStyle: TextStyle(color: Colors.white54),
-    labelStyle: TextStyle(color: Colors.white),
+    fillColor: const Color(0xFF181A20),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16),
+      borderSide: const BorderSide(color: Colors.white24),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16),
+      borderSide: const BorderSide(color: Colors.white24),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16),
+      borderSide: const BorderSide(color: Color(0xFF651CE5), width: 2),
+    ),
+    hintStyle: const TextStyle(color: Colors.white54),
+    labelStyle: const TextStyle(color: Colors.white),
+    iconColor: Colors.white70,
+    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
   ),
   snackBarTheme: const SnackBarThemeData(
     backgroundColor: Color(0xFF232946),
@@ -71,10 +82,9 @@ final ThemeData darkTheme = ThemeData(
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: const Color(0xFF651CE5),
-  scaffoldBackgroundColor: const Color(0xFFF5F6FA),
+  scaffoldBackgroundColor: const Color(0xFFFFFFFF),
   visualDensity: VisualDensity.adaptivePlatformDensity,
   useMaterial3: true,
-  // Correct property name and value
   fontFamily: 'SansSerif',
   appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xFF651CE5),
@@ -90,13 +100,11 @@ final ThemeData lightTheme = ThemeData(
   colorScheme: ColorScheme.light(
     primary: Color(0xFF651CE5),
     secondary: Color(0xFF0F3460),
-    surface: Color(0xFFF5F6FA),
-    background: Color(0xFFF5F6FA),
+    surface: Color(0xffffffff),
     error: Colors.redAccent,
     onPrimary: Colors.white,
     onSecondary: Colors.white,
     onSurface: Colors.black,
-    onBackground: Colors.black,
     onError: Colors.white,
   ),
   textTheme: const TextTheme(
@@ -112,12 +120,25 @@ final ThemeData lightTheme = ThemeData(
   ),
   cardColor: Colors.white,
   dividerColor: Colors.black12,
-  inputDecorationTheme: const InputDecorationTheme(
+  inputDecorationTheme: InputDecorationTheme(
     filled: true,
-    fillColor: Color(0xFFF5F6FA),
-    border: OutlineInputBorder(),
-    hintStyle: TextStyle(color: Colors.black38),
-    labelStyle: TextStyle(color: Colors.black),
+    fillColor: const Color(0xFFF5F6FA),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16),
+      borderSide: const BorderSide(color: Colors.black12),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16),
+      borderSide: const BorderSide(color: Colors.black12),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16),
+      borderSide: const BorderSide(color: Color(0xFF651CE5), width: 2),
+    ),
+    hintStyle: const TextStyle(color: Colors.black38),
+    labelStyle: const TextStyle(color: Colors.black),
+    iconColor: Colors.black54,
+    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
   ),
   snackBarTheme: const SnackBarThemeData(
     backgroundColor: Color(0xFF651CE5),

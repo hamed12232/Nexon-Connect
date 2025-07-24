@@ -10,42 +10,39 @@ class Custom_appBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final logoAsset = isDark
+        ? 'assets/images/logo_dark.png'
+        : 'assets/images/logo.png';
+
     return Row(
       children: [
-     Row(
+        Row(
           children: [
-            Image.asset(
-              "assets/images/logo.png",
-              height: 70,
-              width: 70,
-              // ignore: deprecated_member_use
-            ),
+            Image.asset(logoAsset, height: 70, width: 70),
             SizedBox(width: 10),
             Text(
               "Nexon",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
             ),
             //  SizedBox(width: 20),
             //  SvgPicture.asset("assets/icons/search.svg", height: 30),
           ],
         ),
 
-
-         Spacer(),
-           SizedBox(
-               width: 70,
-                height: 70,
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, PostScreen.routeName);
-                },
-                child: Lottie.asset(
-                  "assets/images/add.json",
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-
+        Spacer(),
+        SizedBox(
+          width: 70,
+          height: 70,
+          child: InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, PostScreen.routeName);
+            },
+            child: Lottie.asset("assets/images/add.json", fit: BoxFit.cover),
+          ),
+        ),
       ],
     );
   }

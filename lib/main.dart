@@ -36,15 +36,20 @@ void main() async {
     FirebaseNotification().initNotification(),
     CachHelper().init(),
   ]);
+
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
+  final themeCubit = ThemeCubit();
+  await themeCubit.loadTheme();
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => AuthCubit()),
         BlocProvider(create: (_) => PostCubit()),
         BlocProvider(create: (_) => ChatCubit()),
-        BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider.value(value: themeCubit),
+        //Use BlocProvider.value() when you need to reuse an existing instance
+        //Don't create multiple instances of the same BloC when you need shared state
       ],
       child: MyApp(),
     ),
@@ -59,12 +64,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, state) {
+        final themeMode = ThemeCubit.get(context).getTheme();
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: lightTheme,
           darkTheme: darkTheme,
 
-          themeMode: ThemeCubit.get(context).getTheme(),
+          themeMode: themeMode,
           initialRoute: user != null
               ? HomeScreen.routeName
               : AuthScreen.routeName,

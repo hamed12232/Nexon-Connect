@@ -41,12 +41,10 @@ class _ChatsState extends State<InboxScreen>
 
   UserModel? userModel;
   @override
-  @override
   Widget build(BuildContext context) {
     super.build(context);
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
         body: Stack(
           children: [
             Column(
@@ -64,7 +62,9 @@ class _ChatsState extends State<InboxScreen>
                               context: context,
                               useSafeArea: true,
                               isScrollControlled: true,
-                              backgroundColor: Colors.white,
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.surface,
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(20),

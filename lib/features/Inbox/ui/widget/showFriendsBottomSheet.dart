@@ -24,10 +24,20 @@ class Showfriendsbottomsheet extends StatelessWidget {
               if (state is FollowLoading) {
                 return Center(child: CircularProgressIndicator());
               } else if (state is FollowFailure) {
-                return Center(child: Text(state.error));
+                return Center(
+                  child: Text(
+                    state.error,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                );
               } else if (state is FollowLoaded) {
                 if (state.users.isEmpty) {
-                  return Center(child: Text("No Friends found"));
+                  return Center(
+                    child: Text(
+                      "No Friends found",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  );
                 }
                 return ListView.builder(
                   padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
@@ -40,29 +50,37 @@ class Showfriendsbottomsheet extends StatelessWidget {
                           user['image'],
                         ),
                       ),
-                      title: Text(user['fullName']),
-                      subtitle: Text("Tap To Message"),
+                      title: Text(
+                        user['fullName'],
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      subtitle: Text(
+                        "Tap To Message",
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                       trailing: GestureDetector(
                         onTap: () async {
                           await context.read<ChatCubit>().createChatAndLoad(
                             user1,
                             user.id,
                           );
-    
+
                           Navigator.pop(context);
                         },
                         child: Container(
                           height: 50,
                           width: 50,
                           decoration: BoxDecoration(
-                            // ignore: deprecated_member_use
-                            color: Colors.grey.withOpacity(0.2),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.secondary.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(100),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(12),
                             child: SvgPicture.asset(
                               "assets/icons/mail-outline.svg",
+                              color: Theme.of(context).iconTheme.color,
                             ),
                           ),
                         ),
@@ -71,7 +89,12 @@ class Showfriendsbottomsheet extends StatelessWidget {
                   },
                 );
               }
-              return Center(child: Text("Something went wrong"));
+              return Center(
+                child: Text(
+                  "Something went wrong",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              );
             },
           ),
         ),

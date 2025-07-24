@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +19,7 @@ class HomeScreenContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: BlocBuilder<PostCubit, PostState>(
           builder: (context, state) {
             if (state is PostLoading) {
@@ -28,17 +28,16 @@ class HomeScreenContent extends StatelessWidget {
                 child: ListView.builder(
                   padding: const EdgeInsets.all(20),
                   itemCount: 5,
-                  itemBuilder:
-                      (context, index) => Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: Container(
-                          height: 300,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
+                  itemBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Container(
+                      height: 300,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(16),
                       ),
+                    ),
+                  ),
                 ),
               );
             } else if (state is PostFailure) {
@@ -50,7 +49,7 @@ class HomeScreenContent extends StatelessWidget {
                 child: Stack(
                   children: [
                     Container(
-                      color: Colors.white,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
@@ -75,12 +74,8 @@ class HomeScreenContent extends StatelessWidget {
                               }
                               return BlocProvider(
                                 key: ValueKey(post.id),
-                                create:
-                                    (context) =>
-                                        LikeCubit()..loadLikes(
-                                          post.id,
-                                          user.currentUser!.uid,
-                                        ),
+                                create: (context) => LikeCubit()
+                                  ..loadLikes(post.id, user.currentUser!.uid),
                                 child: HomeCard(
                                   postId: post.id,
                                   user: user.currentUser!.uid,

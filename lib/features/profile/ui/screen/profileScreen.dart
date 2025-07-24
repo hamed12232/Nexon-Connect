@@ -45,7 +45,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
         body: Stack(
           children: [
             BlocBuilder<AuthCubit, AuthState>(
@@ -101,10 +100,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // ignore: deprecated_member_use
           SvgPicture.asset(
             "assets/icons/back-arrow.svg",
-            color: Colors.black,
             height: 25,
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white,
           ),
           Text(
             userModel.fullName,
@@ -121,7 +123,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: SizedBox(
               height: 30,
               width: 30,
-              child: SvgPicture.asset("assets/icons/dots.svg", height: 8),
+              child: SvgPicture.asset(
+                "assets/icons/dots.svg",
+                height: 8,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.black
+                    : Colors.white,
+              ),
             ),
           ),
         ],
@@ -170,6 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fileName,
                   );
                   await servicesHelper.updateUserImage(userId, newImageUrl!);
+                  // ignore: use_build_context_synchronously
                   await context.read<AuthCubit>().getUserData(userId);
                   showInSnackBar("Image updated successfully", context);
                 } else {
@@ -238,68 +247,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         const SizedBox(height: 10),
-        Text(
-          label,
-          style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 15),
-        ),
+        Text(label, style: TextStyle(fontSize: 15)),
       ],
     );
   }
 
-  Widget _buildActions() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildFollowButton(),
-        const SizedBox(width: 20),
-        _buildMessageButton(),
-      ],
-    );
-  }
+  // Widget _buildFollowButton() {
+  //   return Container(
+  //     width: 100,
+  //     height: 43,
+  //     decoration: BoxDecoration(
+  //       gradient: const LinearGradient(
+  //         colors: [Color(0xff651CE5), Color(0xff811ce5)],
+  //       ),
+  //       borderRadius: BorderRadius.circular(10),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: const Color(0xff651CE5).withOpacity(0.3),
+  //           blurRadius: 8,
+  //         ),
+  //       ],
+  //     ),
+  //     child: TextButton(
+  //       onPressed: () {},
+  //       child: const Text(
+  //         'Follow',
+  //         style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget _buildFollowButton() {
-    return Container(
-      width: 100,
-      height: 43,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xff651CE5), Color(0xff811ce5)],
-        ),
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xff651CE5).withOpacity(0.3),
-            blurRadius: 8,
-          ),
-        ],
-      ),
-      child: TextButton(
-        onPressed: () {},
-        child: const Text(
-          'Follow',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMessageButton() {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        height: 50,
-        width: 50,
-        decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(100),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: SvgPicture.asset("assets/icons/mail-outline.svg"),
-        ),
-      ),
-    );
-  }
+  // Widget _buildMessageButton() {
+  //   return GestureDetector(
+  //     onTap: () {},
+  //     child: Container(
+  //       height: 50,
+  //       width: 50,
+  //       decoration: BoxDecoration(
+  //         color: Colors.grey.withOpacity(0.2),
+  //         borderRadius: BorderRadius.circular(100),
+  //       ),
+  //       child: Padding(
+  //         padding: const EdgeInsets.all(12),
+  //         child: SvgPicture.asset("assets/icons/mail-outline.svg"),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildTabBar() {
     return Padding(
@@ -374,19 +369,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       right: 0,
                       child: Center(
                         child: Container(
-                          height: 40,
-                          width: 70,
+                          width: 50,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(35),
                           ),
-                          child: const Center(
-                            child: Text(
-                              "123k",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  post.likes.length.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.favorite,
+                                  color: Colors.red,
+                                  size: 20,
+                                ),
+                              ],
                             ),
                           ),
                         ),

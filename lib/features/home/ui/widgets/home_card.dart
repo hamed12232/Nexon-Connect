@@ -45,33 +45,31 @@ class _HomeCardState extends State<HomeCard> {
           //Side-bar Container
           Positioned(
             right: -5,
-            top:
-                MediaQuery.of(context).size.shortestSide < 600
-                    ? (MediaQuery.of(context).size.width * 1.45 -
-                            MediaQuery.of(context).size.width * 1.25) /
-                        2
-                    : (MediaQuery.of(context).size.width * 1.45 -
-                            MediaQuery.of(context).size.width * 0.7) /
-                        2,
+            top: MediaQuery.of(context).size.shortestSide < 600
+                ? (MediaQuery.of(context).size.width * 1.45 -
+                          MediaQuery.of(context).size.width * 1.25) /
+                      2
+                : (MediaQuery.of(context).size.width * 1.45 -
+                          MediaQuery.of(context).size.width * 0.7) /
+                      2,
             child: Stack(
               children: [
                 SizedBox(
-                  width:
-                      MediaQuery.of(context).size.shortestSide < 600
-                          ? 115
-                          : 180,
-                  height:
-                      MediaQuery.of(context).size.shortestSide < 600
-                          ? MediaQuery.of(context).size.width * 1.25
-                          : MediaQuery.of(context).size.width * 0.7,
+                  width: MediaQuery.of(context).size.shortestSide < 600
+                      ? 115
+                      : 180,
+                  height: MediaQuery.of(context).size.shortestSide < 600
+                      ? MediaQuery.of(context).size.width * 1.25
+                      : MediaQuery.of(context).size.width * 0.7,
                   child: ClipPath(
                     clipper: MyCustomClipper(),
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                       child: SvgPicture.asset(
                         "assets/icons/side-bar.svg",
-                        // ignore: deprecated_member_use
-                        color: Color(0xffc9c9c9).withOpacity(0.5),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.surface.withOpacity(0.2),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -120,16 +118,14 @@ class _HomeCardState extends State<HomeCard> {
                 Row(
                   children: [
                     CircleAvatar(
-                      backgroundImage:CachedNetworkImageProvider(widget.dp!),
+                      backgroundImage: CachedNetworkImageProvider(widget.dp!),
                       radius: 25,
                     ),
                     SizedBox(width: 10),
                     Text(
                       widget.name!,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
                     ),
                   ],
@@ -137,22 +133,18 @@ class _HomeCardState extends State<HomeCard> {
                 SizedBox(height: 20),
                 Text(
                   widget.des!,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 15,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
                 Row(
                   children: [
                     Expanded(
                       child: Text(
-                        "#hello",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xff00d289),
-                          fontSize: 18,
-                        ),
+                        "#Nexon Connect",
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyLarge?.copyWith(color: Colors.green),
                       ),
                     ),
                   ],
@@ -165,11 +157,12 @@ class _HomeCardState extends State<HomeCard> {
     );
   }
 }
+
 void showCommentSheet(BuildContext context, String postId) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
+    backgroundColor: Theme.of(context).colorScheme.surface,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
