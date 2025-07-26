@@ -12,14 +12,14 @@ class Custom_appBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final logoAsset = isDark
-        ? 'assets/images/logo_dark.png'
+        ? 'assets/img/logo_dark.png'
         : 'assets/images/logo.png';
 
     return Row(
       children: [
         Row(
           children: [
-            Image.asset(logoAsset, height: 70, width: 70),
+            SizedBox(width: 50, height: 50, child: Image.asset(logoAsset)),
             SizedBox(width: 10),
             Text(
               "Nexon",

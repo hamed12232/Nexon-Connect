@@ -8,6 +8,7 @@ class ChatModel {
   final String senderName;
   final String senderImage;
   final bool isActive;
+  final int unreadCount; // Only add this field
 
   ChatModel({
     required this.chatId,
@@ -17,6 +18,7 @@ class ChatModel {
     required this.lastMessage,
     required this.lastTime,
     required this.isActive,
+    this.unreadCount = 0, // Default value for unreadCount
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) {
@@ -28,6 +30,7 @@ class ChatModel {
       senderImage: json['senderImage'],
       lastTime: (json['lastTime'] as Timestamp).toDate(),
       isActive: json['isActive'],
+      unreadCount: json['unreadCount'] ?? 0, // Default to 0 if not present
     );
   }
 
@@ -40,6 +43,7 @@ class ChatModel {
       'senderImage': senderImage,
       'lastTime': lastTime,
       'isActive': isActive,
+      'unreadCount': unreadCount,
     };
   }
 }

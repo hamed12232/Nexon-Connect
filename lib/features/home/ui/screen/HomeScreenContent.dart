@@ -33,7 +33,7 @@ class HomeScreenContent extends StatelessWidget {
                     child: Container(
                       height: 300,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
+                        color: Theme.of(context).dividerColor,
                         borderRadius: BorderRadius.circular(16),
                       ),
                     ),

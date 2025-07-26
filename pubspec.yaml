@@ -40,6 +40,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^9.1.1
   flutter_local_notifications: ^18.0.1
+  flutter_native_splash: 2.4.4
   flutter_svg: ^2.0.9
   font_awesome_flutter: ^10.8.0
   googleapis_auth: ^1.4.1
@@ -72,7 +73,8 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
-    - assets/img/login_logo.png
+    - assets/img/
+    - assets/img/logo_dark.png
     - assets/demosocialapp-ef38c-be73771d867a.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

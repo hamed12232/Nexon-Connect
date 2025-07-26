@@ -21,9 +21,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   Future<void> _sendResetEmail() async {
-    ServicesHelper().sendResetEmail(_emailController.text);
-    await Future.delayed(const Duration(seconds: 2));
-    showInSnackBar("Check your email!", context);
+    if (_emailController.text.isEmpty) {
+      showInSnackBar("Please enter your email!", context);
+      return;
+    }
+    if (await ServicesHelper().isEmailRegistered(_emailController.text)) {
+      ServicesHelper().sendResetEmail(_emailController.text);
+      await Future.delayed(const Duration(seconds: 2));
+      showInSnackBar("Check your email!", context);
+    } else {
+      showInSnackBar("Email not vaild", context);
+    }
   }
 
   @override

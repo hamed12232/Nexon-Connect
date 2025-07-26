@@ -7,6 +7,7 @@ class MessageModel {
   final String? repliedToMessageId;
   final String? repliedToText;
   final String? repliedToSenderId;
+  final bool isRead; // Only add this field
 
   MessageModel({
     required this.senderId,
@@ -15,6 +16,7 @@ class MessageModel {
     this.repliedToMessageId,
     this.repliedToText,
     this.repliedToSenderId,
+    this.isRead = false, // Default value for isRead
   });
   factory MessageModel.fromJson(Map<String, dynamic> json) {
     return MessageModel(
@@ -24,6 +26,7 @@ class MessageModel {
       repliedToMessageId: json['repliedToMessageId'],
       repliedToText: json['repliedToText'],
       repliedToSenderId: json['repliedToSenderId'],
+      isRead: json['isRead'] ?? false, // Default to false if not present
     );
   }
 
@@ -35,7 +38,7 @@ class MessageModel {
       'repliedToMessageId': repliedToMessageId,
       'repliedToText': repliedToText,
       'repliedToSenderId': repliedToSenderId,
+      'isRead': isRead, // Include isRead in the JSON representation
     };
   }
-
 }

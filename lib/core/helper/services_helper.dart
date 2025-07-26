@@ -11,6 +11,10 @@ class ServicesHelper {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final SupabaseClient supabase = Supabase.instance.client;
 
+  static final ServicesHelper _instance = ServicesHelper._internal();
+  factory ServicesHelper() => _instance;
+  ServicesHelper._internal();
+
   Future loginUser(String email, String password) async {
     await auth.signInWithEmailAndPassword(email: email, password: password);
   }
@@ -116,16 +120,17 @@ class ServicesHelper {
   //   }
   // }
 
-  // Future<bool> isEmailRegistered(String email) async {
-  //   try {
-  //     List<String> signInMethods =
-  //     // ignore: deprecated_member_use
-  //     await auth.fetchSignInMethodsForEmail(email);
-  //     return signInMethods.isNotEmpty; // إذا كان غير فارغ، فالإيميل مسجل
-  //   } catch (e) {
-  //     return false; // في حالة أي خطأ، نعتبر أن الإيميل غير مسجل
-  //   }
-  // }
+  Future<bool> isEmailRegistered(String email) async {
+    try {
+      List<String> signInMethods =
+          // ignore: deprecated_member_use
+          await auth.fetchSignInMethodsForEmail(email);
+      return signInMethods.isNotEmpty; // إذا كان غير فارغ، فالإيميل مسجل
+    } catch (e) {
+      return false; // في حالة أي خطأ، نعتبر أن الإيميل غير مسجل
+    }
+  }
+
   Future<String?> uploadImage(File imageFile, String fileName) async {
     final bucket = supabase.storage.from('images');
     try {
@@ -147,4 +152,13 @@ class ServicesHelper {
       return null;
     }
   }
+
+  // Future<bool> isEmailExistsInFirestore(String email) async {
+  //   final query = await firestore
+  //       .collection('users')
+  //       .where('email', isEqualTo: email)
+  //       .limit(1)
+  //       .get();
+  //   return query.docs.isNotEmpty;
+  // }
 }

@@ -24,22 +24,35 @@ class InboxScreen extends StatefulWidget {
 class _ChatsState extends State<InboxScreen>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   FirebaseAuth currentUser = FirebaseAuth.instance;
+  UserModel? userModel;
+
   @override
   void initState() {
-    context.read<ChatCubit>().loadChats(currentUser.currentUser!.uid);
-    user().then((value) {
-      setState(() {
-        userModel = value;
-      });
-    });
     super.initState();
+    _initializeScreen();
   }
 
-  Future<UserModel> user() async {
-    return await ServicesHelper().getUser(currentUser.currentUser!.uid);
+  Future<void> _initializeScreen() async {
+    // Load user data
+    final user = await ServicesHelper().getUser(currentUser.currentUser!.uid);
+    if (mounted) {
+      setState(() {
+        userModel = user;
+      });
+    }
+
+    // Load chats with real-time listening
+    if (mounted) {
+      context.read<ChatCubit>().loadChats(currentUser.currentUser!.uid);
+    }
   }
 
-  UserModel? userModel;
+  @override
+  void dispose() {
+    super.dispose();
+    context.read<ChatCubit>().close();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -80,20 +93,15 @@ class _ChatsState extends State<InboxScreen>
                                 ),
                               ),
                             );
-                            // context.read<ChatCubit>().createChat(currentUser.currentUser!.uid, "QYn9zhHJH8drNneWtjnp1nczcOl2");
                           },
                           child: Container(
                             decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(
-                                  // ignore: deprecated_member_use
                                   color: Colors.grey.withOpacity(0.5),
                                   spreadRadius: 2,
                                   blurRadius: 5,
-                                  offset: Offset(
-                                    0,
-                                    3,
-                                  ), // changes position of shadow
+                                  offset: Offset(0, 3),
                                 ),
                               ],
                               borderRadius: BorderRadius.circular(50),
@@ -127,7 +135,19 @@ class _ChatsState extends State<InboxScreen>
                   ),
                 ),
                 Expanded(
-                  child: BlocBuilder<ChatCubit, ChatState>(
+                  child: BlocConsumer<ChatCubit, ChatState>(
+                    listenWhen: (previous, current) =>
+                        previous is ChatCreated &&
+                        current is ChatCreated &&
+                        previous.chats != current.chats,
+                    listener: (context, state) {
+                      // Handle any side effects here if needed
+                      if (state is ChatError) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(state.error)));
+                      }
+                    },
                     builder: (context, state) {
                       if (state is ChatLoading) {
                         return Skeletonizer(
@@ -140,7 +160,7 @@ class _ChatsState extends State<InboxScreen>
                               child: Container(
                                 height: 70,
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: Theme.of(context).dividerColor,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
@@ -148,17 +168,48 @@ class _ChatsState extends State<InboxScreen>
                           ),
                         );
                       } else if (state is ChatError) {
-                        return Center(child: Text(state.error));
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Error: ${state.error}"),
+                              SizedBox(height: 16),
+                              ElevatedButton(
+                                onPressed: () {
+                                  context.read<ChatCubit>().loadChats(
+                                    currentUser.currentUser!.uid,
+                                  );
+                                },
+                                child: Text("Retry"),
+                              ),
+                            ],
+                          ),
+                        );
                       } else if (state is ChatCreated) {
                         if (state.chats.isEmpty) {
-                          return SvgPicture.asset(
-                            "assets/images/Group Chat-amico.svg",
-                            fit: BoxFit.scaleDown,
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  "assets/images/Group Chat-amico.svg",
+                                  fit: BoxFit.scaleDown,
+                                ),
+                                SizedBox(height: 16),
+                                Text(
+                                  "No conversations yet",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
                           );
                         } else {
                           return ChatsListView(
                             chats: state.chats,
-                            isOnline: userModel!.online,
+                            isOnline: userModel?.online ?? false,
                           );
                         }
                       } else {

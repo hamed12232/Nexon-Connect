@@ -37,7 +37,6 @@ class _ConversationState extends State<Conversation> {
           elevation: 3,
           leading: GestureDetector(
             onTap: () {
-              context.read<ChatCubit>().loadChats(currentUser.currentUser!.uid);
               Navigator.pop(context);
             },
             child: Padding(
@@ -133,31 +132,30 @@ class _ConversationState extends State<Conversation> {
 
                       final messages = snapshot.data!.docs;
 
-                      return Expanded(
-                        child: ListView.builder(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          itemCount: messages.length,
-                          reverse: true,
-                          itemBuilder: (context, index) {
-                            final messageData =
-                                messages[messages.length - 1 - index].data()
-                                    as Map<String, dynamic>?;
+                      return ListView.builder(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        itemCount: messages.length,
+                        reverse: true,
+                        itemBuilder: (context, index) {
+                          final messageData =
+                              messages[messages.length - 1 - index].data()
+                                  as Map<String, dynamic>?;
 
-                            return ChatBubble(
-                              message: messageData!['text'] ?? '',
-                              time: DateFormat('hh:mm a').format(
-                                (messageData['timestamp'] as Timestamp)
-                                    .toDate(),
-                              ),
-                              isMe: messageData['senderId'] == widget.senderId,
+                          return ChatBubble(
+                            message: messageData!['text'] ?? '',
+                            time: DateFormat('hh:mm a').format(
+                              (messageData['timestamp'] as Timestamp).toDate(),
+                            ),
+                            isMe:
+                                messageData['senderId'] ==
+                                currentUser.currentUser!.uid,
 
-                              type: "text",
-                              replyText: "",
-                              isReply: false,
-                              replyName: "",
-                            );
-                          },
-                        ),
+                            type: "text",
+                            replyText: "",
+                            isReply: false,
+                            replyName: "",
+                          );
+                        },
                       );
                     },
                   ),
@@ -228,7 +226,7 @@ class _ConversationState extends State<Conversation> {
                               if (_textController.text.trim().isNotEmpty) {
                                 context.read<ChatCubit>().sendMessage(
                                   chatId: widget.chatId,
-                                  senderId: widget.senderId,
+                                  senderId: currentUser.currentUser!.uid,
                                   text: _textController.text.trim(),
                                 );
                                 _textController.clear();

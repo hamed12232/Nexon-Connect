@@ -605,7 +605,7 @@ class _AuthScreenState extends State<AuthScreen>
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 340.0),
+                margin: EdgeInsets.only(top: 350.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   boxShadow: <BoxShadow>[

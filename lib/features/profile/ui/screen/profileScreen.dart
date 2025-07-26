@@ -26,6 +26,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late final int versionParam;
   File? imageFile;
+  int postCount = 0;
   String fileName = '';
   final supabase = Supabase.instance.client;
   final userId = FirebaseAuth.instance.currentUser!.uid;
@@ -233,7 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   "${userModel.followers.length - 1}",
                   "Followers",
                 ),
-          _buildStatItem("${userModel.likes}", "Like"),
+          _buildStatItem(postCount.toString(), "posts"),
         ],
       ),
     );
@@ -336,6 +337,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (state is PostFailure) return Center(child: Text(state.error));
         if (state is PostLoaded) {
           final posts = state.posts;
+          postCount = posts.length;
           return GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),

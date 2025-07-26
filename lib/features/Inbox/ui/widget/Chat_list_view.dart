@@ -24,8 +24,8 @@ class ChatsListView extends StatelessWidget {
           dp: otherUser.image,
           name: otherUser.fullName,
           isOnline: isOnline,
-          counter: 1,
           msg: chat.lastMessage,
+          unreadCount: chat.unreadCount,
           time: DateFormat('hh:mm a').format(chat.lastTime),
         );
       },

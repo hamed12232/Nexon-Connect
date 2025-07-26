@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
 import 'package:myapp/features/Inbox/ui/widget/Conversition.dart';
 
 class ChatItem extends StatefulWidget {
@@ -9,9 +13,9 @@ class ChatItem extends StatefulWidget {
   final String? time;
   final String? msg;
   final bool? isOnline;
-  final int? counter;
   final String chatId;
   final String senderId;
+  final int unreadCount;
 
   const ChatItem({
     super.key,
@@ -20,9 +24,9 @@ class ChatItem extends StatefulWidget {
     required this.time,
     required this.msg,
     required this.isOnline,
-    required this.counter,
     required this.chatId,
     required this.senderId,
+    required this.unreadCount,
   });
 
   @override
@@ -111,43 +115,60 @@ class _ChatItemState extends State<ChatItem> {
               style: TextStyle(fontWeight: FontWeight.w300, fontSize: 11),
             ),
             SizedBox(height: 5),
-            widget.counter == 0
+            widget.unreadCount == 0
                 ? SizedBox()
                 : Container(
-                  padding: EdgeInsets.all(1),
-                  decoration: BoxDecoration(
-                    color: Color(0xff00d289),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  constraints: BoxConstraints(minWidth: 11, minHeight: 11),
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 1, left: 5, right: 5),
-                    child: Text(
-                      "${widget.counter}",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
+                    padding: EdgeInsets.all(1),
+                    decoration: BoxDecoration(
+                      color: Color(0xff00d289),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    constraints: BoxConstraints(minWidth: 11, minHeight: 11),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 1, left: 5, right: 5),
+                      child: Text(
+                        "${widget.unreadCount}",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
-                ),
           ],
         ),
         onTap: () {
-          Navigator.of(context, rootNavigator: true).push(
-            MaterialPageRoute(
-              builder: (BuildContext context) {
-                return Conversation(
-                  chatId: widget.chatId,
-                  senderId: widget.senderId,
-                  dp: widget.dp,
-                  name: widget.name,
-                );
-              },
-            ),
+          log("Chat tapped: ${widget.chatId}");
+          context.read<ChatCubit>().markChatAsRead(
+            widget.chatId,
+            currentUser.currentUser!.uid,
           );
+
+          Navigator.of(context, rootNavigator: true)
+              .push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return Conversation(
+                      chatId: widget.chatId,
+                      senderId: widget.senderId,
+                      dp: widget.dp,
+                      name: widget.name,
+                    );
+                  },
+                ),
+              )
+              .then((value) {
+                log('Returned from conversation, refreshing chats');
+
+                // Optionally refresh the chat list after returning from conversation
+                if (mounted) {
+                  context.read<ChatCubit>().refreshChats(
+                    currentUser.currentUser!.uid,
+                  );
+                }
+              });
         },
       ),
     );
