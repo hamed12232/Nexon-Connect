@@ -224,9 +224,7 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
-  // Method to refresh chats manually if needed
   Future<void> refreshChats(String userId) async {
-    // The real-time listener will automatically update, but you can call this for manual refresh
     await loadChats(userId);
   }
 }
