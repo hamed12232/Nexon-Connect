@@ -341,7 +341,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (state is PostFailure) return Center(child: Text(state.error));
         if (state is PostLoaded) {
           final posts = state.posts;
-          postCount = posts.length;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              setState(() {
+                postCount = posts.length;
+              });
+            }
+          });
           return GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),

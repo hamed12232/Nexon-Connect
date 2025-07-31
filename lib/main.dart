@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nexon/core/Components/OnBackgroundFunction.dart';
 import 'package:nexon/core/Components/firebase_notification.dart';
 import 'package:nexon/core/Components/local_notification.dart';
@@ -51,13 +52,13 @@ void main() async {
         //Use BlocProvider.value() when you need to reuse an existing instance
         //Don't create multiple instances of the same BloC when you need shared state
       ],
-      child: nexon(),
+      child: Nexon(),
     ),
   );
 }
 
-class nexon extends StatelessWidget {
-  nexon({super.key});
+class Nexon extends StatelessWidget {
+  Nexon({super.key});
   final user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -65,16 +66,21 @@ class nexon extends StatelessWidget {
     return BlocBuilder<ThemeCubit, ThemeState>(
       builder: (context, state) {
         final themeMode = ThemeCubit.get(context).getTheme();
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: lightTheme,
-          darkTheme: darkTheme,
+        return ScreenUtilInit(
+          designSize: const Size(375, 812),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: lightTheme,
+            darkTheme: darkTheme,
 
-          themeMode: themeMode,
-          initialRoute: user != null
-              ? HomeScreen.routeName
-              : AuthScreen.routeName,
-          onGenerateRoute: NavigationRoutes.generateRoute,
+            themeMode: themeMode,
+            initialRoute: user != null
+                ? HomeScreen.routeName
+                : AuthScreen.routeName,
+            onGenerateRoute: NavigationRoutes.generateRoute,
+          ),
         );
       },
     );
