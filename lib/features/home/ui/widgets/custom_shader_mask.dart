@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/features/home/ui/widgets/home_card.dart';
+import 'package:nexon/features/home/ui/widgets/fullScreenImage.dart';
+import 'package:nexon/features/home/ui/widgets/home_card.dart';
 
 class CustomShaderMaskImage extends StatelessWidget {
   const CustomShaderMaskImage({super.key, required this.widget});
@@ -23,14 +24,24 @@ class CustomShaderMaskImage extends StatelessWidget {
           ).createShader(Rect.fromLTRB(0, 300, rect.width, rect.height - 1));
         },
         blendMode: BlendMode.darken,
-        child: Container(
-          height: MediaQuery.of(context).size.width * 1.45,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: CachedNetworkImageProvider(widget.img),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FullScreenImage(imagePath: widget.img),
+              ),
+            );
+          },
+          child: Container(
+            height: MediaQuery.of(context).size.width * 1.45,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: CachedNetworkImageProvider(widget.img),
+              ),
+              borderRadius: BorderRadius.circular(35),
             ),
-            borderRadius: BorderRadius.circular(35),
           ),
         ),
       ),

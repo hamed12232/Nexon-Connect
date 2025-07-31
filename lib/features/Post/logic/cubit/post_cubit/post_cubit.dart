@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:myapp/core/helper/services_helper.dart';
+import 'package:nexon/core/helper/services_helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/features/Post/logic/model/post_model.dart';
+import 'package:nexon/features/Post/logic/model/post_model.dart';
 import 'package:uuid/uuid.dart';
 part 'post_state.dart';
 
@@ -58,36 +58,36 @@ class PostCubit extends Cubit<PostState> {
   Future<void> fetchPost() async {
     emit(PostLoading());
     try {
-      
-      final snapshot =
-          await servicesHelper.firestore
-              .collection("posts")
-              .orderBy("created_at", descending: true)
-              .get();
+      final snapshot = await servicesHelper.firestore
+          .collection("posts")
+          .orderBy("created_at", descending: true)
+          .get();
 
-      final posts =
-          snapshot.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
+      final posts = snapshot.docs
+          .map((doc) => PostModel.fromJson(doc.data()))
+          .toList();
       emit(PostLoaded(posts));
     } catch (e) {
       emit(PostFailure(e.toString()));
     }
   }
-  Future<void> fetchUserPosts(String userId,) async {
-  emit(PostLoading());
-  try {
-    final snapshot = await servicesHelper.firestore
-        .collection('posts')
-        .where('user_id', isEqualTo: userId)
-        .orderBy('created_at', descending: true)
-        .get();
 
-    final posts = snapshot.docs.map((doc) {
-      return PostModel.fromJson(doc.data());
-    }).toList();
+  Future<void> fetchUserPosts(String userId) async {
+    emit(PostLoading());
+    try {
+      final snapshot = await servicesHelper.firestore
+          .collection('posts')
+          .where('user_id', isEqualTo: userId)
+          .orderBy('created_at', descending: true)
+          .get();
 
-    emit(PostLoaded(posts));
-  } catch (e) {
-    emit(PostFailure(e.toString()));
+      final posts = snapshot.docs.map((doc) {
+        return PostModel.fromJson(doc.data());
+      }).toList();
+
+      emit(PostLoaded(posts));
+    } catch (e) {
+      emit(PostFailure(e.toString()));
+    }
   }
-}
 }

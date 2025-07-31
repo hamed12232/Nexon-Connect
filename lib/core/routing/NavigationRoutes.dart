@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/features/Post/ui/screen/post_screen.dart';
-import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
-import 'package:myapp/features/discover/ui/discover_screen.dart';
-import 'package:myapp/features/home/ui/screen/HomeScreen.dart';
-import 'package:myapp/features/Inbox/ui/screen/Inbox_Screen.dart';
-import 'package:myapp/features/profile/logic/user_model.dart';
-import 'package:myapp/features/profile/ui/screen/profileScreen.dart';
-import 'package:myapp/features/profile/ui/screen/SettingsPrivacypage.dart';
-import 'package:myapp/features/profile/ui/widget/PrivacyPolicyScreen.dart';
-import 'package:myapp/features/profile/ui/widget/SupportAndHelpScreen.dart';
-import 'package:myapp/features/profile/ui/widget/accountSection.dart';
-import 'package:myapp/features/profile/ui/widget/changePassword.dart';
-import 'package:myapp/features/auth/ui/screen/forgot_password.dart';
+import 'package:nexon/features/Post/ui/screen/post_screen.dart';
+import 'package:nexon/features/auth/ui/screen/AuthScreen.dart';
+import 'package:nexon/features/discover/ui/discover_screen.dart';
+import 'package:nexon/features/home/ui/screen/HomeScreen.dart';
+import 'package:nexon/features/Inbox/ui/screen/Inbox_Screen.dart';
+import 'package:nexon/features/profile/logic/user_model.dart';
+import 'package:nexon/features/profile/ui/screen/profileScreen.dart';
+import 'package:nexon/features/profile/ui/screen/SettingsPrivacypage.dart';
+import 'package:nexon/features/profile/ui/widget/PrivacyPolicyScreen.dart';
+import 'package:nexon/features/profile/ui/widget/SupportAndHelpScreen.dart';
+import 'package:nexon/features/profile/ui/widget/accountSection.dart';
+import 'package:nexon/features/profile/ui/widget/changePassword.dart';
+import 'package:nexon/features/auth/ui/screen/forgot_password.dart';
 
 class NavigationRoutes {
   static Route generateRoute(RouteSettings settings) {

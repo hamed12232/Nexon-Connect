@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
-import 'package:myapp/features/Inbox/ui/widget/Chat_bubble.dart';
-import 'package:myapp/features/Inbox/ui/widget/Conversition.dart';
+import 'package:nexon/features/Inbox/logic/cubit/chat_cubit.dart';
+import 'package:nexon/features/Inbox/ui/widget/Chat_bubble.dart';
+import 'package:nexon/features/Inbox/ui/widget/Conversition.dart';
 
 class CustomChatStreamBuilder extends StatelessWidget {
   const CustomChatStreamBuilder({

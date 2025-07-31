@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/features/profile/ui/widget/SupportAndHelpScreen.dart';
+import 'package:nexon/features/profile/ui/widget/SupportAndHelpScreen.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});

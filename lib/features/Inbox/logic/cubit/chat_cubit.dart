@@ -3,9 +3,9 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/core/Components/firebase_notification.dart';
-import 'package:myapp/core/helper/services_helper.dart';
-import 'package:myapp/features/Inbox/logic/models/chat_model.dart';
+import 'package:nexon/core/Components/firebase_notification.dart';
+import 'package:nexon/core/helper/services_helper.dart';
+import 'package:nexon/features/Inbox/logic/models/chat_model.dart';
 import 'package:uuid/uuid.dart';
 
 part 'chat_state.dart';

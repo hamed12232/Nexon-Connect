@@ -4,11 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:myapp/features/Post/logic/cubit/comment_cubit/comment_cubit.dart';
-import 'package:myapp/features/Post/ui/screen/comment_bottom_sheet_screen.dart';
-import 'package:myapp/features/home/ui/widgets/custom_shader_mask.dart';
-import 'package:myapp/features/home/ui/widgets/custom_side_bar_icons.dart';
-import 'package:myapp/features/home/ui/widgets/like_button.dart';
+import 'package:nexon/features/Post/logic/cubit/comment_cubit/comment_cubit.dart';
+import 'package:nexon/features/Post/ui/screen/comment_bottom_sheet_screen.dart';
+import 'package:nexon/features/home/ui/widgets/custom_shader_mask.dart';
+import 'package:nexon/features/home/ui/widgets/custom_side_bar_icons.dart';
+import 'package:nexon/features/home/ui/widgets/like_button.dart';
 
 class HomeCard extends StatefulWidget {
   final String? dp;
@@ -97,6 +97,7 @@ class _HomeCardState extends State<HomeCard> {
                             urlimage: "assets/icons/comment-option.svg",
                           ),
                         ),
+
                         MyCustomSideBarIcon(
                           urlimage: "assets/icons/bookmark-black-shape.svg",
                         ),

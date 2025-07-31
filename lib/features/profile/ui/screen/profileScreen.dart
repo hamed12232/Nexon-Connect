@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:myapp/core/Components/Custom_NavBar.dart';
-import 'package:myapp/core/Components/Snak_bar.dart';
-import 'package:myapp/core/Components/enums.dart';
-import 'package:myapp/core/helper/services_helper.dart';
-import 'package:myapp/features/Post/logic/cubit/post_cubit/post_cubit.dart';
-import 'package:myapp/features/auth/logic/Cubit/auth_cubit.dart';
-import 'package:myapp/features/profile/ui/screen/SettingsPrivacypage.dart';
+import 'package:nexon/core/Components/Custom_NavBar.dart';
+import 'package:nexon/core/Components/Snak_bar.dart';
+import 'package:nexon/core/Components/enums.dart';
+import 'package:nexon/core/helper/services_helper.dart';
+import 'package:nexon/features/Post/logic/cubit/post_cubit/post_cubit.dart';
+import 'package:nexon/features/auth/logic/Cubit/auth_cubit.dart';
+import 'package:nexon/features/profile/ui/screen/SettingsPrivacypage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
 class ProfileScreen extends StatefulWidget {

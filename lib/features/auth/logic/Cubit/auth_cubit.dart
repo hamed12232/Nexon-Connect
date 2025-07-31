@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:myapp/core/helper/services_helper.dart';
-import 'package:myapp/features/profile/logic/user_model.dart';
+import 'package:nexon/core/helper/services_helper.dart';
+import 'package:nexon/features/profile/logic/user_model.dart';
 
 part 'auth_state.dart';
 
@@ -85,10 +85,10 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> updateName(String newName) async{
+  Future<void> updateName(String newName) async {
     emit(AuthLoading());
     try {
-     await servicesHelper.firestore
+      await servicesHelper.firestore
           .collection("users")
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .update({"fullName": newName});

@@ -4,15 +4,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/core/Components/firebase_notification.dart';
-import 'package:myapp/core/helper/services_helper.dart';
-import 'package:myapp/core/style/style.dart';
-import 'package:myapp/core/style/theme/theme_cubit.dart';
-import 'package:myapp/features/auth/ui/screen/AuthScreen.dart';
-import 'package:myapp/features/profile/ui/widget/PrivacyPolicyScreen.dart';
-import 'package:myapp/features/profile/ui/widget/SupportAndHelpScreen.dart';
-import 'package:myapp/features/profile/ui/widget/accountSection.dart';
-import 'package:myapp/features/profile/ui/widget/changePassword.dart';
+import 'package:nexon/core/Components/firebase_notification.dart';
+import 'package:nexon/core/helper/services_helper.dart';
+import 'package:nexon/core/style/style.dart';
+import 'package:nexon/core/style/theme/theme_cubit.dart';
+import 'package:nexon/features/auth/ui/screen/AuthScreen.dart';
+import 'package:nexon/features/profile/ui/widget/PrivacyPolicyScreen.dart';
+import 'package:nexon/features/profile/ui/widget/SupportAndHelpScreen.dart';
+import 'package:nexon/features/profile/ui/widget/accountSection.dart';
+import 'package:nexon/features/profile/ui/widget/changePassword.dart';
 
 class SettingsPrivacyPage extends StatefulWidget {
   const SettingsPrivacyPage({

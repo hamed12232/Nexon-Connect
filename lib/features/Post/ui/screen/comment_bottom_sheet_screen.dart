@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/core/helper/services_helper.dart';
-import 'package:myapp/features/Post/logic/cubit/comment_cubit/comment_cubit.dart';
-import 'package:myapp/features/Post/logic/model/comment_model.dart';
+import 'package:nexon/core/helper/services_helper.dart';
+import 'package:nexon/features/Post/logic/cubit/comment_cubit/comment_cubit.dart';
+import 'package:nexon/features/Post/logic/model/comment_model.dart';
 
 class CommentBottomSheet extends StatefulWidget {
   final String postId;

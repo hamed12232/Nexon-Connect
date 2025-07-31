@@ -1,7 +1,7 @@
 // comment_cubit.dart
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:myapp/features/Post/logic/model/comment_model.dart';
+import 'package:nexon/features/Post/logic/model/comment_model.dart';
 part 'comment_state.dart';
 
 class CommentCubit extends Cubit<CommentState> {

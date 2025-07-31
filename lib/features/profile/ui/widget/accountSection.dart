@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
-import 'package:myapp/core/helper/services_helper.dart';
-import 'package:myapp/features/home/ui/screen/HomeScreen.dart';
+import 'package:nexon/core/helper/services_helper.dart';
+import 'package:nexon/features/home/ui/screen/HomeScreen.dart';
 
 class ComplateProfileScreen extends StatefulWidget {
   const ComplateProfileScreen({super.key});

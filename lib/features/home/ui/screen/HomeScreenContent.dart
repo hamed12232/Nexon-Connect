@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/core/Components/Custom_NavBar.dart';
-import 'package:myapp/core/Components/enums.dart';
-import 'package:myapp/features/Post/logic/cubit/likes_cubit/likes_cubit.dart';
-import 'package:myapp/features/Post/logic/cubit/post_cubit/post_cubit.dart';
-import 'package:myapp/features/Post/logic/model/post_model.dart';
-import 'package:myapp/features/home/ui/widgets/custom_app_bar_widget.dart';
-import 'package:myapp/features/home/ui/widgets/home_card.dart';
+import 'package:nexon/core/Components/Custom_NavBar.dart';
+import 'package:nexon/core/Components/enums.dart';
+import 'package:nexon/features/Post/logic/cubit/likes_cubit/likes_cubit.dart';
+import 'package:nexon/features/Post/logic/cubit/post_cubit/post_cubit.dart';
+import 'package:nexon/features/Post/logic/model/post_model.dart';
+import 'package:nexon/features/home/ui/widgets/custom_app_bar_widget.dart';
+import 'package:nexon/features/home/ui/widgets/home_card.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class HomeScreenContent extends StatelessWidget {

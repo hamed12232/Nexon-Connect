@@ -5,9 +5,9 @@ import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:myapp/core/Components/local_notification.dart';
-import 'package:myapp/core/helper/cache_helper.dart';
-import 'package:myapp/core/helper/cache_helper_key.dart';
+import 'package:nexon/core/Components/local_notification.dart';
+import 'package:nexon/core/helper/cache_helper.dart';
+import 'package:nexon/core/helper/cache_helper_key.dart';
 
 class FirebaseNotification {
   static final FirebaseNotification _instance =
@@ -84,14 +84,11 @@ class FirebaseNotification {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
     };
-    
+
     final body = jsonEncode({
       "message": {
         "token": deviceToken,
-        "notification": {
-          "title": title,
-          "body": bodye,
-        },
+        "notification": {"title": title, "body": bodye},
         "android": {
           "priority": "high",
           "notification": {
@@ -101,30 +98,25 @@ class FirebaseNotification {
             "notification_priority": "PRIORITY_HIGH",
             "default_sound": true,
             "default_vibrate_timings": true,
-          }
+          },
         },
         "data": {
           "title": title,
           "body": bodye,
           "type": "message",
-          "click_action": "FLUTTER_NOTIFICATION_CLICK"
+          "click_action": "FLUTTER_NOTIFICATION_CLICK",
         },
         "apns": {
-          "headers": {
-            "apns-priority": "10"
-          },
+          "headers": {"apns-priority": "10"},
           "payload": {
             "aps": {
-              "alert": {
-                "title": title,
-                "body": bodye
-              },
+              "alert": {"title": title, "body": bodye},
               "badge": 1,
-              "sound": "default"
-            }
-          }
-        }
-      }
+              "sound": "default",
+            },
+          },
+        },
+      },
     });
 
     final response = await http.post(url, headers: headers, body: body);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:myapp/core/Components/Snak_bar.dart';
-import 'package:myapp/core/helper/services_helper.dart';
+import 'package:nexon/core/Components/Snak_bar.dart';
+import 'package:nexon/core/helper/services_helper.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   static const String routeName = '/forgot-password';

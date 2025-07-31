@@ -2,14 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:myapp/core/Components/Custom_NavBar.dart';
-import 'package:myapp/core/Components/enums.dart';
-import 'package:myapp/core/helper/services_helper.dart';
-import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
-import 'package:myapp/features/Inbox/ui/widget/Chat_list_view.dart';
-import 'package:myapp/features/Inbox/ui/widget/showFriendsBottomSheet.dart';
-import 'package:myapp/features/discover/logic/cubit/follow_cubit.dart';
-import 'package:myapp/features/profile/logic/user_model.dart';
+import 'package:nexon/core/Components/Custom_NavBar.dart';
+import 'package:nexon/core/Components/enums.dart';
+import 'package:nexon/core/helper/services_helper.dart';
+import 'package:nexon/features/Inbox/logic/cubit/chat_cubit.dart';
+import 'package:nexon/features/Inbox/ui/widget/Chat_list_view.dart';
+import 'package:nexon/features/Inbox/ui/widget/showFriendsBottomSheet.dart';
+import 'package:nexon/features/discover/logic/cubit/follow_cubit.dart';
+import 'package:nexon/features/profile/logic/user_model.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class InboxScreen extends StatefulWidget {

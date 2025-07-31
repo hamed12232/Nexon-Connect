@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/features/profile/logic/user_model.dart';
+import 'package:nexon/features/profile/logic/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 
 class ServicesHelper {

@@ -4,8 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
-import 'package:myapp/features/Inbox/ui/widget/Conversition.dart';
+import 'package:nexon/features/Inbox/logic/cubit/chat_cubit.dart';
+import 'package:nexon/features/Inbox/ui/widget/Conversition.dart';
 
 class ChatItem extends StatefulWidget {
   final String? dp;

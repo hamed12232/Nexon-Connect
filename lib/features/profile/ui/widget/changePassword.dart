@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:myapp/core/Components/Snak_bar.dart';
-import 'package:myapp/core/helper/services_helper.dart';
+import 'package:nexon/core/Components/Snak_bar.dart';
+import 'package:nexon/core/helper/services_helper.dart';
 
 class Changepassword extends StatefulWidget {
   const Changepassword({super.key, required this.email});

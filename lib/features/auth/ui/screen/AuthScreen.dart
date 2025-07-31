@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:myapp/features/auth/logic/Cubit/auth_cubit.dart';
-import 'package:myapp/features/auth/ui/screen/forgot_password.dart';
-import 'package:myapp/features/home/ui/screen/HomeScreen.dart';
-import 'package:myapp/core/Components/Snak_bar.dart';
+import 'package:nexon/features/auth/logic/Cubit/auth_cubit.dart';
+import 'package:nexon/features/auth/ui/screen/forgot_password.dart';
+import 'package:nexon/features/home/ui/screen/HomeScreen.dart';
+import 'package:nexon/core/Components/Snak_bar.dart';
 // ignore: library_prefixes
-import 'package:myapp/core/style/style.dart' as AppTheme;
-import 'package:myapp/features/auth/ui/widgets/build_menu_bar.dart';
+import 'package:nexon/core/style/style.dart' as AppTheme;
+import 'package:nexon/features/auth/ui/widgets/build_menu_bar.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});

@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
-import 'package:myapp/features/discover/logic/cubit/follow_cubit.dart';
+import 'package:nexon/features/Inbox/logic/cubit/chat_cubit.dart';
+import 'package:nexon/features/discover/logic/cubit/follow_cubit.dart';
 
 class Showfriendsbottomsheet extends StatelessWidget {
   const Showfriendsbottomsheet({super.key, required this.user1});

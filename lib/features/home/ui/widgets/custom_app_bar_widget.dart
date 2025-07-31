@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:myapp/features/Post/ui/screen/post_screen.dart';
+import 'package:nexon/features/Post/ui/screen/post_screen.dart';
 
 // ignore: camel_case_types
 class Custom_appBarWidget extends StatelessWidget {

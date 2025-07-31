@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/core/Components/Custom_NavBar.dart';
-import 'package:myapp/core/Components/enums.dart';
-import 'package:myapp/features/discover/logic/cubit/follow_cubit.dart';
+import 'package:nexon/core/Components/Custom_NavBar.dart';
+import 'package:nexon/core/Components/enums.dart';
+import 'package:nexon/features/discover/logic/cubit/follow_cubit.dart';
 
 class DiscoverScreen extends StatefulWidget {
   static const String routeName = "/discover";

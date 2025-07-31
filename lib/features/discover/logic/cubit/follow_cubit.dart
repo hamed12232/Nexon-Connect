@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/core/Components/firebase_notification.dart';
+import 'package:nexon/core/Components/firebase_notification.dart';
 part 'follow_state.dart';
 
 class FollowCubit extends Cubit<FollowState> {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:myapp/core/Components/enums.dart';
-import 'package:myapp/features/discover/ui/discover_screen.dart';
-import 'package:myapp/features/home/ui/screen/HomeScreen.dart';
-import 'package:myapp/features/Inbox/ui/screen/Inbox_Screen.dart';
-import 'package:myapp/features/profile/ui/screen/profileScreen.dart';
+import 'package:nexon/core/Components/enums.dart';
+import 'package:nexon/features/discover/ui/discover_screen.dart';
+import 'package:nexon/features/home/ui/screen/HomeScreen.dart';
+import 'package:nexon/features/Inbox/ui/screen/Inbox_Screen.dart';
+import 'package:nexon/features/profile/ui/screen/profileScreen.dart';
 
 class CustomNavBar extends StatelessWidget {
   const CustomNavBar({super.key, required this.selectedMenu});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:myapp/features/Inbox/logic/models/chat_model.dart';
-import 'package:myapp/features/Inbox/ui/widget/Chat_item.dart';
-import 'package:myapp/features/profile/logic/user_model.dart';
+import 'package:nexon/features/Inbox/logic/models/chat_model.dart';
+import 'package:nexon/features/Inbox/ui/widget/Chat_item.dart';
+import 'package:nexon/features/profile/logic/user_model.dart';
 
 class ChatsListView extends StatelessWidget {
   const ChatsListView({super.key, required this.chats, required this.isOnline});

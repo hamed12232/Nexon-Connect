@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/features/Inbox/ui/widget/Conversition.dart';
+import 'package:nexon/features/Inbox/ui/widget/Conversition.dart';
 
 class CustomChatTitleAppBar extends StatelessWidget {
   const CustomChatTitleAppBar({super.key, required this.widget});

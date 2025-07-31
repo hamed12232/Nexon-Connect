@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
-        android:label="myapp"
+        android:label="Nexon"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

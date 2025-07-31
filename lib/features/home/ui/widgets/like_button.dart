@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:myapp/features/Post/logic/cubit/likes_cubit/likes_cubit.dart';
-import 'package:myapp/features/home/ui/widgets/home_card.dart';
+import 'package:nexon/features/Post/logic/cubit/likes_cubit/likes_cubit.dart';
+import 'package:nexon/features/home/ui/widgets/home_card.dart';
 
 class LikeButton extends StatelessWidget {
   const LikeButton({super.key, required this.widget});
