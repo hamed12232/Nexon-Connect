@@ -54,9 +54,9 @@ class CustomChatStreamBuilder extends StatelessWidget {
                   'hh:mm a',
                 ).format((messageData['timestamp'] as Timestamp).toDate()),
                 isMe: messageData['senderId'] == currentUser.currentUser!.uid,
-
                 type: "text",
                 replyText: "",
+                pathRecord: messageData['audioUrl'],
                 isReply: false,
                 replyName: "",
               );

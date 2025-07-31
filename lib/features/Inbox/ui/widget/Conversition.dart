@@ -1,11 +1,11 @@
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:myapp/core/Components/Snak_bar.dart';
 import 'package:myapp/features/Inbox/logic/cubit/chat_cubit.dart';
+import 'package:myapp/features/Inbox/ui/widget/ChatInputBar.dart';
 import 'package:myapp/features/Inbox/ui/widget/CustomChatStreamBuilder.dart';
 import 'package:myapp/features/Inbox/ui/widget/CustomChatTitleAppBar.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -102,29 +102,48 @@ class _ConversationState extends State<Conversation> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: BottomAppBar(
-                    height: height * 0.115,
+                    height: !isRecordingStarted ? height * 0.1 : height * 0.14,
                     elevation: 10,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
                         vertical: 4,
                       ),
-
-                      child: !isRecordingStarted
-                          ? customChatBottomAppBar(context)
-                          : Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.close),
-                                  onPressed: () {
-                                    setState(() {
-                                      isRecordingStarted = false;
-                                    });
-                                  },
-                                ),
-                                Expanded(child: voiceRecorder(context)),
-                              ],
-                            ),
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 200), // مدة الانيميشن
+                        height: !isRecordingStarted
+                            ? height * 0.1
+                            : height * 0.15,
+                        child: !isRecordingStarted
+                            ? ChatInputBar(
+                                onSendMessage: (text) {
+                                  context.read<ChatCubit>().sendMessage(
+                                    chatId: widget.chatId,
+                                    senderId: currentUser.currentUser!.uid,
+                                    text: text,
+                                  );
+                                },
+                                onStartRecording: () {
+                                  setState(() {
+                                    isRecordingStarted = true;
+                                  });
+                                },
+                              )
+                            : Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.close),
+                                    onPressed: () {
+                                      setState(() {
+                                        isRecordingStarted = false;
+                                      });
+                                    },
+                                  ),
+                                  Expanded(child: voiceRecorder(context)),
+                                ],
+                              ),
+                      ),
                     ),
                   ),
                 ),
@@ -235,7 +254,7 @@ class _ConversationState extends State<Conversation> {
 
   VoiceRecorderWidget voiceRecorder(BuildContext context) {
     return VoiceRecorderWidget(
-      iconSize: 35, // تصغير حجم الأيقونة
+      iconSize: 40, // تصغير حجم الأيقونة
       showTimerText: true,
       showSwipeLeftToCancel: true,
       style: VoiceUIStyle.compact,
@@ -247,6 +266,11 @@ class _ConversationState extends State<Conversation> {
           isRecordingStarted = false; // إغلاق حالة التسجيل بعد الانتهاء
         });
         showInSnackBar("Recording saved", context);
+        context.read<ChatCubit>().sendVoiceMessage(
+          chatId: widget.chatId,
+          senderId: currentUser.currentUser!.uid,
+          audioUrl: recordedFile!.path, // استخدام مسار الملف المسجل
+        );
       },
       onRecordedWeb: (url) {
         setState(() {
@@ -264,7 +288,7 @@ class _ConversationState extends State<Conversation> {
       },
       maxRecordDuration: const Duration(seconds: 60),
       permissionNotGrantedMessage: 'Microphone permission required',
-      dragToLeftText: "← Slide to cancel",
+      dragToLeftText: "← Slide left  to cancel",
       dragToLeftTextStyle: TextStyle(color: Colors.grey[600], fontSize: 14),
       cancelDoneText: 'Cancelled',
       cancelHintColor: Colors.red,

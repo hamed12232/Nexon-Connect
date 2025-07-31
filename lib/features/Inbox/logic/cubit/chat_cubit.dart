@@ -192,6 +192,39 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
+  Future<void> sendVoiceMessage({
+    required String chatId,
+    required String senderId,
+    required String audioUrl,
+  }) async {
+    try {
+      final messageDoc = _firestore
+          .collection("chats")
+          .doc(chatId)
+          .collection("messages")
+          .doc();
+
+      await messageDoc.set({
+        "id": messageDoc.id,
+        "senderId": senderId,
+        "audioUrl": audioUrl,
+        "timestamp": DateTime.now(),
+        "isRead": false,
+      });
+
+      await _firestore.collection("chats").doc(chatId).update({
+        "lastMessage": "Voice message",
+        "lastTime": DateTime.now(),
+      });
+      await _sendNotificationIfNeeded(chatId, senderId, "Voice message");
+
+      emit(MessageSent());
+    } catch (e) {
+      log("Error sending voice message: $e");
+      emit(ChatError(e.toString()));
+    }
+  }
+
   Future<void> _sendNotificationIfNeeded(
     String chatId,
     String senderId,
