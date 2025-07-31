@@ -17,8 +17,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     return;
   }
 
-  final title = message.data['title'] ?? "No title";
-  final body = message.data['body'] ?? "No body";
+  // final title = message.data['title'] ?? "No title";
+  // final body = message.data['body'] ?? "No body";
 
-  LocalNotification().showBasicNotification(title, body);
+  // LocalNotification().showBasicNotification(title, body);
 }

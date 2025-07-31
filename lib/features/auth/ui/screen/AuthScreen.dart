@@ -8,7 +8,7 @@ import 'package:myapp/features/auth/ui/screen/forgot_password.dart';
 import 'package:myapp/features/home/ui/screen/HomeScreen.dart';
 import 'package:myapp/core/Components/Snak_bar.dart';
 // ignore: library_prefixes
-import 'package:myapp/core/style/style.dart' as Theme;
+import 'package:myapp/core/style/style.dart' as AppTheme;
 import 'package:myapp/features/auth/ui/widgets/build_menu_bar.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -67,93 +67,96 @@ class _AuthScreenState extends State<AuthScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: NotificationListener<OverscrollIndicatorNotification>(
-        child: BlocConsumer<AuthCubit, AuthState>(
-          listener: (context, state) {
-            if (state is AuthFailure) {
-              showInSnackBar(state.errorMessage, context);
-            } else if (state is AuthSuccess) {
-              showInSnackBar("Login Successful", context);
-              Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-            }
-          },
-          builder: (context, state) {
-            if (state is AuthLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return SingleChildScrollView(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height >= 775.0
-                    ? MediaQuery.of(context).size.height
-                    : 775.0,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.ColorsTheme.loginGradientStart,
-                      Theme.ColorsTheme.loginGradientEnd,
+    return Theme(
+      data: ThemeData.light(),
+      child: Scaffold(
+        body: NotificationListener<OverscrollIndicatorNotification>(
+          child: BlocConsumer<AuthCubit, AuthState>(
+            listener: (context, state) {
+              if (state is AuthFailure) {
+                showInSnackBar(state.errorMessage, context);
+              } else if (state is AuthSuccess) {
+                showInSnackBar("Login Successful", context);
+                Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+              }
+            },
+            builder: (context, state) {
+              if (state is AuthLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height >= 775.0
+                      ? MediaQuery.of(context).size.height
+                      : 775.0,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppTheme.ColorsTheme.loginGradientStart,
+                        AppTheme.ColorsTheme.loginGradientEnd,
+                      ],
+                      begin: const FractionalOffset(0.0, 0.0),
+                      end: const FractionalOffset(1.0, 1.0),
+                      stops: [0.0, 1.0],
+                      tileMode: TileMode.clamp,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(top: 75.0),
+                        child: Image(
+                          width: 250.0,
+                          height: 191.0,
+                          fit: BoxFit.fill,
+                          image: AssetImage('assets/img/login_logo.png'),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 20.0),
+                        child: BuildMenuBar(
+                          pageController: _pageController!,
+                          onSignUpButtonPress: _onSignUpButtonPress,
+                          onSignInButtonPress: _onSignInButtonPress,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: PageView(
+                          controller: _pageController,
+                          onPageChanged: (i) {
+                            if (i == 0) {
+                              setState(() {
+                                right = Colors.white;
+                                left = Colors.black;
+                              });
+                            } else if (i == 1) {
+                              setState(() {
+                                right = Colors.black;
+                                left = Colors.white;
+                              });
+                            }
+                          },
+                          children: <Widget>[
+                            ConstrainedBox(
+                              constraints: const BoxConstraints.expand(),
+                              child: _buildSignIn(context),
+                            ),
+                            ConstrainedBox(
+                              constraints: const BoxConstraints.expand(),
+                              child: _buildSignUp(context),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
-                    begin: const FractionalOffset(0.0, 0.0),
-                    end: const FractionalOffset(1.0, 1.0),
-                    stops: [0.0, 1.0],
-                    tileMode: TileMode.clamp,
                   ),
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 75.0),
-                      child: Image(
-                        width: 250.0,
-                        height: 191.0,
-                        fit: BoxFit.fill,
-                        image: AssetImage('assets/img/login_logo.png'),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: BuildMenuBar(
-                        pageController: _pageController!,
-                        onSignUpButtonPress: _onSignUpButtonPress,
-                        onSignInButtonPress: _onSignInButtonPress,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: PageView(
-                        controller: _pageController,
-                        onPageChanged: (i) {
-                          if (i == 0) {
-                            setState(() {
-                              right = Colors.white;
-                              left = Colors.black;
-                            });
-                          } else if (i == 1) {
-                            setState(() {
-                              right = Colors.black;
-                              left = Colors.white;
-                            });
-                          }
-                        },
-                        children: <Widget>[
-                          ConstrainedBox(
-                            constraints: const BoxConstraints.expand(),
-                            child: _buildSignIn(context),
-                          ),
-                          ConstrainedBox(
-                            constraints: const BoxConstraints.expand(),
-                            child: _buildSignUp(context),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
@@ -286,8 +289,8 @@ class _AuthScreenState extends State<AuthScreen>
                   ],
                   gradient: LinearGradient(
                     colors: [
-                      Theme.ColorsTheme.loginGradientEnd,
-                      Theme.ColorsTheme.loginGradientStart,
+                      AppTheme.ColorsTheme.loginGradientEnd,
+                      AppTheme.ColorsTheme.loginGradientStart,
                     ],
                     begin: const FractionalOffset(0.2, 0.2),
                     end: const FractionalOffset(1.0, 1.0),
@@ -297,7 +300,7 @@ class _AuthScreenState extends State<AuthScreen>
                 ),
                 child: MaterialButton(
                   highlightColor: Colors.transparent,
-                  splashColor: Theme.ColorsTheme.loginGradientEnd,
+                  splashColor: AppTheme.ColorsTheme.loginGradientEnd,
                   //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -618,8 +621,8 @@ class _AuthScreenState extends State<AuthScreen>
                   ],
                   gradient: LinearGradient(
                     colors: [
-                      Theme.ColorsTheme.loginGradientEnd,
-                      Theme.ColorsTheme.loginGradientStart,
+                      AppTheme.ColorsTheme.loginGradientEnd,
+                      AppTheme.ColorsTheme.loginGradientStart,
                     ],
                     begin: const FractionalOffset(0.2, 0.2),
                     end: const FractionalOffset(1.0, 1.0),
@@ -629,7 +632,7 @@ class _AuthScreenState extends State<AuthScreen>
                 ),
                 child: MaterialButton(
                   highlightColor: Colors.transparent,
-                  splashColor: Theme.ColorsTheme.loginGradientEnd,
+                  splashColor: AppTheme.ColorsTheme.loginGradientEnd,
                   //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(

@@ -43,7 +43,7 @@ final ThemeData darkTheme = ThemeData(
   dividerColor: Colors.white24,
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
-    fillColor: const Color(0xFF181A20),
+    fillColor: const Color(0xFF0c1014),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(16),
       borderSide: const BorderSide(color: Colors.white24),

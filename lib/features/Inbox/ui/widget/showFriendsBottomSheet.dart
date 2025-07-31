@@ -60,7 +60,7 @@ class Showfriendsbottomsheet extends StatelessWidget {
                       ),
                       trailing: GestureDetector(
                         onTap: () async {
-                          await context.read<ChatCubit>().createChatAndLoad(
+                          await context.read<ChatCubit>().createChat(
                             user1,
                             user.id,
                           );

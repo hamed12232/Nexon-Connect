@@ -40,7 +40,9 @@ class FollowCubit extends Cubit<FollowState> {
         });
         await FirebaseNotification().sendPushNotification(
           deviceToken: targetUserSnapshot['fcmToken'] ?? "null",
-          follower: currentUserSnapshot["fullName"],
+
+          title: "New Follower!",
+          bodye: "${currentUserSnapshot["fullName"]} started following you",
         );
       }
 
@@ -60,8 +62,9 @@ class FollowCubit extends Cubit<FollowState> {
       );
       final following = List<String>.from(currentUser['following'] ?? []);
 
-      final suggestedUsers =
-          usersSnapshot.docs.where((doc) => doc.id != currentUserId).toList();
+      final suggestedUsers = usersSnapshot.docs
+          .where((doc) => doc.id != currentUserId)
+          .toList();
 
       emit(FollowLoaded(users: suggestedUsers, following: following));
     } catch (e) {

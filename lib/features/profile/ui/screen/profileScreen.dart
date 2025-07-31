@@ -1,4 +1,3 @@
-// ✅ ProfileScreen refactored with cleaner image update and user data flow
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,8 +23,9 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late final int versionParam;
+  int? imageVersion; // متغير لتحديث الكاش عند تغيير الصورة
   File? imageFile;
+  bool isUpdatingImage = false;
   int postCount = 0;
   String fileName = '';
   final supabase = Supabase.instance.client;
@@ -34,9 +34,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    versionParam = DateTime.now().millisecondsSinceEpoch;
-
-    fileName = 'profile_$userId.jpg';
+    imageVersion = null; // في البداية لا يوجد تحديث
+    fileName = 'profile_ userId.jpg';
     context.read<AuthCubit>().getUserData(userId);
     context.read<PostCubit>().fetchUserPosts(userId);
     super.initState();
@@ -159,11 +158,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             child: Padding(
               padding: const EdgeInsets.all(4.0),
-              child: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(
-                  "${userModel.image}?v=${DateTime.now().millisecondsSinceEpoch}",
-                ),
-                radius: 25,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  CircleAvatar(
+                    backgroundImage: CachedNetworkImageProvider(
+                      imageVersion == null
+                          ? userModel.image
+                          : "${userModel.image}?v=$imageVersion",
+                    ),
+                    radius: 25,
+                  ),
+                  if (isUpdatingImage)
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      ),
+                    ),
+                ],
               ),
             ),
           ),
@@ -172,19 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             right: 10,
             child: InkWell(
               onTap: () async {
-                await pickImageGallery();
-                if (imageFile != null) {
-                  String? newImageUrl = await servicesHelper.uploadImage(
-                    imageFile!,
-                    fileName,
-                  );
-                  await servicesHelper.updateUserImage(userId, newImageUrl!);
-                  // ignore: use_build_context_synchronously
-                  await context.read<AuthCubit>().getUserData(userId);
-                  showInSnackBar("Image updated successfully", context);
-                } else {
-                  showInSnackBar("No image selected", context);
-                }
+                await updateProfileImage();
               },
               child: Container(
                 height: 55,
@@ -408,6 +412,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return const Center(child: Text("Something went wrong"));
       },
     );
+  }
+
+  Future<void> updateProfileImage() async {
+    setState(() {
+      isUpdatingImage = true;
+    });
+
+    try {
+      await pickImageGallery();
+      if (imageFile != null) {
+        String? newImageUrl = await servicesHelper.uploadImage(
+          imageFile!,
+          fileName,
+        );
+        await servicesHelper.updateUserImage(userId, newImageUrl!);
+        await context.read<AuthCubit>().getUserData(userId);
+        setState(() {
+          imageVersion = DateTime.now().millisecondsSinceEpoch;
+        });
+        showInSnackBar("Image updated successfully", context);
+      } else {
+        showInSnackBar("No image selected", context);
+      }
+    } catch (e) {
+      showInSnackBar("Error updating image", context);
+    } finally {
+      setState(() {
+        isUpdatingImage = false;
+      });
+    }
   }
 
   Future<void> pickImageGallery() async {

@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:myapp/core/Components/firebase_notification.dart';
 import 'package:myapp/core/helper/services_helper.dart';
 import 'package:myapp/features/Inbox/logic/models/chat_model.dart';
 import 'package:uuid/uuid.dart';
@@ -148,11 +149,6 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
-  Future<void> createChatAndLoad(String user1Id, String user2Id) async {
-    await createChat(user1Id, user2Id);
-    // No need to call loadChats again as it's already listening
-  }
-
   Future<void> sendMessage({
     required String chatId,
     required String senderId,
@@ -162,6 +158,7 @@ class ChatCubit extends Cubit<ChatState> {
     String? repliedToSenderId,
   }) async {
     try {
+      // 1. إرسال الرسالة
       final messageDoc = _firestore
           .collection("chats")
           .doc(chatId)
@@ -179,14 +176,70 @@ class ChatCubit extends Cubit<ChatState> {
         "isRead": false,
       });
 
+      // 2. تحديث معلومات المحادثة
       await _firestore.collection("chats").doc(chatId).update({
         "lastMessage": text,
         "lastTime": DateTime.now(),
       });
 
+      // 3. إرسال الإشعار
+      await _sendNotificationIfNeeded(chatId, senderId, text);
+
       emit(MessageSent());
     } catch (e) {
+      log("Error sending message: $e");
       emit(ChatError(e.toString()));
+    }
+  }
+
+  Future<void> _sendNotificationIfNeeded(
+    String chatId,
+    String senderId,
+    String messageText,
+  ) async {
+    try {
+      // الحصول على معرف المستخدم الآخر
+      final chatDoc = await _firestore.collection("chats").doc(chatId).get();
+      final otherUserId = chatDoc['users'].firstWhere((id) => id != senderId);
+
+      // التحقق من وجود رسائل غير مقروءة من المرسل
+      final unreadCount = await _firestore
+          .collection("chats")
+          .doc(chatId)
+          .collection("messages")
+          .where("senderId", isEqualTo: senderId)
+          .where("isRead", isEqualTo: false)
+          .get();
+
+      // إرسال إشعار فقط للرسالة الأولى غير المقروءة
+      if (unreadCount.docs.length == 1) {
+        await _sendPushNotification(otherUserId, messageText);
+      }
+    } catch (e) {
+      log("Error checking notification: $e");
+    }
+  }
+
+  Future<void> _sendPushNotification(String userId, String messageText) async {
+    try {
+      final userDoc = await _firestore.collection("users").doc(userId).get();
+
+      if (!userDoc.exists) return;
+
+      final userData = userDoc.data() as Map<String, dynamic>;
+      final fcmToken = userData['fcmToken'];
+      final userName = userData['fullName'] ?? 'Someone';
+
+      if (fcmToken != null && fcmToken.toString().isNotEmpty) {
+        await FirebaseNotification().sendPushNotification(
+          deviceToken: fcmToken,
+          title: "New message from $userName",
+          bodye: messageText,
+        );
+        log("Notification sent successfully");
+      }
+    } catch (e) {
+      log("Error sending notification: $e");
     }
   }
 

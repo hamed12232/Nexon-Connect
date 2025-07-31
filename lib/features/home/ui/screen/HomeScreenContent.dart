@@ -65,13 +65,6 @@ class HomeScreenContent extends StatelessWidget {
                             ...List.generate(posts.length, (index) {
                               PostModel post = posts[index];
                               String imageUrl = posts[index].userImage;
-                              if (imageUrl.contains('?')) {
-                                imageUrl +=
-                                    "&v=${DateTime.now().millisecondsSinceEpoch}";
-                              } else {
-                                imageUrl +=
-                                    "?v=${DateTime.now().millisecondsSinceEpoch}";
-                              }
                               return BlocProvider(
                                 key: ValueKey(post.id),
                                 create: (context) => LikeCubit()

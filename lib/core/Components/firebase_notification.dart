@@ -72,7 +72,8 @@ class FirebaseNotification {
 
   Future<void> sendPushNotification({
     required String deviceToken,
-    required String follower,
+    required String title,
+    required String bodye,
   }) async {
     String accessToken = await getAccessToken();
     final url = Uri.parse(
@@ -83,16 +84,47 @@ class FirebaseNotification {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $accessToken',
     };
-
+    
     final body = jsonEncode({
       "message": {
         "token": deviceToken,
-        "data": {
-          "title": "New Follower!",
-          "body": "$follower started following you",
-          "type": "follow",
+        "notification": {
+          "title": title,
+          "body": bodye,
         },
-      },
+        "android": {
+          "priority": "high",
+          "notification": {
+            "title": title,
+            "body": bodye,
+            "channel_id": "messages",
+            "notification_priority": "PRIORITY_HIGH",
+            "default_sound": true,
+            "default_vibrate_timings": true,
+          }
+        },
+        "data": {
+          "title": title,
+          "body": bodye,
+          "type": "message",
+          "click_action": "FLUTTER_NOTIFICATION_CLICK"
+        },
+        "apns": {
+          "headers": {
+            "apns-priority": "10"
+          },
+          "payload": {
+            "aps": {
+              "alert": {
+                "title": title,
+                "body": bodye
+              },
+              "badge": 1,
+              "sound": "default"
+            }
+          }
+        }
+      }
     });
 
     final response = await http.post(url, headers: headers, body: body);

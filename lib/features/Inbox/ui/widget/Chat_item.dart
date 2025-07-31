@@ -55,7 +55,7 @@ class _ChatItemState extends State<ChatItem> {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: Offset(0, 3), // changes position of shadow
+                      offset: Offset(0, 3),
                     ),
                   ],
                   borderRadius: BorderRadius.circular(50),
@@ -162,7 +162,6 @@ class _ChatItemState extends State<ChatItem> {
               .then((value) {
                 log('Returned from conversation, refreshing chats');
 
-                // Optionally refresh the chat list after returning from conversation
                 if (mounted) {
                   context.read<ChatCubit>().refreshChats(
                     currentUser.currentUser!.uid,
