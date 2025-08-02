@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/images/logo.png" height="120"/>
+  <img src="assets/images/darkSplash.png" height="120"/>
   <h1>Nexon Connect</h1>
   <p>A powerful real-time social media (Instagram clone) Flutter app with Firebase & Supabase</p>
 </div>
@@ -13,11 +13,10 @@
 - [📸 Screenshots](#-screenshots)
 - [🚀 Tech Stack](#-tech-stack)
 - [🛠️ Getting Started](#️-getting-started)
-- [🎯 Usage](#-usage)
+- [⚙️ Installation](#️-installation)
 - [✨ Coming Soon](#-coming-soon)
 - [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
-
 ---
 
 ## 📱 About the Project
@@ -55,21 +54,23 @@ Users can:
 | 🔄 Foreground/Background Notifs (NEW) | Full push notification support                         |
 
 ---
+
 ## 📸 Screenshots
 
 | **Login**                          | **Home**                          | **Post**                          | **Chat**                          |
 |------------------------------------|-----------------------------------|-----------------------------------|-----------------------------------|
 | ![Login](assets/screens/login.jpg) | ![Home](assets/screens/home.jpg)  | ![Create Post](assets/screens/create%20post.jpg) | ![Chats](assets/screens/chats.jpg) |
-| ![Register](assets/screens/register.jpg) | ![Home Light](assets/screens/home_light.jpg.jpg) | ![Post Image](assets/screens/post%20Image.jpg) | ![Chat Room](assets/screens/chats_room.jpg) |
-| ![Forget Password](assets/screens/forget%20password.jpg) |                                   |                                   |                                   |
+| ![Register](assets/screens/register.jpg) | ![Home Light](assets/screens/home_light.jpg) | ![Post Image](assets/screens/post%20Image.jpg) | ![Chat Room](assets/screens/chats_room.jpg) |
+| ![Forget Password](assets/screens/forget%20password.jpg) |                                   | ![Comments](assets/screens/comments.jpg) |                                   |
 
 | **Discover**                      | **Friends**                       | **Profile**                       | **Settings**                      |
 |-----------------------------------|-----------------------------------|-----------------------------------|-----------------------------------|
 | ![Discover](assets/screens/discover.jpg) | ![Friends](assets/screens/friends.jpg) | ![Profile](assets/screens/profile.jpg) | ![Settings](assets/screens/settings.jpg) |
-| ![Discover Light](assets/screens/discover_light.jpg.jpg) |                                   |                                   | ![Settings Light](assets/screens/settings_light.jpg) |
+| ![Discover Light](assets/screens/discover_light.jpg) |                                   |                                   | ![Settings Light](assets/screens/settings_light.jpg) |
 |                                   |                                   |                                   | ![Update Info](assets/screens/update%20information.jpg) |
 |                                   |                                   |                                   | ![Change Password](assets/screens/change%20password.jpg) |
 |                                   |                                   |                                   | ![Privacy](assets/screens/privacy.jpg) |
+
 ---
 
 ## 🚀 Tech Stack
@@ -106,4 +107,24 @@ To run this project locally, follow these steps:
 git clone https://github.com/hamed12232/Nexon-Connect.git
 cd Nexon-Connect
 flutter pub get
+flutter run
 ```
+
+
+### ✨ Coming Soon
+
+    Video call support
+    Advanced search filters
+    Group chats
+    Story feature
+
+---
+
+## 🤝 Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+---
+
+## 📄 License
+This project is licensed under the MIT License.
+Built with ❤️ by Hamed Ahmed & Contributors
