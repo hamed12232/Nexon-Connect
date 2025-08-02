@@ -55,24 +55,21 @@ Users can:
 | 🔄 Foreground/Background Notifs (NEW) | Full push notification support                         |
 
 ---
-
 ## 📸 Screenshots
 
-| Login                                                  | Home | Post | Chat |
-| ------------------------------------------------------ | ---- | ---- | ---- |
-| ![Login](assets/screens/login.png)                     |
-| ![register](assets/screens/register.png)               |
-| ![forgot password](assets/screens/forget password.png) |
+| **Login**                          | **Home**                          | **Post**                          | **Chat**                          |
+|------------------------------------|-----------------------------------|-----------------------------------|-----------------------------------|
+| ![Login](assets/screens/login.jpg) | ![Home](assets/screens/home.jpg)  | ![Create Post](assets/screens/create%20post.jpg) | ![Chats](assets/screens/chats.jpg) |
+| ![Register](assets/screens/register.jpg) | ![Home Light](assets/screens/home_light.jpg.jpg) | ![Post Image](assets/screens/post%20Image.jpg) | ![Chat Room](assets/screens/chats_room.jpg) |
+| ![Forget Password](assets/screens/forget%20password.jpg) |                                   |                                   |                                   |
 
-![Home](assets/screens/home.png) | ![Post](assets/screens/create post.png) | ![Chat](assets/screens/chats.png) |
-| ![Discover](assets/screens/discover_light.png) |
-| ![Friends](assets/screens/friends.png) |
-
-![discover] (assets/screens/discover.png) |
-| Profile | Settings |
-|---------|----------|
-| ![Profile](assets/screens/profile.png) | ![Settings](assets/screens/settings.png) |
-
+| **Discover**                      | **Friends**                       | **Profile**                       | **Settings**                      |
+|-----------------------------------|-----------------------------------|-----------------------------------|-----------------------------------|
+| ![Discover](assets/screens/discover.jpg) | ![Friends](assets/screens/friends.jpg) | ![Profile](assets/screens/profile.jpg) | ![Settings](assets/screens/settings.jpg) |
+| ![Discover Light](assets/screens/discover_light.jpg.jpg) |                                   |                                   | ![Settings Light](assets/screens/settings_light.jpg) |
+|                                   |                                   |                                   | ![Update Info](assets/screens/update%20information.jpg) |
+|                                   |                                   |                                   | ![Change Password](assets/screens/change%20password.jpg) |
+|                                   |                                   |                                   | ![Privacy](assets/screens/privacy.jpg) |
 ---
 
 ## 🚀 Tech Stack
